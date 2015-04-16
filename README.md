@@ -1,4 +1,4 @@
-Europeana Research
-==================
+Europeana Labs
+==============
 
-This is the repository of the Europeana Research site.
+This is the repository of the Europeana Labs site.
