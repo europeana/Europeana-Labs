@@ -3,13 +3,13 @@
 
 
 # The name of the website
-sitename: Europeana Research
-payoff: The Europeana Research
+sitename: Europeana Labs
+payoff: The Europeana Labs website
 
 # The theme to use. Be sure to copy the {theme_path}/base-2013 folder, and change the
 # name here accordingly. Don't edit the templates in theme/base-2013, because
 # they _will_ get updated in next releases
-theme: research-europeana-2015
+theme: labs-europeana-2015
 
 # The locale that'll be used by the application. If no locale is set the
 # fallback locale is 'en_GB'. For available options, see: http://docs.bolt.cm/locales
@@ -188,10 +188,11 @@ accept_file_types: [ twig, html, js, css, scss, gif, jpg, jpeg, png, ico, zip, t
 # convenience or to obscure it from prying eyes. The Bolt backend is accessible as /bolt/
 # by default, if you change it here, it will only be accessible through the value set in
 # 'path'. Keep the path simple: lowercase only, no extra slashes or other special characters.
-#branding:
+
+branding:
 #  name: SuperCMS
-#  path: /admin
-#  provided_by: [ supercool@example.org, "Supercool Webdesign Co." ]
+  path: /admin
+ # provided_by: [ supercool@example.org, "Supercool Webdesign Co." ]
 
 # Show the 'debug' nut in the lower right corner for logged-in user. By default,
 # the debugbar is only shown to logged-in users. Use the 'debug_show_loggedoff'

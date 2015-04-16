@@ -14,11 +14,13 @@ use \utilphp\util;
 class Extension extends \Bolt\BaseExtension
 {
 
-    public $cachedBaseStructure = array();
+    private $treeParents = array();
+    private $treeChildren = array();
+    private $cachedStructures = array();
+    private $linksLoaded = false;
 
     public function initialize()
     {
-
         // For europeana, stupid hardcoded redirect for a domain:
         if (strpos($_SERVER['HTTP_HOST'], "europeanacreative.eu") !== false) {
             \Bolt\Library::simpleredirect('http://pro.europeana.eu/get-involved/projects/project-list/europeana-creative');
@@ -27,59 +29,72 @@ class Extension extends \Bolt\BaseExtension
 
         // listings
 
-        // sitemap
-        $this->app->match("/sitemap", array($this, 'sitemap'));
-        $this->app->match("/sitemap.xml", array($this, 'xmlSitemap'));
-
         // slug listing
         $this->app->match("/{slug}", array($this, 'slugTreeRecord'))
             ->assert('slug', '[a-zA-Z0-9_\-]+[^(sitemap)^(search)]')
             ->bind('slugTreeRecord');
 
         // strucutureslug / slug listing
-        // todo: except _profiler
         $this->app->match("/{structureSlugs}/{slug}", array($this, 'structureTreeRecord'))
             ->assert('structureSlugs', '(?!(async|_profiler)).*')
             ->assert('slug', '[a-zA-Z0-9_\-]+')
             ->bind('structureTreeRecord');
-
 
         // twig functions
         $this->addTwigFunction('structurelink', 'getStructureLink');
         $this->addTwigFunction('structurecontenttype', 'getContenttypeByStructure');
         $this->addTwigFunction('breadcrumb', 'breadCrumb');
         $this->addTwigFunction('subsite', 'subSite');
-        $this->addTwigFunction('sitemap', 'renderSitemap');
         $this->addTwigFunction('sortRecords', 'sortObject');
         $this->addTwigFunction('getContenttype', 'getContenttype');
-
-
-        // storage events
-        // $this->app['dispatcher']->addListener(\Bolt\StorageEvents::POST_SAVE, array($this, 'updateStructureTaxonomy'));
-        // $this->app['dispatcher']->addListener(\Bolt\StorageEvents::POST_DELETE, array($this, 'updateStructureTaxonomy'));
+        $this->addTwigFunction('getTreeChildren', 'getTreeChildren');
 
         $this->contenttypeslugs = $this->config['contenttypes'];
+    }
 
+    private function loadLinks() {
+        if ($this->linksLoaded) {
+            return;
+        }
+        $tablename = $this->app['config']->get('general/database/prefix') . 'relations';
+        $stmt = $this->app['db']->prepare("SELECT from_contenttype, from_id, to_id FROM $tablename WHERE to_contenttype = 'structures'");
+        $res = $stmt->execute();
+        while ($row = $stmt->fetch()) {
+            $contenttype = $row['from_contenttype'];
+            $from = intval($row['from_id']);
+            $to = intval($row['to_id']);
+
+            $this->treeParents[$contenttype][$from] = $to;
+            $this->treeChildren[$to][] = "$contenttype/$from";
+        }
+        $this->linksLoaded = true;
+    }
+
+    private function getTreeParentID($contenttype, $id) {
+        $this->loadLinks();
+        if (isset($this->treeParents[$contenttype][$id])) {
+            return $this->treeParents[$contenttype][$id];
+        }
+        return false;
+    }
+
+    private function getTreeChildIDs($id) {
+        $this->loadLinks();
+        if (isset($this->treeChildren[$id])) {
+            return $this->treeChildren[$id];
+        }
+        return false;
     }
 
     public function slugTreeRecord($slug) {
         // Add snippets, since this is a Frontend route.
         $this->app['htmlsnippets'] = true;
 
-        $parents= self::getTreeParents();
-        $slug = \Bolt\Helpers\String::makesafe($slug, -1);
+        // $slug = \Bolt\Helpers\String::slug($slug, -1);
+        $slug = $this->app['slugify']->slugify($slug);
 
-        // slug is strucutre
-        if ( isset($parents[$slug]) ) {
-            $contenttype = 'Structures';
-            $frontend = new Bolt\Controllers\Frontend;
-            return $frontend->record($this->app , $contenttype, $slug);
-        }
-        else {
-            $contenttype = self::getContenttypeBySlug($slug);
-            $frontend = new Bolt\Controllers\Frontend;
-            return $frontend->record($this->app , $contenttype, $slug);
-        }
+        $contenttype = $this->getContenttypeBySlug($slug, true);
+        return Bolt\Controllers\Frontend::record($this->app , $contenttype, $slug);
     }
 
     /**
@@ -91,22 +106,39 @@ class Extension extends \Bolt\BaseExtension
     public function structureTreeRecord($structureSlugs, $slug) {
         // Add snippets, since this is a Frontend route.
         $this->app['htmlsnippets'] = true;
-        $contenttype = self::getContenttypeBySlug($slug);
 
-        $frontend = new Bolt\Controllers\Frontend;
-
-        return $frontend->record($this->app , $contenttype, $slug);
-
-
+        $contenttype = $this->getContenttypeBySlug($slug);
+        return Bolt\Controllers\Frontend::record($this->app , $contenttype, $slug);
     }
 
-    public function getContenttypeBySlug($slug) {
-        foreach ($this->contenttypeslugs as $contenttypeslug ) {
-            $content = $this->app['storage']->getContent($contenttypeslug, array('slug' => $slug, returnsingle => true));
-            if ($content)
-                return $contenttypeslug;
+    /**
+     * Find first content record with the given slug.
+     */
+    public function getContentBySlug($slug, $preferStructure = false) {
+        $contenttypeslugs = $this->contenttypeslugs;
+        if ($preferStructure) {
+            array_unshift($contenttypeslugs, 'structures');
         }
-        return 0;
+        foreach ($contenttypeslugs as $contenttypeslug ) {
+            $content = $this->app['storage']->getContent($contenttypeslug, array('slug' => $slug, returnsingle => true));
+            if ($content) {
+                return $content;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Find first contenttype that contains a record with the given slug.
+     */
+    public function getContenttypeBySlug($slug, $preferStructure = false) {
+        $content = $this->getContentBySlug($slug, $preferStructure);
+        if ($content) {
+            return $content->contenttype['slug'];
+        }
+        else {
+            return false;
+        }
     }
 
     public function getContenttype($slug) {
@@ -120,93 +152,65 @@ class Extension extends \Bolt\BaseExtension
      * @return void
      */
     public function getContenttypeByStructure($structureSlug) {
-        foreach ($this->contenttypeslugs as $contenttypeslug ) {
-            $content = $this->app['storage']->getContent($contenttypeslug, array(tree => $structureSlug, order => 'datepublish', returnsingle => true));
+        $structure = $this->app['storage']->getContent('structures/' . $structureSlug);
+        foreach ($this->contenttypeslugs as $contenttypeslug) {
+            $content = $structure->related($contenttypeslug);
 
-            if ($content->values) {
+            if ($content) {
                 return $this->app['storage']->getContentType($contenttypeslug);
             }
         }
-        return 0;
+        return null;
     }
 
-
-
-    /**
-     * update strucuture taxnomoy options
-     * todo: add structuretree exeption
-     *
-     * @param Bolt\StorageEvent
-     * @return void
-     */
-    public function updateStructureTaxonomy(\Bolt\StorageEvent $event) {
-        if ($event->getContentType() == 'structures') {
-            $yaml = new Yaml();
-            $file = BOLT_CONFIG_DIR . '/taxonomy.yml';
-            $tax = $yaml->parse($file);
-            $options = array();
-
-            $structures = $this->app['storage']->getContent('structures', array( order => 'title') );
-            foreach($structures as $structure) {
-                $options[$structure->values['slug']] = $structure->values['title'];
-            }
-
-            $tax['tree']['options'] = $options;
-
-            file_put_contents($file, $yaml->dump($tax));
-
-            // delete session parents structures
-            $this->app['session']->set('parents', null);
-
-            return 0;
-        }
-    }
-
-    public function getBaseStructure($record, $parents)
+    private function getParentStructure($record)
     {
-        $contenttype = $record->contenttype['name'];
+        if (is_array($record)) {
+            $record = $this->app['storage']->getContent($record['link']);
+        }
+        $contenttype = $record->contenttype;
+        $id = $this->getTreeParentID($contenttype['slug'], $record->id);
 
-        if (isset($this->cachedBaseStructure[$contenttype])) {
-            return $this->cachedBaseStructure[$contenttype]['value'];
+        if (!$id) {
+            return null;
         }
 
-        // search structure with assigned contenttype
-        foreach ($parents as $parent) {
-            if ($parent['content'] == $contenttype) {
-                $parentContent = $parent;
-                break;
-            }
+        if (array_key_exists($id, $this->cachedStructures)) {
+            return $this->cachedStructures[$id];
         }
-
-        $this->cachedBaseStructure[$contenttype] = array('done' => true, 'value' => $parentContent);
-
-        return $parentContent;
+        else {
+            $structure = $this->app['storage']->getContent('structures/' . $id);
+            $this->cachedStructures[$id] = $structure;
+            return $structure;
+        }
     }
 
 
     /**
-     * Generate contentlink for structure binded records
+     * Generate contentlink for structure-bound records
      * contenttypes can can belong to more than one stucture.
      * If no parent is set return default link.
      */
-    public function getStructureLink($record)
+    public function getStructureLink($record, $recursing = false)
     {
-        $parents = self::getTreeParents();
-        $parentSlug = $record->group['slug'];
-        $parentContent = self::getBaseStructure($record, $parents);
-
-        // parent link
-        if ($parentSlug) {
-            $link = $parents[$parentSlug]['path'] . $record['slug'];
+        if (!$record) {
+            return false;
         }
-        // link of default structure for contenttype
-        else if ($parentContent) {
-            $link = $parentContent['path'] . $record['slug'];
+        if (is_array($record)) {
+            $record = $this->app['storage']->getContent($record['link']);
         }
-        // default link
-        else $link = $record->link();
-
-        return $link;
+        $structure = $this->getParentStructure($record);
+        $selfSlug = $record['slug'];
+        if ($structure) {
+            $parentLink = $this->getStructureLink($structure, true);
+            return "$parentLink/$selfSlug";
+        }
+        else if ($record->contenttype['slug'] === 'structures') {
+            return "/$selfSlug";
+        }
+        else {
+            return $record->link();
+        }
     }
 
     private function abort($slug)
@@ -217,17 +221,7 @@ class Extension extends \Bolt\BaseExtension
             simpleredirect($this->app['config']->get('general/branding/path') . "/");
         }
 
-        // try to get related
-        // $pageContent = $this->app['storage']->getContent('pages', array('slug' => $slug,'status'=> '!published', 'returnsingle' => true));
-        // var_dump( $pageContent->taxonomy );
-
         $this->app->abort(404, "Page $contenttypeslug/$slug not found.");
-    }
-
-    public function getMixedContent($contenttype, $treeSlug) {
-        $content = $this->app['storage']->getContent($contenttype, array(tree => $treeSlug) );
-
-        echo sizeof($content);
     }
 
     /**
@@ -237,32 +231,17 @@ class Extension extends \Bolt\BaseExtension
      */
     public function subSite($record)
     {
-        $parents = self::getTreeParents();
-        $parentSlug = $record->group['slug'];
-        $contenttype = $record->contenttype['name'];
 
-        if ($contenttype == 'Structures')
-            $parentSlug = $record['slug'];
-
-        // find structure with content by contenttype
-        if (!$parentSlug) {
-            foreach ($parents as $parent) {
-                if ( !$parentSlug && $parent['content'] == $contenttype ) {
-                    $parentSlug = $parent['slug'];
-                }
-            }
+        if (!$record) {
+            return null;
         }
-
-        while ($parentSlug) {
-            $parent = $parents[$parentSlug];
-
-            if ( $parent['subsite'] && $parent['subsite']['subclass'] != 'none') {
-                return $parent['subsite'];
-            }
-
-            $parentSlug = $parent['parentslug'];
+        if (isset($record['subclass']) && $record['subclass'] !== 'none') {
+            return $record;
         }
-        return 0;
+        else {
+            $parent = $this->getParentStructure($record);
+            return $this->subSite($parent);
+        }
     }
 
     /**
@@ -270,85 +249,38 @@ class Extension extends \Bolt\BaseExtension
      * @return (array) breadcumb
      */
     public function breadCrumb($record) {
+        $structure = $this->getParentStructure($record);
 
-        $parents = self::getTreeParents();
-        $parentSlug = $record->group['slug'];
-        $items = array();
-
-        $baseParent = self::getBaseStructure($record, $parents);
-        if ($baseParent && !$parentSlug)
-            $parentSlug = $baseParent['slug'];
-
-        while ($parentSlug) {
-            $parent = $parents[$parentSlug];
-            $items[] = $parent;
-            $parentSlug = $parents[$parentSlug]['parentslug'];
+        if ($structure) {
+            $breadcrumbs = $this->breadCrumb($structure);
         }
-        return array_reverse($items);
+        else {
+            $breadcrumbs = array();
+        }
+        $breadcrumbs[] = array(
+            'title' => $record['title'],
+            'path' => $this->getStructureLink($record));
+        return $breadcrumbs;
     }
 
     public function sortObject($records, $sortby)
     {
         $callbackArraySort = function($a, $b) use ($sortby) {
-            return strcmp($a->{($sortby)}, $b->{($sortby)});
+            if (is_array($sortby)) {
+                foreach ($sortby as $s) {
+                    if ($a[$s] != $b[$s])
+                        return $a[$s] > $b[$s];
+                }
+                return false;
+            }
+            else {
+                return $a[$sortby] > $b[$sortby];
+            }
         };
 
         usort($records, $callbackArraySort);
 
         return $records;
-    }
-
-    private function getTreeParents()
-    {
-        // check for parents in session
-        if (is_array( $this->app['session']->get('parents') )) {
-            return $this->app['session']->get('parents');
-        }
-
-        $structures = $this->app['storage']->getContent('structures');
-        $parents = array();
-        $structuresSlugs = array();
-
-        // build structure parent object
-        foreach ( $structures as $structure ) {
-            $id = $structure->values['id'];
-            $slug = $structure->values['slug'];
-            $p = array(
-                    'path' => array(),
-                    'structure' => array()
-                    );
-
-            array_push($structuresSlugs, $structure->values['slug'] );
-            $tempParents = self::getParents($structure, $structures, $p);
-            $parents[$slug] = array(
-                    'id' => $id,
-                    'title' => $structure->values['title'],
-                    'slug' => $structure->values['slug'],
-                    'content' => $structure->values['content'],
-                    'subsite' => ($structure->values['subclass']) ? array(
-                        'subclass' => $structure->values['subclass'],
-                        'footer' => $structure->values['footer'],
-                        'path' => $parents[$id]['path']
-                        ) : null,
-                    'parentslug' => $structure->group['slug'],
-                    'parents' => array_reverse($tempParents['structure'], true),
-                    'path' => $this->app['paths']['root'] . join('/',array_reverse($tempParents['path'], true)) . '/',
-                    'testpath' => join('/', array_reverse($tempParents['path'], true) )
-                    );
-
-            // set subsite options
-            if (strpos($structure->values['template'],'subsite') !== false)
-                $parents[$id]['subsite'] = array(
-                        'subclass' => $structure->values['subclass'],
-                        'footer' => $structure->relation['footer'][0],
-                        'path' => $parents[$id]['path']
-                        );
-        }
-
-        $this->app['session']->set('parents', $parents);
-        $this->app['session']->set('structuresslugs', $structuresSlugs);
-
-        return $parents;
     }
 
     private function getParents($structure, $structures, $p )
@@ -360,7 +292,7 @@ class Extension extends \Bolt\BaseExtension
         $parentSlug = $structure->group['slug'];
 
         if ( $structure->group['slug'] != "" ) {
-            return self::getParents( self::getStructureBySlug($parentSlug, $structures), $structures, $p);
+            return $this->getParents( $this->getStructureBySlug($parentSlug, $structures), $structures, $p);
         }
         else {
             return $p;
@@ -378,135 +310,54 @@ class Extension extends \Bolt\BaseExtension
     }
 
 
+    public function getTreeChildren($record)
+    {
+        if ($record->contenttype['slug'] !== 'structures') {
+            return array();
+        }
+        $childSlugs = $this->getTreeChildIDs($record->id);
+        $children = array();
+        if (!empty($childSlugs)) {
+            foreach ($childSlugs as $childSlug) {
+                $child = $this->app['storage']->getContent($childSlug);
+                if ($child) {
+                    $children[] = $child;
+                }
+            }
+        }
+        return $children;
+    }
+
     /**
-     * xml sitemap listing
+     * Render a template while wrapping Twig_Error_Loader in 404
+     * in case the template is not found by Twig.
+     *
+     * @param \Silex\Application $app
+     * @param string             $template Ex: 'listing.twig'
+     * @param string             $title    '%s' in "No template for '%s' defined."
+     *
+     * @return mixed Rendered template
      */
-    public function xmlSitemap()
+    public function render(Silex\Application $app, $template, $title)
     {
-        return self::sitemap(true);
-    }
+        try {
+            return $app['twig']->render($template);
+        } catch (\Twig_Error_Loader $e) {
+            $error = sprintf(
+                'Rendering %s failed: %s',
+                $title,
+                $e->getMessage()
+            );
 
-    /**
-     * sitemap
-     */
-    public function sitemap($xml = false)
-    {
-        if($xml){
-            $this->app['extensions']->clearSnippetQueue();
-            $this->app['extensions']->disableJquery();
-            $this->app['debugbar'] = false;
-        }
+            // Log it
+            $app['logger.system']->error($error, array('event' => 'twig'));
 
-        $sitemap = [];
-        $pages = [];
-        $template = ($xml) ? $this->config['sitemap']['xml_template'] : $this->config['sitemap']['template'];
-        $sources = $this->config['sitemap']['sources'];
-        $contenttypes = $this->config['sitemap']['contenttypes'];
+            // Set the template error
+            $this->setTemplateError($app, $error);
 
-        // get content
-        foreach ($contenttypes as $contenttype ) {
-            $pages = array_merge($pages, $this->app['storage']->getContent($contenttype));
-        }
-
-        // get sitemap sources
-        foreach ($sources as $source) {
-            $item = [];
-
-            // entry type 'menu'
-            if ($source['type'] == 'menu') {
-                $menu = $this->app['config']->get('menu/'.$source['data']['menu']);
-
-                foreach ($menu as $entry) {
-                    $slug = util::slugify($entry['path'], -1);
-                    $itemRaw = $this->app['storage']->getContent('structures', array('slug' => $slug, 'returnsingle' => true));
-                    $item = $itemRaw->values;
-                    $childsUnsorted = self::getChilds($pages, $itemRaw['slug']);
-                    $item['childs'] = self::sortObject($childsUnsorted, 'sortorder');
-                    $item['link'] = $this->app['paths']['root'] . $item['slug'];
-                    array_push($sitemap, $item);
-                }
-            }
-            // entrie type 'list'
-            elseif ($source['type'] == 'list') {
-                $itemRoot = [];
-                $itemRoot['title'] = $source['label'];
-                $itemRoot['childs'] = [];
-
-                foreach ($source['data'] as $entry) {
-                    // get link entries
-                    if ($entry['link']) {
-                        $item = array('title'=> $entry['label'], 'link' => $entry['link']);
-                        array_push($itemRoot['childs'], $item);
-                    }
-                    // get slug entries
-                    elseif ($entry['slug']) {
-                        $slug = util::slugify($entry['slug'], -1);
-                        $itemRaw = [];
-                        foreach ($contenttypes as $contenttype ) {
-                            $itemRaw = $this->app['storage']->getContent($contenttype, array('slug' => $slug, 'returnsingle' => true));
-                            if ($itemRaw) break;
-                        }
-                        $item = $itemRaw->values;
-                        $item['link'] = $this->app['paths']['root'] . $item['slug'];
-                        $item['childs'] = self::getChilds($pages, $itemRaw['slug']);
-                        array_push($itemRoot['childs'], $item);
-                    }
-                }
-                array_push($sitemap, $itemRoot);
-            }
-        }
-
-        $this->app['twig.loader.filesystem']->addPath(__DIR__);
-
-        $headers = array();
-        if ($xml) {
-            $headers['Content-Type'] = 'application/xml; charset=utf-8';
-            $temp = [];
-            self::flat($sitemap, $temp);
-            $sitemap = $temp;
-        }
-
-        $body = $this->app['render']->render($template, array(
-                    'entries' => $sitemap,
-                    'title' => 'Sitemap'
-                    ));
-
-        return new Response($body, 200, $headers);
-    }
-
-    private function flat($sitemapItem, &$f) {
-        
-        if (is_array($sitemapItem)) {
-            foreach ($sitemapItem as $item) {
-                if (isset($item['childs']) ){
-                    $f[] = $item;
-                    self::flat($item['childs'], $f);
-                }
-                else {
-                    $f[] = $item;
-                }
-            }
+            // Abort ship
+            $app->abort(Response::HTTP_INTERNAL_SERVER_ERROR, $error);
         }
     }
 
-    private function getChilds(&$pages, $parentSlug, $depth = 1)
-    {
-
-        if ($depth > 5) {
-            return false;
-        }
-
-        $p = array();
-
-        foreach ($pages as $page ) {
-            if ( isset($page->group['slug']) && $page->group['slug'] == $parentSlug ) {
-                $temp = $page->values;
-                $temp['link'] = self::getStructureLink($page);
-                $temp['childs'] = self::getChilds($pages, $page['slug'], $depth+1 );
-                $p[] = $temp;
-            }
-        }
-
-        return $p;
-    }
 }

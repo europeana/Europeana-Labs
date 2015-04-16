@@ -1,13 +1,8 @@
-# Use sqlite, or Mysql..
 database:
-  driver: sqlite
-  databasename: bolt
-
-#database:
-#  driver: mysql
-#  databasename: bolt
-#  username: 
-#  password: ""
+  driver: mysql
+  databasename: ''
+  username: ''
+  password: ''
 
 
 # Settings for caching in parts of Bolt.
@@ -18,7 +13,7 @@ caching:
   duration: 10
   authenticated: false
 
-# Show the 'debug' nut in the lower right corner for logged-in user. 
+# Show the 'debug' nut in the lower right corner for logged-in user.
 debug: true
 developer_notices: false
 debug_show_loggedoff: false
@@ -29,7 +24,7 @@ debug_enable_whoops: true # change this to false to use PHP's built-in error han
 
 # Use strict variables. This will make Bolt complain if you use {{ foo }},
 # when foo doesn't exist.
-strict_variables: true
+strict_variables: false
 
 # by default, mail is sent using PHP's built-in mail function. In general, it's advised to use SMTP for sending mail
 # instead. Uncomment the following lines to use an SMTP server with authentication.
