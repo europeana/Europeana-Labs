@@ -1,8 +1,8 @@
 Europeana Labs
 ==============
 
- - Version: 1.0
- - Date: 2015-04-16
+ - Version: 1.1
+ - Date: 2015-04-17
  - Author: Bob den Otter - bob@twokings.nl
 
 There's a new github Repository here:
@@ -53,7 +53,7 @@ Login and deployment though engineyard. Dasha can arrange an account there, if y
 
  - https://login.engineyard.com/login
 
-To log on to the backend, go to http://ec2-54-194-176-140.eu-west-1.compute.amazonaws.com/bolt/
+To log on to the backend, go to http://ec2-54-194-176-140.eu-west-1.compute.amazonaws.com/admin/
 
 I've added a username, and you can add more yourself:
 
