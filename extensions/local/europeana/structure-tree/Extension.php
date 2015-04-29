@@ -94,7 +94,10 @@ class Extension extends \Bolt\BaseExtension
         $slug = $this->app['slugify']->slugify($slug);
 
         $contenttype = $this->getContenttypeBySlug($slug, true);
-        return Bolt\Controllers\Frontend::record($this->app , $contenttype, $slug);
+
+        $frontend = new Bolt\Controllers\Frontend();
+
+        return $frontend->record($this->app , $contenttype, $slug);
     }
 
     /**
@@ -108,7 +111,11 @@ class Extension extends \Bolt\BaseExtension
         $this->app['htmlsnippets'] = true;
 
         $contenttype = $this->getContenttypeBySlug($slug);
-        return Bolt\Controllers\Frontend::record($this->app , $contenttype, $slug);
+
+        $frontend = new Bolt\Controllers\Frontend();
+
+        return $frontend->record($this->app , $contenttype, $slug);
+
     }
 
     /**

@@ -29,7 +29,7 @@ class Application extends Silex\Application
 
     public function __construct(array $values = array())
     {
-        $values['bolt_version'] = '2.1.5';
+        $values['bolt_version'] = '2.1.7';
         $values['bolt_name'] = '';
         $values['bolt_released'] = true; // `true` for stable releases, `false` for alpha, beta and RC.
 
@@ -291,17 +291,15 @@ class Application extends Silex\Application
         // $app['locale'] should only be a single value.
         $this['locale'] = reset($configLocale);
 
-        // Set The Timezone Based on the Config, fallback to UTC
-        date_default_timezone_set(
-            $this['config']->get('general/timezone') ?: 'UTC'
-        );
+        // Set the default timezone if provided in the Config
+        date_default_timezone_set($this['config']->get('general/timezone') ?: ini_get('date.timezone') ?: 'UTC');
 
         // for javascript datetime calculations, timezone offset. e.g. "+02:00"
         $this['timezone_offset'] = date('P');
 
         // Set default locale, for Bolt
         $locale = array();
-        foreach ($configLocale as $key => $value) {
+        foreach ($configLocale as $value) {
             $locale = array_merge($locale, array(
                 $value . '.UTF-8',
                 $value . '.utf8',
@@ -467,6 +465,26 @@ class Application extends Silex\Application
     }
 
     /**
+     * Remove the 'bolt_session' cookie from the headers if it's about to be set.
+     *
+     * Note, we don't use $request->clearCookie (logs out a logged-on user) or
+     * $request->removeCookie (doesn't prevent the header from being sent).
+     *
+     * @see https://github.com/bolt/bolt/issues/3425
+     */
+    public function unsetSessionCookie()
+    {
+        if (!headers_sent()) {
+            $headersList = headers_list();
+            foreach($headersList as $header) {
+                if (strpos($header, "Set-Cookie: bolt_session=") === 0) {
+                    header_remove("Set-Cookie");
+                }
+            }
+        }
+    }
+
+    /**
      * Global 'after' handler. Adds 'after' HTML-snippets and Meta-headers to the output.
      *
      * @param Request  $request
@@ -476,6 +494,15 @@ class Application extends Silex\Application
     {
         // Start the 'stopwatch' for the profiler.
         $this['stopwatch']->start('bolt.app.after');
+
+        /*
+         * Don't set 'bolt_session' cookie, if we're in the frontend or async.
+         *
+         * @see https://github.com/bolt/bolt/issues/3425
+         */
+        if ($this['config']->get('general/cookies_no_frontend', false) && $this['config']->getWhichEnd() !== 'backend') {
+            $this->unsetSessionCookie();
+        }
 
         // Set the 'X-Frame-Options' headers to prevent click-jacking, unless specifically disabled. Backend only!
         if ($this['config']->getWhichEnd() == 'backend' && $this['config']->get('general/headers/x_frame_options')) {

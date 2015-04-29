@@ -198,7 +198,10 @@ class Content implements \ArrayAccess
                     break;
 
                 case 'html':
-                    $newvalue[$field] = str_replace('&nbsp;', ' ', $this->values[$field]);
+                    // Remove &nbsp; characters from CKEditor, unless configured to leave them in.
+                    if (!$this->app['config']->get('general/wysiwyg/ck/allowNbsp')) {
+                        $newvalue[$field] = str_replace('&nbsp;', ' ', $this->values[$field]);
+                    }
                     break;
             }
         }
@@ -409,9 +412,11 @@ class Content implements \ArrayAccess
                     continue; // Skip 'empty' uploads.
                 }
 
+                $paths = $this->app['resources']->getPaths();
+
                 $filename = sprintf(
-                    '%s/files/%s/%s',
-                    $this->app['paths']['rootpath'],
+                    '%sfiles/%s/%s',
+                    $paths['rootpath'],
                     date('Y-m'),
                     String::makeSafe($file['name'][0], false, '[]{}()')
                 );
@@ -1084,10 +1089,17 @@ class Content implements \ArrayAccess
      *
      * @return \Bolt\Content[]
      */
-    public function related($filtercontenttype = null, $filterid = null)
+    public function related($filtercontenttype = null, $options = array())
     {
         if (empty($this->relation)) {
             return false; // nothing to do here.
+        }
+
+        // Backwards compatibility: If '$options' is a string, assume we passed an id
+        if (!is_array($options)) {
+            $options = array(
+                'id' => $options
+            );
         }
 
         $records = array();
@@ -1097,14 +1109,16 @@ class Content implements \ArrayAccess
                 continue; // Skip other contenttypes, if we requested a specific type.
             }
 
-            if ($contenttype === $filtercontenttype && !empty($filterid)) {
-                // Request was for a single record ID
-                $ids = array($filterid);
-            }
-
             $params = array('hydrate' => true);
             $where = array('id' => implode(' || ', $ids));
             $dummy = false;
+
+            // If there were other options add them to the 'where'. We potentially overwrite the 'id' here.
+            if (!empty($options)) {
+                foreach($options as $option => $value) {
+                    $where[$option] = $value;
+                }
+            }
 
             $tempResult = $this->app['storage']->getContent($contenttype, $params, $dummy, $where);
 

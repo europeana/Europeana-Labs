@@ -1,7 +1,42 @@
-Bolt 2.1.5
+Bolt 2.1.7
 ----------
 
 Not yet released. Notable changes: 
+
+ - Check if folder exists first, when using it for uploads (See #3450) 
+ - Allow 'duplicate' and 'delete' from contextual menu, when a Record has relationships. Fixes #3431 
+ - Don't trigger DBCheck for changed indexes. Fixes #3426 
+ - Make Application::unsetSessionCookie() optional and BC friendly (see #3427)
+ - Make the removal / stripping of `&nbsp;` characters in CKEditor fields optional. (see #3373)
+ - Fixed: Allow editing of empty files. (Thanks, @SahAssar, see #3391)
+ - Added: Always have a fallback for a timezone when it isn't set in either php.ini or config.yml (See #3394)
+ - Only show the "delete" button if the page has been saved already. Fixes #3444
+
+Bolt 2.1.6
+----------
+
+Released 2015-04-13. Notable changes: 
+
+ - Fixed: Slugs generation with `uses:` fixed (see #3310)
+ - Added: Frontend requests should not set cookies. Remove them, to allow Varnish to do a better job of caching the request. (see #3309)
+ - Added: Add exif aspect ratio and exif orientation data to imageinfo() (Thanks @Intendit,see #3308)
+ - Fixed: Fix rendering in sidebar on mobile. (see #3246)
+ - Added: New feature: Retina support for thumnbails (see bolt/bolt-thumbs/#19)
+ - Added: Allow filtering in 'record.related' on other fields too. (Thanks @miguelavaqrod, see #3303)
+ - Fixed: Fix path for non-ajaxy file-upload. (see #3303)
+ - Fixed: Added extra check for "view permission" for quicklinks (Thanks @StevendeVries, see #3299)
+ - Change: Frontend requests should not set cookies. Remove them, to allow Varnish to do a better job of caching the request. (See #3309)
+ - Fixed: Fix rendering in sidebar on mobile. Fixes (See #3321)
+ - Fixed: Fix for "timed depublish". (See #3330)
+ - Fixed: Only setting default timezone if config provides it (See #3334)
+ - Added: Small UX improvement: Show spinner while doing ajaxy save. (See #3355)
+ - Fixed: Fixing small inconsistency in `permissions.yml.dist': 'editors' can browse uploaded files from within CKeditor now. (See #3357)
+ - Fix: People who try installing Bolt on PHP 5.1 or 5.2 will now get a nice and friendly notice that Bolt won't work. (see #3371)
+
+Bolt 2.1.5
+----------
+
+Released 2015-04-01. Notable changes:
 
  - Fixed: Strange step behaviour when no `min` is set for integer fields (Thanks @Pinpickle, see #3284)
  - Fixed: Make sure we have the same amount of columns, always. (See #3228) 
