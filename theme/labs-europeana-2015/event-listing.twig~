@@ -1,0 +1,61 @@
+{% include '_header.twig' %}
+
+{# set order #}
+{% set order = contenttype['sort'] %}
+{% if app.request.get('order') %}
+    {% set order = app.request.get('order') %}
+{% endif %}
+
+{# set page number #}
+{% set page = app.request.get('page', 1) %}
+
+{# set amount #}
+{% if contenttype['listing_records'] is defined %}
+    {% set amount = contenttype['listing_records'] %}
+{% else %}
+    {% set amount = app.config.get('general/listing_records') %}
+{% endif %}
+
+{% if records|length %}
+
+    {# show/hide sortby item and pager #}
+    {% set showsortby = false %}
+
+    {# default list views #}
+    {% if record is not defined %}
+
+        {# tags #}
+        {% if taxonomy is defined %}
+            {% set showsortby = false %}
+            {% set contenttype = taxonomy %}
+
+        {% else %}
+            {% set contenttype = getContenttype(records|first.contenttype.name) %}
+            {% set showsortby = true %}
+            {% set contenttypePager = contenttype['slug'] %}
+        {% endif %}
+
+    {# structure content #}
+    {% elseif contenttype['name'] is defined %}
+        {% if (contenttype['slug'] in app.config.get('general/sort_options/disabled')|keys ) %}
+            {% set contenttypePager = contenttype['slug'] %}
+            {% set showsortby = true %}
+        {% endif %}
+    {% endif %}
+
+
+
+<!-- Start content -->
+<main role="main" class="l-page">
+<div class="lc">
+    <!-- Start grid -->
+		
+    <!-- End grid -->
+</div>
+</main>
+<!-- End Content -->
+
+{% endif %}
+
+{% include '_footer.twig' %}
+

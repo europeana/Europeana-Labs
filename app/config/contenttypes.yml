@@ -1,156 +1,70 @@
-
-#################################
+#################################################################
 #
-# BLOG POST
+# Creatd by: Alexander Linn
 #
-# Notes:
-# If this is type authors is populated, then instead of showing [By Owner] eg, "By Dean Birkett" in the byline, it will show "By [Written by]"
-# Type Attachments should link directly with our DMS. This should allow for multiple files to be added, and not just one file
-# Type owner is not shown at all if the Written by section is populated; I think dependet choice list are not possible?
+# Version: 0.1
+# Creation date: 07.07.2014
 #
+# Modified by: Patrick Tettenborn
+# Modification date:
 #
-#################################
-blogposts:
-  name: 'Blog Posts'
-  singular_name: 'BlogPost'
-  display_name: 'Blog Posts'
-  slug: 'blogposts'
-  singular_slug: 'blogpost'
-  fields:
-    # Show on Blog list page, Blog page, Related items snippet, Home page
-    title:
-      type: text
-      required: true
-      label: "Title (required):"
-      variant: inline
-      postfix: "(max. 200 characters)"
-      pattern: "^.{1,200}$"
-      group: "Blog post"
-    slug:
-      type: slug
-      uses: title
-    # Shown on Blog page
-    body:
-      type: html
-      required: false
-      label: "Body (required):"
-      height: 150px
-    # multiselect from dms
-    # Show on Blog list page, Related items snippet, Home page
-    image:
-      type: image
-      required: false
-      label: "Teaser image:"
-      attrib: title
-      extensions: [ gif, jpg, png ]
-    # Show on Blog page
-    attachments:
-      type: filelist
-      required: false
-      label: "Attachments:"
-      group: "Secondary information"
-  # Show on Blog page
-  taxonomy: [ tags, tree ]
-  relations:
-    persons:
-      label: "Author(s)"
-      multiple: true
-      format: "{{ item.last_name }}, {{ item.first_name }}"
-      order: last_name
-    # person:
-    #   multiple: true
-    #   label: "Contact(s)"
-    #   order: last_name
-    #   format: "{{ item.last_name }}, {{ item.first_name }}"
-    #   order: last_name
-    pages:
-      multiple: true
-      label: "Pages"
-      order: -id
-      format: "{{ item.title|escape }}"
-    collections:
-      multiple: true
-      label: "Collections"
-      order: -id
-      format: "{{ item.title|escape }}"
-    # blogposts:
-    #   multiple: true
-    #   label: "Blog posts"
-    #   order: -id
-    #   format: "{{ item.title|escape }}"
-    # publications:
-    #   multiple: true
-    #   label: "Publications"
-    #   order: -id
-    #   format: "{{ item.title|escape }}"
-    # pressreleases:
-    #   multiple: true
-    #   label: "Press releases"
-    #   order: -id
-    #   format: "{{ item.title|escape }}"
-    # projects:
-    #   multiple: true
-    #   label: "Projects"
-    #   order: -id
-    #   format: "{{ item.title|escape }}"
-    # taskforces:
-    #   multiple: true
-    #   label: "Task forces"
-    #   order: -id
-    #   format: "{{ item.title|escape }}"
-    # events:
-    #   multiple: true
-    #   label: "Events"
-    #   order: -id
-    #   format: "{{ item.title|escape }}"
-    # jobs:
-    #   multiple: true
-    #   label: "Jobs"
-    #   order: -id
-    #   format: "{{ item.title|escape }}"
-  record_template: record_blogpost.twig
-  recordsperpage: 100
-  icon_many: "fa:quote-left"
-  icon_one: "fa:quote-right"
-
-
-
-#################################
+# Based upon:
+# ----------
+# Requirements:
+# https://docs.google.com/spreadsheets/d/1e89kisHaEK7tKjbD95VudnTXtekh889ScwQr4-dqCC0/edit#gid=773173311
 #
-# PAGE
+# Examples
+# http://demo.deanbirkett.name/ETHZZG/#p=location
 #
-# Notes:
-# Type position: If 2 blocks of content share the same value (eg both set to be first), then the latest should take precedence
-# Type checkbox: This checkbox should control whether the page is shown in the overview/list page, or is a page that is reachable
-# via a top level link. If this is not checked, then the page will still be published, still be searchable, but will only be reached
-# via a link that has been placed in some body text.
 #
 # Issues:
-# - Not defined how to build up the selectfield for parent to build a structure; using suggestion from bob with taxonomies
-# - Restrict the mulitiple: true select to MAX: 2
+# - required field function for more type ('select', 'html')
+#
 #
 # ToDos:
-# - Clarify behavior of type parent
-# - Implement answers to questions if possible
 #
-# Questions:
-# - How does the permalink looks like? Solution with routing or should it stay with page/title?
-# - Where do the contact persons come from? From contenttype person?
-# - Is it possible to define the max amount of choosen entries from the contenttype select, multiple: true? Example: max choose two entries
-# - How will be the exact handling of type support_navigation?
-#   > Currently implemented as a markdown field. This could just as well be an
-#     HTML field; neither is a particularly excellent solution, but the
-#     alternative would be to add yet another contenttype, and a relation - way
-#     too complex.
-#     The field should contain a sequence of list items
-# - Should related content be shown on the contenttype (shown in prototype demo.deanbirkett but not in excel docs.google.com)?
+#
+#################################################################
+
+
+
+##################################################################
+#
+# The following contentypes are specified:
+#
+# - LOCATION
+# - STRUCTURE
+# - PAGE
+# - BLOGPOST
+# - JOB
+# - EVENT
+# - PERSON
+# - PUBLICATION
+# - PRESSRELEASE
+# - PROJECTS
+# - TASKFORCES
+# - HOMEPAGE
+# - FOOTER
+#
+#################################################################
+
+
+
+#################################
+#
+# PUBLICATION
+#
+# Notes:
+# Image: The dimensions need to be specified. The image should appear as a thumbnail on all pages above,
+# but on the individual publications page it may be larger?
+#
 #
 #################################
-pages:
-  name: Pages
-  singular_name: Page
+publications:
+  name: Publications
+  singular_name: Publication
   fields:
-    # Shown on Individual pages, Lists, Overviews, Teasers
+    # Show on Publication list page, Publication page, Teasers, Individual staff members page
     title:
       type: text
       required: true
@@ -158,81 +72,60 @@ pages:
       variant: inline
       postfix: "(max. 50 characters)"
       pattern: "^.{1,50}$"
-      group: Page
+      group: Publications
     slug:
       type: slug
       uses: title
-    intro:
-      type: textarea
-      label: "Intro:"
-      height: 150px
-    # Shown on Individual pages, Lists
     teaser:
       type: html
-      label: "Teaser (required):"
+      required: true
+      label: "Teaser:"
       height: 150px
-    # Shown on Individual pages
+    introduction:
+      type: text
+      required: false
+      label: "Introduction (120 chars MAX):"
+      pattern: "^.{1,120}$"
+      height: 150px
     body:
       type: html
-      label: "Body (required):"
-      height: 300px
-    # Shown on Individual pages, Lists, Overviews, Teasers
-    teaser_image:
-      type: image
       required: false
-      label: "Teaser image:"
-    secondary_mail:
-      type: checkbox
-      label: "Show secondary email instead:"
-    hide_list:
-      type: checkbox
-      label: "Hide from list views:"
-      postfix: "Check to hide this page from overview."
-    filelist_files:
+      label: "Body:"
+      height: 150px
+    filelist:
       type: filelist
-      label: "Attachments:"
-      group: "Secondary information"
-    filelist_downloads:
+      required: true
+      label: "Files:"
+    image:
+      type: image
+      required: true
+      label: "Image:"
+      attrib: title
+      extensions: [ gif, jpg, png ]
+    isbn:
       type: text
-      class: narrow
-      label: "Document folder:"
-      postfix: "Add the name of the folder to show as a 'File browser' listing, relative to the base 'files/' folder. If left blank, no file-browser will be shown."
-    # show_page:
-    #  type: checkbox
-    #  required: false
-    #  label: "This page should be shown on the site, and is not an internal page:"
-    # These links & titles will show in the right bar if populated - external links should have the external link icon
-    # appended, documents on the DMS should have another visual representation present.
-    hide_related:
-      type: checkbox
-      label: "Hide from related content:"
-      postfix: "Check to hide this page from related content sections."
-    hide_related_section:
-      type: checkbox
-      label: "Hide related content section:"
-      postfix: "Check to hide the related content section."
-    listtitle:
-      type: text
-      default: "Thumbnail/image grid view"
       required: false
+      label: "ISBN:"
       variant: inline
-      prefix: "<hr><h2>Image Grid</h2>"
-    imagelist:
-      type: imagelist
-      label: "Grid images for subsites:"
-    liststyle:
-      type: select
-      label: "Style modifier"
-      values: ['default', 'fivecols']
-    support_navigation:
-      type: markdown
-      label: "Support navigation:"
-      group: "Support navigation"
-  taxonomy: [ tags, tree ]
+      group: "Secondary options"
+    structure_sortorder:
+      type: integer
+      label: "Sort order in structure tree parent"
+  taxonomy: [ tags ]
   relations:
+    structures:
+      label: "Tree parent"
+      multiple: false
+      order: title
     persons:
-      label: "Contact(s)"
+      label: "Author(s)"
       multiple: true
+      format: "{{ item.last_name }}, {{ item.first_name }}"
+      order: last_name
+    person:
+      multiple: true
+      label: "Contact(s)"
+      order: last_name
       format: "{{ item.last_name }}, {{ item.first_name }}"
       order: last_name
     pages:
@@ -245,51 +138,58 @@ pages:
       label: "Blog posts"
       order: -id
       format: "{{ item.title|escape }}"
-    collections:
+    publications:
       multiple: true
-      label: "Collections"
+      label: "Publications"
       order: -id
       format: "{{ item.title|escape }}"
-    # publications:
-    #   multiple: true
-    #   label: "Publications"
-    #   order: -id
-    #   format: "{{ item.title|escape }}"
-    # pressreleases:
-    #   multiple: true
-    #   label: "Press releases"
-    #   order: -id
-    #   format: "{{ item.title|escape }}"
-    # projects:
-    #   multiple: true
-    #   label: "Projects"
-    #   order: -id
-    #   format: "{{ item.title|escape }}"
-    # taskforces:
-    #   multiple: true
-    #   label: "Task forces"
-    #   order: -id
-    #   format: "{{ item.title|escape }}"
-    # events:
-    #   multiple: true
-    #   label: "Events"
-    #   order: -id
-    #   format: "{{ item.title|escape }}"
-    # jobs:
-    #   multiple: true
-    #   label: "Jobs"
-    #   order: -id
-    #   format: "{{ item.title|escape }}"
-  record_template: record_page.twig
-  icon_many: "fa:files-o"
-  icon_one: "fa:file-o"
+    pressreleases:
+      multiple: true
+      label: "Press releases"
+      order: -id
+      format: "{{ item.title|escape }}"
+    projects:
+      multiple: true
+      label: "Projects"
+      order: -id
+      format: "{{ item.title|escape }}"
+    taskforces:
+      multiple: true
+      label: "Task forces"
+      order: -id
+      format: "{{ item.title|escape }}"
+    events:
+      multiple: true
+      label: "Events"
+      order: -id
+      format: "{{ item.title|escape }}"
+    jobs:
+      multiple: true
+      label: "Jobs"
+      order: -id
+      format: "{{ item.title|escape }}"
+  sort: -datepublish
+  record_template : record_publication.twig
+  icon_many: "fa:book"
+  icon_one: "fa:book"
 
 
-collections:
-  name: Collections
-  singular_name: Collection
+
+#################################
+#
+# PRESSRELEASES
+#
+# Notes:
+# Copy of PUBLICATION
+#
+#
+#################################
+pressreleases:
+  name: 'Press Releases'
+  singular_name: 'Press Release'
+  slug: 'pressreleases'
+  singular_slug: 'pressrelease'
   fields:
-    # Shown on Individual pages, Lists, Overviews, Teasers
     title:
       type: text
       required: true
@@ -297,94 +197,49 @@ collections:
       variant: inline
       postfix: "(max. 100 characters)"
       pattern: "^.{1,100}$"
-      group: Page
+      group: "Press releases"
     slug:
       type: slug
       uses: title
-    intro:
-      type: textarea
-      label: "Intro:"
+    introduction:
+      type: markdown
+      required: false
+      label: "Introduction (120 chars MAX):"
+      pattern: "^.{1,120}$"
       height: 150px
-    # Shown on Individual pages, Lists
-    teaser:
-      type: html
-      label: "Teaser (required):"
-      height: 150px
-    # Shown on Individual pages
     body:
       type: html
-      label: "Body (required):"
-      height: 300px
-    # Shown on Individual pages, Lists, Overviews, Teasers
-    teaser_image:
-      type: image
       required: false
-      label: "Teaser image:"
+      label: "Body:"
+      height: 150px
+    filelist:
+      type: filelist
+      required: true
+      label: "Files:"
+    image:
+      type: image
+      required: true
+      label: "Image:"
       attrib: title
       extensions: [ gif, jpg, png ]
-    source:
-      type: text
-      variant: inline
-      class: narrow
-    source_url:
-      type: text
-      required: false
-      label: "URL from source:"
-      variant: inline
-      postfix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url
-    secondary_mail:
-      type: checkbox
-      label: "Show secondary email instead:"
-    hide_list:
-      type: checkbox
-      label: "Hide from list views:"
-      postfix: "Check to hide this page from overview."
-    filelist_files:
-      type: filelist
-      label: "Attachments:"
-      group: "Secondary information"
-    filelist_downloads:
-      type: text
-      class: narrow
-      label: "Document folder:"
-      postfix: "Add the name of the folder to show as a 'File browser' listing, relative to the base 'files/' folder. If left blank, no file-browser will be shown."
-    # show_page:
-    #  type: checkbox
-    #  required: false
-    #  label: "This page should be shown on the site, and is not an internal page:"
-    # These links & titles will show in the right bar if populated - external links should have the external link icon
-    # appended, documents on the DMS should have another visual representation present.
-    hide_related:
-      type: checkbox
-      label: "Hide from related content:"
-      postfix: "Check to hide this page from related content sections."
-    hide_related_section:
-      type: checkbox
-      label: "Hide related content section:"
-      postfix: "Check to hide the related content section."
-    listtitle:
-      type: text
-      default: "Thumbnail/image grid view"
-      required: false
-      variant: inline
-      prefix: "<hr><h2>Image Grid</h2>"
-    imagelist:
-      type: imagelist
-      label: "Grid images for subsites:"
-    liststyle:
-      type: select
-      label: "Style modifier"
-      values: ['default', 'fivecols']
-    support_navigation:
-      type: markdown
-      label: "Support navigation:"
-      group: "Support navigation"
-  taxonomy: [ tags, tree ]
+    structure_sortorder:
+      type: integer
+      label: "Sort order in structure tree parent"
+  taxonomy: [ tags ]
   relations:
+    structures:
+      label: "Tree parent"
+      multiple: false
+      order: title
     persons:
-      label: "Contact(s)"
+      label: "Author(s)"
       multiple: true
+      format: "{{ item.last_name }}, {{ item.first_name }}"
+      order: last_name
+    person:
+      multiple: true
+      label: "Contact(s)"
+      order: last_name
       format: "{{ item.last_name }}, {{ item.first_name }}"
       order: last_name
     pages:
@@ -397,130 +252,40 @@ collections:
       label: "Blog posts"
       order: -id
       format: "{{ item.title|escape }}"
-    # publications:
-    #   multiple: true
-    #   label: "Publications"
-    #   order: -id
-    #   format: "{{ item.title|escape }}"
-    # pressreleases:
-    #   multiple: true
-    #   label: "Press releases"
-    #   order: -id
-    #   format: "{{ item.title|escape }}"
-    # projects:
-    #   multiple: true
-    #   label: "Projects"
-    #   order: -id
-    #   format: "{{ item.title|escape }}"
-    # taskforces:
-    #   multiple: true
-    #   label: "Task forces"
-    #   order: -id
-    #   format: "{{ item.title|escape }}"
-    # events:
-    #   multiple: true
-    #   label: "Events"
-    #   order: -id
-    #   format: "{{ item.title|escape }}"
-    # jobs:
-    #   multiple: true
-    #   label: "Jobs"
-    #   order: -id
-    #   format: "{{ item.title|escape }}"
-  record_template: record_page.twig
-  icon_many: "fa:share-alt"
-  icon_one: "fa:share-alt"
-
-
-#################################
-#
-# STRUCTURE
-#
-# Notes:
-# Some of these list pages (eg - the publications list page), will not need creating here,
-# they should be dynamic lists that show anything that was created as a publication, likewise the staff list page
-# should show any person that has been created
-#
-#################################
-structures:
-  name: Structures
-  singular_name: Structure
-  fields:
-  # Shown on Overview pages, List pages, Teasers
-    title:
-      type: text
-      required: true
-      label: "Title (required):"
-      variant: inline
-      postfix: "(max. 50 characters)"
-      pattern: "^.{1,50}$"
-      group: Structure
-    # The permalink should be /parent URL/title - eg pro.europeana.eu/share-your-data/getting-started.html
-    slug:
-      type: slug
-      uses: title
-    secondary_mail:
-      type: checkbox
-      required: false
-      label: "Show secondary email instead:"
-    # Shown on Overview pages, List pages
-    teaser:
-      type: html
-      required: false
-      label: "Intro text:"
-      height: 150px
-    # Shown on Overview pages, List pages, Teasers
-    image:
-      type: image
-      required: true
-      label: "Image:"
-      attrib: title
-      extensions: [ gif, jpg, png ]
-    template:
-      type: templateselect
-      filter: '*_structure.twig'
-      postfix: 'Use "default template" for overview.'
-      prefix: "<hr>"
-    content:
-      type: select
-      label: 'Contenttype'
-      values: ['default', 'Events', 'BlogPosts', 'Persons', 'PressReleases', 'Projects', 'Publications', 'TaskForces', 'Jobs']
-      postfix: 'Set content by contenttype'
-      group: "Content type"
-    # subclass get a own body class
-    # -> change name to 'theme'
-    subclass:
-      type: select
-      label: "Subsite theme"
-      values: ['none', 'europeana_subsite_cloud', 'europeana_subsite_creative']
-      prefix: "<hr><h2>Subsite Settings</h2>"
-      group: "Subsite settings"
-    footer:
-      type: select
-      label: 'Subsite footer'
-      values: footer/id,title
-    date_start:
-      type: date
-      required: false
-      label: "Project start:"
-      variant: inline
-    date_end:
-      type: date
-      required: false
-      label: "Project end:"
-      variant: inline
-  taxonomy: [ tags, tree ]
-  relations:
-    persons:
-      label: "Contact(s)"
+    publications:
       multiple: true
-      format: "{{ item.last_name }}, {{ item.first_name }}"
-  record_template: overview_structure.twig
-  recordsperpage: 1000
-  icon_many: "fa:puzzle-piece"
-  icon_one: "fa:puzzle-piece"
-  # viewless: true
-
+      label: "Publications"
+      order: -id
+      format: "{{ item.title|escape }}"
+    pressreleases:
+      multiple: true
+      label: "Press releases"
+      order: -id
+      format: "{{ item.title|escape }}"
+    projects:
+      multiple: true
+      label: "Projects"
+      order: -id
+      format: "{{ item.title|escape }}"
+    taskforces:
+      multiple: true
+      label: "Task forces"
+      order: -id
+      format: "{{ item.title|escape }}"
+    events:
+      multiple: true
+      label: "Events"
+      order: -id
+      format: "{{ item.title|escape }}"
+    jobs:
+      multiple: true
+      label: "Jobs"
+      order: -id
+      format: "{{ item.title|escape }}"
+  sort: -datepublish
+  record_template : record_publication.twig
+  icon_many: "fa:newspaper-o"
+  icon_one: "fa:newspaper-o"
 
 
 
@@ -587,18 +352,16 @@ persons:
       label: "Team:"
       values:
         "(not set)": "(not set)"
+        "Aggregation": "Data Partner Services"
+        "Corporate Communication": "Communications"
+        "Distribution & Engagement": "End User Services"
+        "Facilitation": "Policy, Research, Knowledge & Programme Management"
         "Management": "Management"
-        "Editors_Contributors": "Editors & Contributors"
-        # "Aggregation": "Data Partner Services"
-        # "Corporate Communication": "Communications"
-        # "Distribution & Engagement": "End User Services"
-        # "Facilitation": "Policy, Research, Knowledge & Programme Management"
-        # "Management": "Management"
-        # "Network & Sustainability": "Network & Sustainability"
-        # "People & Business Support": "People & Business Support"
-        # "Product Development": "Product Development"
-        # "Technology": "Technology"
-        # "Re-use Services": "Re-use Services"
+        "Network & Sustainability": "Network & Sustainability"
+        "People & Business Support": "People & Business Support"
+        "Product Development": "Product Development"
+        "Technology": "Technology"
+        "Re-use Services": "Re-use Services"
     introduction:
       type: html
       required: false
@@ -714,7 +477,15 @@ persons:
     contact_tag:
       type: checkbox
       label: "Main contact of tag page"
-  taxonomy: [ tags, tree ]
+    structure_sortorder:
+      type: integer
+      label: "Sort order in structure tree parent"
+  taxonomy: [ tags ]
+  relations:
+    structures:
+      label: "Tree parent"
+      multiple: false
+      order: title
   sort: team
   # no pager for person, mabe there is a better solution
   listing_records: 10000
@@ -722,6 +493,599 @@ persons:
   listing_template : listing_person.twig
   icon_many: "fa:users"
   icon_one: "fa:user"
+
+
+
+
+#################################
+#
+# EVENT
+#
+# Notes:
+# Requirement: On occasion we will not know the exact dates of events, but we would like to announce them.
+# For the day / month fields, there should be a (not known) to allow the user control over this.
+# => Did not follow the date style with different text fields; If date fields are not filled out make them unknown
+# Documents folder: This is required, so that you can show the root folder where the event documentation is going to be
+# stored. This will be created in the DMS first, and the user can then select this folder.
+# The folder area will be shown on the single events page, and when files are uploaded into this area,
+# then the website will update automatically.
+#
+#
+#################################
+events:
+  name: Events
+  singular_name: Event
+  fields:
+    # Show on Events list page, Events page, Home page
+    title:
+      type: text
+      required: true
+      label: "Title (required):"
+      variant: inline
+      postfix: "<hr>"
+      postfix: "(max. 50 characters)"
+      pattern: "^.{1,50}$"
+      group: "Event information"
+    slug:
+      type: slug
+      uses: title
+    start_event:
+      type: datetime
+      required: false
+      label: "Start:"
+    unconfirmed_start:
+      type: checkbox
+      required: false
+      label: "Unconfirmed:"
+    # If the end date and the start date are the same, then the end date will not show
+    # Show on Events list page, Events page, Home page
+    end_event:
+      type: datetime
+      required: false
+      label: "End:"
+    unconfirmed_end:
+      type: checkbox
+      required: false
+      label: "Unconfirmed:"
+    teaser:
+      type: html
+      required: true
+      label: "Teaser (required):"
+      height: 150px
+    # Show on Events list page, Events page, Home page
+    body:
+      type: html
+      required: true
+      label: "Body (required):"
+      height: 150px
+    # Shown on Individual pages, Lists, Overviews, Teasers
+    teaser_image:
+      type: image
+      required: false
+      label: "Teaser image:"
+    image:
+      type: image
+      required: false
+      label: "Teaser image:"
+      attrib: title
+      extensions: [ gif, jpg, png ]
+    filelist:
+      type: filelist
+      required: true
+      label: "Files:"
+    # If this is checked, then the contact persons secondary email will be shown instead of their primary email in the contact block
+    secondary_mail:
+      type: checkbox
+      required: false
+      label: "Show secondary email instead:"
+    structure_sortorder:
+      type: integer
+      label: "Sort order in structure tree parent"
+    support_navigation:
+      type: markdown
+      label: "Support navigation:"
+      group: "Support navigation"
+  taxonomy: [ tags ]
+  relations:
+    structures:
+      label: "Tree parent"
+      multiple: false
+      order: title
+    locations:
+      multiple: false
+      label: "Location"
+      order: title
+      format: "{{ item.title }}"
+    persons:
+      multiple: true
+      label: "Speakers"
+      order: last_name
+      format: "{{ item.last_name }}, {{ item.first_name }}"
+    person:
+      multiple: true
+      label: "Contact(s)"
+      order: last_name
+      format: "{{ item.last_name }}, {{ item.first_name }}"
+    pages:
+      multiple: true
+      label: "Pages"
+      order: -id
+      format: "{{ item.title|escape }}"
+  sort: start_event
+  record_template : record_event.twig
+  listing_template: event_listing.twig
+  listing_records : 8
+  icon_many: "fa:calendar"
+  icon_one: "fa:calendar"
+
+tags:
+  name: Tags
+  singular_name: Tags
+  fields:
+    title:
+      type: text
+      required: true
+      label: "Title (required):"
+      variant: inline
+      postfix: "<hr>"
+      postfix: "(max. 50 characters)"
+      pattern: "^.{1,50}$"
+    slug:
+      type: slug
+      uses: title
+  record_template : record_event.twig
+  listing_template: tag_listing.twig
+  listing_records : 8
+
+
+#################################
+#
+# JOB
+#
+# Notes:
+# Type Location will show the Locations content types, that have the ʺThis is a Europeana place of workʺ checked
+# NOTE: All job posts will be appended with the following:
+# How to apply?
+# Send us your CV (in English) with a covering letter outlining what interests you about this position to: jobs@europeana.eu
+# Should you have any additional questions or require more information before deciding to apply, please send us an email.
+# You should respond before (depublication date)
+# More about us
+# For more information see: (Europeana Foundation about link)
+# The depublication date will be the last day that you should respond by, so if the depublication date was set to ʺFebruary 10, 2014ʺ
+# - then the job ad would be removed from the list, and the job page will be depublished. Before this date, there should
+# be text saying ʺYou should respond by February 10, 2014ʺ on the job page.
+#
+#
+#################################
+Jobs:
+  name: Jobs
+  singular_name: Job
+  fields:
+    # Show on Job list page, Job page
+    position:
+      type: text
+      required: true
+      label: "Position (required):"
+      variant: inline
+      class: wide
+      group: "Job information"
+    slug:
+      type: slug
+      uses: position
+    department:
+      type: select
+      required: false
+      label: "Position will be in this team:"
+      #values: [ "(not set)", "Aggregation", "Corporate Communication", "Distribution & Engagement", "Facilitation", "Managment", "Network & Sustainability", "People & Business Support", "Product Development", "Technology" ]
+      values:
+        - 'Data Partner Services'
+        - 'Communications'
+        - 'End User Services'
+        - 'Policy, Research, Knowledge & Programme Management'
+        - 'Management'
+        - 'Network & Sustainability'
+        - 'People & Business Support'
+        - 'Product Development'
+        - 'Re-use Services'
+        - 'Technology'
+    # Show on Job list page, Job page
+    postion_type:
+      type: select
+      required: false
+      label: "Contract type:"
+      values: [ "Full time", "Part time", "Internship", "Full time (Maternity cover)", "Full time (Temp)", "Part time (Temp)" ]
+    # Show on Job list page, Job page
+    teaser:
+      type: html
+      required: true
+      label: "Teaser (required):"
+      height: 150px
+    # Show on Job page
+    body:
+      type: html
+      required: true
+      label: "Body (required):"
+      height: 150px
+      postfix: "<hr>"
+    # Show on Job page
+    salary_eur:
+      type: text
+      required: false
+      variant: inline
+      label: "Monthly salary (EUR):"
+      index: true
+    # Show on Job page
+    scale_eur:
+      type: text
+      required: false
+      variant: inline
+      label: "Scale (EUR):"
+      index: true
+      postfix: "<hr>"
+    deadline:
+      type: date
+      required: false
+      label: "Deadline"
+    filelist:
+      type: filelist
+      required: false
+      label: "Files:"
+      group: "Secondary information"
+    structure_sortorder:
+      type: integer
+      label: "Sort order in structure tree parent"
+  taxonomy: [ ]
+  relations:
+    structures:
+      label: "Tree parent"
+      multiple: false
+      order: title
+    persons:
+      multiple: true
+      label: "Contact(s)"
+      order: last_name
+      format: "{{ item.last_name }}, {{ item.first_name }}"
+    locations:
+      label: "Locations"
+      multiple: false
+    pages:
+      multiple: true
+      label: "Pages"
+      order: -id
+      format: "{{ item.title|escape }}"
+    blogposts:
+      multiple: true
+      label: "Blog posts"
+      order: -id
+      format: "{{ item.title|escape }}"
+    publications:
+      multiple: true
+      label: "Publications"
+      order: -id
+      format: "{{ item.title|escape }}"
+    pressreleases:
+      multiple: true
+      label: "Press releases"
+      order: -id
+      format: "{{ item.title|escape }}"
+    projects:
+      multiple: true
+      label: "Projects"
+      order: -id
+      format: "{{ item.title|escape }}"
+    taskforces:
+      multiple: true
+      label: "Task forces"
+      order: -id
+      format: "{{ item.title|escape }}"
+    events:
+      multiple: true
+      label: "Events"
+      order: -id
+      format: "{{ item.title|escape }}"
+    jobs:
+      multiple: true
+      label: "Jobs"
+      order: -id
+      format: "{{ item.title|escape }}"
+  sort: -datepublish
+  record_template: record_job.twig
+  icon_many: "fa:money"
+  icon_one: "fa:money"
+
+
+
+
+#################################
+#
+# BLOG POST
+#
+# Notes:
+# If this is type authors is populated, then instead of showing [By Owner] eg, "By Dean Birkett" in the byline, it will show "By [Written by]"
+# Type Files should link directly with our DMS. This should allow for multiple files to be added, and not just one file
+# Type owner is not shown at all if the Written by section is populated; I think dependet choice list are not possible?
+#
+#
+#################################
+blogposts:
+  name: 'Blog Posts'
+  singular_name: 'BlogPost'
+  display_name: 'Blog Posts'
+  slug: 'blogposts'
+  singular_slug: 'blogpost'
+  fields:
+    # Show on Blog list page, Blog page, Related items snippet, Home page
+    title:
+      type: text
+      required: true
+      label: "Title (required):"
+      variant: inline
+      postfix: "(max. 200 characters)"
+      pattern: "^.{1,200}$"
+      group: "Blog post"
+    slug:
+      type: slug
+      uses: title
+    # Shown on Blog page
+    body:
+      type: html
+      required: false
+      label: "Body (required):"
+      height: 150px
+    # multiselect from dms
+    # Show on Blog list page, Related items snippet, Home page
+    image:
+      type: image
+      required: false
+      label: "Teaser image:"
+      attrib: title
+      extensions: [ gif, jpg, png ]
+    # Show on Blog page
+    files:
+      type: filelist
+      required: false
+      label: "Files:"
+      group: "Secondary information"
+    structure_sortorder:
+      type: integer
+      label: "Sort order in structure tree parent"
+  # Show on Blog page
+  taxonomy: [ tags ]
+  relations:
+    structures:
+      label: "Tree parent"
+      multiple: false
+      order: title
+    persons:
+      label: "Author(s)"
+      multiple: true
+      format: "{{ item.last_name }}, {{ item.first_name }}"
+      order: last_name
+    person:
+      multiple: true
+      label: "Contact(s)"
+      order: last_name
+      format: "{{ item.last_name }}, {{ item.first_name }}"
+      order: last_name
+    pages:
+      multiple: true
+      label: "Pages"
+      order: -id
+      format: "{{ item.title|escape }}"
+    blogposts:
+      multiple: true
+      label: "Blog posts"
+      order: -id
+      format: "{{ item.title|escape }}"
+    publications:
+      multiple: true
+      label: "Publications"
+      order: -id
+      format: "{{ item.title|escape }}"
+    pressreleases:
+      multiple: true
+      label: "Press releases"
+      order: -id
+      format: "{{ item.title|escape }}"
+    projects:
+      multiple: true
+      label: "Projects"
+      order: -id
+      format: "{{ item.title|escape }}"
+    taskforces:
+      multiple: true
+      label: "Task forces"
+      order: -id
+      format: "{{ item.title|escape }}"
+    events:
+      multiple: true
+      label: "Events"
+      order: -id
+      format: "{{ item.title|escape }}"
+    jobs:
+      multiple: true
+      label: "Jobs"
+      order: -id
+      format: "{{ item.title|escape }}"
+  record_template: record_blogpost.twig
+  recordsperpage: 100
+  icon_many: "fa:quote-left"
+  icon_one: "fa:quote-right"
+
+
+
+#################################
+#
+# PAGE
+#
+# Notes:
+# Type position: If 2 blocks of content share the same value (eg both set to be first), then the latest should take precedence
+# Type checkbox: This checkbox should control whether the page is shown in the overview/list page, or is a page that is reachable
+# via a top level link. If this is not checked, then the page will still be published, still be searchable, but will only be reached
+# via a link that has been placed in some body text.
+#
+# Issues:
+# - Not defined how to build up the selectfield for parent to build a structure; using suggestion from bob with taxonomies
+# - Restrict the mulitiple: true select to MAX: 2
+#
+# ToDos:
+# - Clarify behavior of type parent
+# - Implement answers to questions if possible
+#
+# Questions:
+# - How does the permalink looks like? Solution with routing or should it stay with page/title?
+# - Where do the contact persons come from? From contenttype person?
+# - Is it possible to define the max amount of choosen entries from the contenttype select, multiple: true? Example: max choose two entries
+# - How will be the exact handling of type support_navigation?
+#   > Currently implemented as a markdown field. This could just as well be an
+#     HTML field; neither is a particularly excellent solution, but the
+#     alternative would be to add yet another contenttype, and a relation - way
+#     too complex.
+#     The field should contain a sequence of list items
+# - Should related content be shown on the contenttype (shown in prototype demo.deanbirkett but not in excel docs.google.com)?
+#
+#################################
+pages:
+  name: Pages
+  singular_name: Page
+  fields:
+    # Shown on Individual pages, Lists, Overviews, Teasers
+    title:
+      type: text
+      required: true
+      label: "Title (required):"
+      variant: inline
+      postfix: "(max. 50 characters)"
+      pattern: "^.{1,50}$"
+      group: Page
+    slug:
+      type: slug
+      uses: title
+    intro:
+      type: textarea
+      label: "Intro:"
+      height: 150px
+    # Shown on Individual pages, Lists
+    teaser:
+      type: html
+      label: "Teaser (required):"
+      height: 150px
+    # Shown on Individual pages
+    body:
+      type: html
+      label: "Body (required):"
+      height: 300px
+    # Shown on Individual pages, Lists, Overviews, Teasers
+    teaser_image:
+      type: image
+      required: false
+      label: "Teaser image:"
+    secondary_mail:
+      type: checkbox
+      label: "Show secondary email instead:"
+    hide_list:
+      type: checkbox
+      label: "Hide from list views:"
+      postfix: "Check to hide this page from overview."
+    filelist_files:
+      type: filelist
+      label: "Files:"
+      group: "Secondary information"
+    filelist_downloads:
+      type: text
+      class: narrow
+      label: "Document folder:"
+      postfix: "Add the name of the folder to show as a 'File browser' listing, relative to the base 'files/' folder. If left blank, no file-browser will be shown."
+    # show_page:
+    #  type: checkbox
+    #  required: false
+    #  label: "This page should be shown on the site, and is not an internal page:"
+    # These links & titles will show in the right bar if populated - external links should have the external link icon
+    # appended, documents on the DMS should have another visual representation present.
+    hide_related:
+      type: checkbox
+      label: "Hide from related content:"
+      postfix: "Check to hide this page from related content sections."
+    hide_related_section:
+      type: checkbox
+      label: "Hide related content section:"
+      postfix: "Check to hide the related content section."
+    listtitle:
+      type: text
+      default: "Thumbnail/image grid view"
+      required: false
+      variant: inline
+      prefix: "<hr><h2>Image Grid</h2>"
+    imagelist:
+      type: imagelist
+      label: "Grid images for subsites:"
+    liststyle:
+      type: select
+      label: "Style modifier"
+      values: ['default', 'fivecols']
+    support_navigation:
+      type: markdown
+      label: "Support navigation:"
+      group: "Support navigation"
+    structure_sortorder:
+      type: integer
+      label: "Sort order in structure tree parent"
+  taxonomy: [ tags ]
+  relations:
+    structures:
+      label: "Tree parent"
+      multiple: false
+      order: title
+    persons:
+      label: "Contact(s)"
+      multiple: true
+      format: "{{ item.last_name }}, {{ item.first_name }}"
+      order: last_name
+    pages:
+      multiple: true
+      label: "Pages"
+      order: -id
+      format: "{{ item.title|escape }}"
+    blogposts:
+      multiple: true
+      label: "Blog posts"
+      order: -id
+      format: "{{ item.title|escape }}"
+    publications:
+      multiple: true
+      label: "Publications"
+      order: -id
+      format: "{{ item.title|escape }}"
+    pressreleases:
+      multiple: true
+      label: "Press releases"
+      order: -id
+      format: "{{ item.title|escape }}"
+    projects:
+      multiple: true
+      label: "Projects"
+      order: -id
+      format: "{{ item.title|escape }}"
+    taskforces:
+      multiple: true
+      label: "Task forces"
+      order: -id
+      format: "{{ item.title|escape }}"
+    events:
+      multiple: true
+      label: "Events"
+      order: -id
+      format: "{{ item.title|escape }}"
+    jobs:
+      multiple: true
+      label: "Jobs"
+      order: -id
+      format: "{{ item.title|escape }}"
+  record_template: record_page.twig
+  icon_many: "fa:files-o"
+  icon_one: "fa:files"
+
+
 
 
 
@@ -772,6 +1136,370 @@ locations:
   icon_many: "fa:map-marker"
   icon_one: "fa:map-marker"
   show_in_menu: false
+
+
+
+#################################
+#
+# PROJECTS
+#
+# Notes:
+#
+#
+#################################
+projects:
+  name: Projects
+  singular_name: Project
+  fields:
+    title:
+      type: text
+      required: true
+      label: "Title (required):"
+      variant: inline
+      postfix: "(max. 50 characters)"
+      pattern: "^.{1,50}$"
+      group: Projects
+    slug:
+      type: slug
+      uses: title
+    subtitle:
+      type: text
+      required: false
+      label: "Subtitle:"
+      variant: inline
+    date_start:
+      type: date
+      required: false
+      label: "Project start:"
+      variant: inline
+    date_end:
+      type: date
+      required: false
+      label: "Project end:"
+      variant: inline
+    teaser:
+      type: html
+      label: "Teaser (required):"
+      height: 150px
+    intro:
+      type: textarea
+      label: "Intro:"
+      height: 150px
+    body:
+      type: html
+      label: "Body (required):"
+      height: 300px
+    url:
+      type: text
+      required: false
+      label: "Link to projects website:"
+      variant: inline
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url
+    logo:
+      type: image
+      required: false
+      label: "Project logo:"
+      extensions: [ gif, jpg, png ]
+    filelist:
+      type: filelist
+      required: true
+      label: "Downloads:"
+      group: "Secondary information"
+    filelist_downloads:
+      type: text
+      class: narrow
+      label: "Document folder:"
+      postfix: "Add the name of the folder to show as a 'File browser' listing, relative to the base 'files/' folder. If left blank, no file-browser will be shown."
+    structure_sortorder:
+      type: integer
+      label: "Sort order in structure tree parent"
+  taxonomy: [ tags ]
+  relations:
+    structures:
+      label: "Tree parent"
+      multiple: false
+      order: title
+    person:
+      multiple: true
+      label: "Contact(s)"
+      order: last_name
+      format: "{{ item.last_name }}, {{ item.first_name }}"
+    pages:
+      multiple: true
+      label: "Pages"
+      order: -id
+      format: "{{ item.title|escape }}"
+    blogposts:
+      multiple: true
+      label: "Blog posts"
+      order: -id
+      format: "{{ item.title|escape }}"
+    publications:
+      multiple: true
+      label: "Publications"
+      order: -id
+      format: "{{ item.title|escape }}"
+    pressreleases:
+      multiple: true
+      label: "Press releases"
+      order: -id
+      format: "{{ item.title|escape }}"
+    projects:
+      multiple: true
+      label: "Projects"
+      order: -id
+      format: "{{ item.title|escape }}"
+    taskforces:
+      multiple: true
+      label: "Task forces"
+      order: -id
+      format: "{{ item.title|escape }}"
+    events:
+      multiple: true
+      label: "Events"
+      order: -id
+      format: "{{ item.title|escape }}"
+    jobs:
+      multiple: true
+      label: "Jobs"
+      order: -id
+      format: "{{ item.title|escape }}"
+  record_template: record_project.twig
+  listing_records: 5
+  recordsperpage: 20
+  sort: -datepublish
+  icon_many: "fa:clipboard"
+  icon_one: "fa:clipboard"
+
+
+
+#################################
+#
+# Task forces
+#
+#
+#################################
+taskforces:
+  name: TaskForces
+  singular_name: TaskForce
+  fields:
+    title:
+      type: text
+      required: true
+      label: "Title (required):"
+      variant: inline
+      postfix: "(max. 50 characters)"
+      pattern: "^.{1,50}$"
+      group: "Task force"
+    slug:
+      type: slug
+      uses: title
+    department:
+      type: select
+      label: "Department:"
+      values: [ "Europeana Network", "Europeana Tech" ]
+    subtitle:
+      type: text
+      required: false
+      label: "Subtitle:"
+      variant: inline
+    date_start:
+      type: date
+      required: false
+      label: "Expected timeframe start:"
+      format: "{{d.Y}}"
+    date_end:
+      type: date
+      required: false
+      label: "Expected timeframe end:"
+      format: "{{d.Y}}"
+    teaser:
+      type: html
+      label: "Teaser (required):"
+      height: 150px
+    intro:
+      type: textarea
+      label: "Intro:"
+      height: 150px
+    body:
+      type: html
+      label: "Body (required):"
+      height: 300px
+    teaser_image:
+      type: image
+      required: false
+      label: "Teaser image:"
+    filelist_files:
+      type: filelist
+      label: "Files:"
+    filelist_downloads:
+      type: text
+      class: narrow
+      label: "Document folder:"
+      postfix: "Add the name of the folder to show as a 'File browser' listing, relative to the base 'files/' folder. If left blank, no file-browser will be shown."
+    structure_sortorder:
+      type: integer
+      label: "Sort order in structure tree parent"
+  taxonomy: [ tags ]
+  relations:
+    structures:
+      label: "Tree parent"
+      multiple: false
+      order: title
+    person:
+      multiple: true
+      label: "Contact(s)"
+      order: last_name
+      format: "{{ item.last_name }}, {{ item.first_name }}"
+      order: last_name
+    persons:
+      multiple: true
+      label: "Chair(s)"
+      order: last_name
+      format: "{{ item.last_name }}, {{ item.first_name }}"
+      order: last_name
+    pages:
+      multiple: true
+      label: "Pages"
+      order: -id
+      format: "{{ item.title|escape }}"
+    blogposts:
+      multiple: true
+      label: "Blog posts"
+      order: -id
+      format: "{{ item.title|escape }}"
+    publications:
+      multiple: true
+      label: "Publications"
+      order: -id
+      format: "{{ item.title|escape }}"
+    pressreleases:
+      multiple: true
+      label: "Press releases"
+      order: -id
+      format: "{{ item.title|escape }}"
+    projects:
+      multiple: true
+      label: "Projects"
+      order: -id
+      format: "{{ item.title|escape }}"
+    taskforces:
+      multiple: true
+      label: "Task forces"
+      order: -id
+      format: "{{ item.title|escape }}"
+    events:
+      multiple: true
+      label: "Events"
+      order: -id
+      format: "{{ item.title|escape }}"
+    jobs:
+      multiple: true
+      label: "Jobs"
+      order: -id
+      format: "{{ item.title|escape }}"
+  record_template: record_taskforce.twig
+  recordsperpage: 1000
+  icon_many: "fa:bullseye"
+  icon_one: "fa:bullseye"
+
+
+#################################
+#
+# STRUCTURE
+#
+# Notes:
+# Some of these list pages (eg - the publications list page), will not need creating here,
+# they should be dynamic lists that show anything that was created as a publication, likewise the staff list page
+# should show any person that has been created
+#
+#################################
+structures:
+  name: Structures
+  singular_name: Structure
+  fields:
+  # Shown on Overview pages, List pages, Teasers
+    title:
+      type: text
+      required: true
+      label: "Title (required):"
+      variant: inline
+      postfix: "(max. 50 characters)"
+      pattern: "^.{1,50}$"
+      group: Structure
+    # The permalink should be /parent URL/title - eg pro.europeana.eu/share-your-data/getting-started.html
+    slug:
+      type: slug
+      uses: title
+    secondary_mail:
+      type: checkbox
+      required: false
+      label: "Show secondary email instead:"
+    # Shown on Overview pages, List pages
+    teaser:
+      type: html
+      required: false
+      label: "Intro text:"
+      height: 150px
+    # Shown on Overview pages, List pages, Teasers
+    image:
+      type: image
+      required: true
+      label: "Image:"
+      attrib: title
+      extensions: [ gif, jpg, png ]
+    template:
+      type: templateselect
+      filter: '*_structure.twig'
+      postfix: 'Use "default template" for overview.'
+      prefix: "<hr>"
+    content:
+      type: select
+      label: 'Contenttype'
+      values: ['default', 'Events', 'BlogPosts', 'Persons', 'PressReleases', 'Projects', 'Publications', 'TaskForces', 'Jobs']
+      postfix: 'Set content by contenttype'
+      group: "Content type"
+    # subclass get a own body class
+    # -> change name to 'theme'
+    subclass:
+      type: select
+      label: "Subsite theme"
+      values: ['none', 'europeana_subsite_cloud', 'europeana_subsite_creative', 'europeana_subsite_enumerate']
+      prefix: "<hr><h2>Subsite Settings</h2>"
+      group: "Subsite settings"
+    footer:
+      type: select
+      label: 'Subsite footer'
+      values: footer/id,title
+    date_start:
+      type: date
+      required: false
+      label: "Project start:"
+      variant: inline
+    date_end:
+      type: date
+      required: false
+      label: "Project end:"
+      variant: inline
+    structure_sortorder:
+      type: integer
+      label: "Sort order in structure tree parent"
+  taxonomy: [ tags ]
+  relations:
+    structures:
+      label: "Tree parent"
+      multiple: false
+      order: title
+    persons:
+      label: "Contact(s)"
+      multiple: true
+      format: "{{ item.last_name }}, {{ item.first_name }}"
+  record_template: overview_structure.twig
+  recordsperpage: 1000
+  # viewless: true
+  icon_many: "fa:cubes"
+  icon_one: "fa:cube"
 
 
 #################################
@@ -907,33 +1635,33 @@ footers:
     # footer logo image
     image:
       type: image
-      # required: true
+      required: true
       label: "Image: (required):"
       attrib: title
       extensions: [ gif, jpg, png ]
     socialmedia:
       type: html
-      # required: true
+      required: true
       label: "Social media links (required):"
       height: 300px
     linklist-left:
       type: html
-      # required: true
+      required: true
       label: "Linklist left (required):"
       height: 300px
     linklist-right:
       type: html
-      # required: true
+      required: true
       label: "Linklist right (required):"
       height: 300px
     mission:
       type: html
-      # required: true
+      required: true
       label: "Mission (required):"
       height: 300px
     linklist-other:
       type: html
-      # required: true
+      required: true
       label: "Linklist others (required):"
       height: 300px
   relations:
@@ -944,3 +1672,193 @@ footers:
   icon_many: "fa:tasks"
   icon_one: "fa:tasks"
   show_in_menu: false
+
+data:
+  name: Data
+  singular_name: Data
+  fields:
+    title:
+      type: text
+      required: false
+      label: "Title:"
+      variant: inline
+      class: narrow
+    slug:
+      type: slug
+      uses: title
+    intro:
+      type: textarea
+      label: "Intro:"
+      height: 150px
+    teaser:
+      type: html
+      required: true
+      label: "Teaser (required):"
+      height: 150px
+    body:
+      type: html
+      required: true
+      label: "Body (required):"
+      variant: inline
+      class: narrow   
+    image:
+      type: image
+      required: true
+      label: "Teaser:"
+      attrib: title
+      extensions: [ gif, jpg, png ]
+    provided_by:
+      type: text
+      required: false
+      label: "Provided by:"
+      variant: inline
+      class: narrow    
+    provided_by_link:
+      type: text
+      required: false
+      label: "Provided by link:"
+      variant: inline
+      class: narrow 
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url  
+  taxonomy: [ tags ]
+  relations:
+    structures:
+      label: "Tree parent"
+      multiple: false
+      order: title
+    person:
+      multiple: true
+      label: "Contact(s)"
+      order: last_name
+      format: "{{ item.last_name }}, {{ item.first_name }}"
+    pages:
+      multiple: true
+      label: "Pages"
+      order: -id
+      format: "{{ item.title|escape }}"
+    data:
+      multiple: true
+      label: "Data"
+      order: -id
+      format: "{{ item.title|escape }}"
+    blogposts:
+      multiple: true
+      label: "Blog posts"
+      order: -id
+      format: "{{ item.title|escape }}"
+    events:
+      multiple: true
+      label: "Events"
+      order: -id
+      format: "{{ item.title|escape }}"
+  record_template : record_data.twig
+  listing_template: data_listing.twig
+  recordsperpage: 1000
+
+apps:
+  name: Apps
+  singular_name: App
+  fields:
+    title:
+      type: text
+      required: false
+      label: "Title:"
+      variant: inline
+      class: narrow
+    slug:
+      type: slug
+      uses: title
+    intro:
+      type: textarea
+      label: "Intro:"
+      height: 150px
+    teaser:
+      type: html
+      required: true
+      label: "Teaser (required):"
+      height: 150px
+    body:
+      type: html
+      required: true
+      label: "Body (required):"
+      variant: inline
+      class: narrow   
+    image:
+      type: image
+      required: true
+      label: "Image:"
+      attrib: title
+      extensions: [ gif, jpg, png ]
+    name:
+      type: text
+      required: false
+      label: "Name of contact:"
+      variant: inline
+      class: narrow
+      group: contact 
+    email:
+      type: text
+      required: false
+      label: "Email address:"
+      variant: inline
+      pattern: email
+      class: narrow
+    twitter:
+      type: text
+      required: false
+      label: "Twitter URL:"
+      variant: inline
+      postfix: '<em>For expample "https://twitter.com/Europeanaeu" </em>'
+      pattern: url
+      class: narrow
+    linked_in:
+      type: text
+      required: false
+      label: "Linked in:"
+      variant: inline
+      class: narrow 
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url 
+    related_external_links:
+      type: text
+      required: false
+      label: "Portal link:"
+      variant: inline
+      class: narrow 
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url 
+  taxonomy: [ tags ]
+  relations:
+    structures:
+      label: "Tree parent"
+      multiple: false
+      order: title
+    pages:
+      multiple: true
+      label: "Pages"
+      order: -id
+      format: "{{ item.title|escape }}"
+    data:
+      multiple: true
+      label: "Data"
+      order: -id
+      format: "{{ item.title|escape }}"
+    apps:
+      multiple: true
+      label: "Data"
+      order: -id
+      format: "{{ item.title|escape }}"
+    blogposts:
+      multiple: true
+      label: "Blog posts"
+      order: -id
+      format: "{{ item.title|escape }}"
+    events:
+      multiple: true
+      label: "Events"
+      order: -id
+      format: "{{ item.title|escape }}"
+  record_template : record_app.twig
+  listing_template: app_listing.twig 
+  recordsperpage: 1000

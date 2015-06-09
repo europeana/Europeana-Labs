@@ -1,0 +1,72 @@
+{#
+  used in:
+      - events	
+#}
+
+{% if record is defined %}
+
+    {% set listItem = record %}
+    {% set contenttype = record.contenttype %}
+    {% set listItemLink = structurelink(record) %}
+
+
+--><li>
+{% if block is defined %}
+	<div class="labs-item block block-thumb block-thumb-small">
+{% else %}
+	<div class="block block-thumb">
+{% endif %}
+
+        <div class="b-thumb">
+        {% if (contenttype.slug in [  'events' ]) %}
+            
+                <a href="{{ listItemLink }}"><img src="{{ listItem.values['teaser_image']|default		(listItem.values['image'])|thumbnail() }}" alt="{{ listItem.image|title }}" /></a>
+                
+        {% endif %}
+
+        </div>
+	<div class="b-text">
+
+	{% if block is defined %}
+	   <h5><a href="{{ listItemLink }}">{{ listItem.title|striptags }}</a></h5>
+	{% else %}
+	   <h1 class="headline gama"><a href="{{ listItemLink }}">{{ listItem.title|striptags }}</a></h1>
+           <div class="description">
+
+                {% if (contenttype.slug in [ "publications", "pressreleases", "blogposts", "blog-posts", "collections" ]) %}
+                    {{ listItem.excerpt(app.config.get('general/excerpt_length')) }}
+                {% else %}
+                    {{ listItem.teaser }}
+                {% endif %}
+
+            </div>
+
+	{% endif %}
+
+     
+           
+
+
+	    <div class="tags">
+
+           
+               
+            {% if contenttype.slug == "events" %}
+                {# set tags #}
+                {% if record.taxonomy.tags is defined  %}
+			<i class="icon icon-tag"></i>
+			    {% for k,v in record.taxonomy.tags %}
+				<a href="{{ k }}">{{ v }}</a>
+			    {% endfor %}
+		 	
+	    	{% endif %}
+
+            {% endif %}
+
+            </div>
+
+           
+        </div>
+</div>
+    </li><!--
+{% endif %}

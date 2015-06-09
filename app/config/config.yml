@@ -1,7 +1,5 @@
 # NOTE: Database configuration must be done in config_local.yml
 # -------------------------------------------------------------
-
-
 # The name of the website
 sitename: Europeana Labs
 payoff: The Europeana Labs website

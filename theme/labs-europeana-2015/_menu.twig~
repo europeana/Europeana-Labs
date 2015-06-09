@@ -1,0 +1,54 @@
+<!-- start .nav-->
+<nav id="nav" class="nav_primary nav">
+    <ul class="nav-list">
+        {% set slugs = paths.currenturl|split('/') %}
+        {% for item in menu %}
+        <li>
+            {% if ( item.path|slice(1, item.path|length) in slugs) %}
+                <a class="current" href="{{ item.link }}">{{item.label}}</a>
+            {% else %}
+                <a href="{{ item.link }}">{{item.label}}</a>
+            {% endif %}
+        </li>
+        {% endfor %}
+	<li>
+		<a href="http://localhost/page/navigationtest">Page</a>	
+	</li>
+	<li>
+		<a href="http://localhost/person/eliza-papaki">personal details</a>	
+	</li>
+	<li>
+		<a href="http://localhost/persons">persons</a>	
+	</li>
+	<li>
+		<a href="http://localhost/blogpost/eam-stabilem-appellas">blogpost</a>	
+	</li>
+<li>
+		<a href="http://localhost/blogposts">blogposts</a>	
+	</li>
+	<li>
+                <a href="http://localhost/event/nam-pyrrho-aristo-erillus-iam-diu-abiecti">event</a>
+        </li>
+	<li>
+                <a href="http://localhost/events">events</a>
+        </li>
+
+	<li>
+                <a href="http://localhost/apps">event</a>
+        </li>
+	<li>
+                <a href="http://localhost/data">events</a>
+        </li>	
+<!--
+	<li>
+		<a href="http://localhost/app/primum-divisit-ineleganter">app</a>
+	</li>
+	<li>
+          	 <a href="http://localhost/data/quis-aristidem-non-mortuum-diligit">data</a>
+        </li>
+
+-->
+
+  </ul>
+</nav>
+<!-- end .nav-->  

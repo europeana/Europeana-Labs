@@ -1,0 +1,44 @@
+primary:
+  - label: 'Featured collections'
+    title: 'These are featured Europeana collections of interest to the research community'
+    path: /collections
+  - label: 'About our data'
+    path: /about-our-data
+    title: 'How the Europeana dataset is aggregated'
+  - label: 'Work with us'
+    path: /work-with-us
+    title: 'How to work with us'
+  - label: 'About us'
+    path: /about-us
+    title: 'About Europeana Research'
+  - label: 'Record event'
+    path: /record-event
+    title: 'Record event'
+
+footer:
+  - title: Home
+    path: homepage
+    label: Home
+  - title: 'Terms & policies'
+    link: http://europeana.eu/portal/rights/terms-and-policies.html
+    label: 'Terms & policies'
+  - title: Sitemap
+    path: /sitemap
+    label: Sitemap
+  - label: 'About us'
+    path: /about-us
+    title: 'About Europeana Research'
+
+Explorer-Europeana:
+  - title: Search portal
+    path: /sitemap
+    label: Search portal
+  - title: Labs
+    path: /sitemap
+    label: Labs
+  - title: 1914-1918
+    path: /sitemap
+    label: 1914-1918
+  - title: End user blog
+    path: /sitemap
+    label: End user blog

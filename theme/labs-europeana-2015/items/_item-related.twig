@@ -76,11 +76,8 @@
                 {% if short %}
                         <a href="{{ structurelink(related) }}">{{ related.title }}</a>
                 {% else %}
-                <div class="link-block block">
+                <div class="link-block-text link-block block">
                     <a href="{{ structurelink(related) }}" class="b-inner">
-                        <div class="b-thumb">
-                            <img src="{{ related.image|thumbnail() }}" alt="{{ related.image|title }}" />
-                        </div>
                         <div class="b-text">
                             <h2 class="item-title">{{ related.title }}</h2>
                             <p>{{ related.teaser|default(related.excerpt(app.config.get('general/excerpt_length'))) }}</p>

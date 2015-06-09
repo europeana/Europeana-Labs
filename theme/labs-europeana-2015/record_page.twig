@@ -9,7 +9,7 @@
 
         <div class="l-content">
 
-            <div class="l-breadcrumbs">
+            <div class="l-breadcrumbs page_header">
                 {% include 'items/_item-breadcrumb.twig' %}
             </div>
 
@@ -53,9 +53,11 @@
                 {% include 'items/_item-help.twig' with { records: contacts, title: "Need help?", use_secondary_mail: record.secondary_mail } %}
 
                 {% if record.support_navigation != "" %}
-                <ul class="nav_tertiary">
-                    {{ record.support_navigation|raw }}
-                </ul>
+		<div class="sticky-wrapper" id="undefined-sticky-wrapper" style="height: 364px;">
+		        <ul class="nav_tertiary js-sticky">
+		            {{ record.support_navigation|raw }}
+		        </ul>
+		</div>
                 {% endif %}
 
             </div>
