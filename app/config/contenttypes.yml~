@@ -618,26 +618,6 @@ events:
   icon_many: "fa:calendar"
   icon_one: "fa:calendar"
 
-tags:
-  name: Tags
-  singular_name: Tags
-  fields:
-    title:
-      type: text
-      required: true
-      label: "Title (required):"
-      variant: inline
-      postfix: "<hr>"
-      postfix: "(max. 50 characters)"
-      pattern: "^.{1,50}$"
-    slug:
-      type: slug
-      uses: title
-  record_template : record_event.twig
-  listing_template: tag_listing.twig
-  listing_records : 8
-
-
 #################################
 #
 # JOB
@@ -983,25 +963,7 @@ pages:
     secondary_mail:
       type: checkbox
       label: "Show secondary email instead:"
-    hide_list:
-      type: checkbox
-      label: "Hide from list views:"
-      postfix: "Check to hide this page from overview."
-    filelist_files:
-      type: filelist
-      label: "Files:"
-      group: "Secondary information"
-    filelist_downloads:
-      type: text
-      class: narrow
-      label: "Document folder:"
-      postfix: "Add the name of the folder to show as a 'File browser' listing, relative to the base 'files/' folder. If left blank, no file-browser will be shown."
-    # show_page:
-    #  type: checkbox
-    #  required: false
-    #  label: "This page should be shown on the site, and is not an internal page:"
-    # These links & titles will show in the right bar if populated - external links should have the external link icon
-    # appended, documents on the DMS should have another visual representation present.
+      group: "Page Options"
     hide_related:
       type: checkbox
       label: "Hide from related content:"
@@ -1010,23 +972,40 @@ pages:
       type: checkbox
       label: "Hide related content section:"
       postfix: "Check to hide the related content section."
-    listtitle:
-      type: text
-      default: "Thumbnail/image grid view"
+    files:
+      type: filelist
       required: false
+      label: "Files:"
+      group: "Files"
+    link1:
+      type: text
+      required: false
+      label: "External link1:"
       variant: inline
-      prefix: "<hr><h2>Image Grid</h2>"
-    imagelist:
-      type: imagelist
-      label: "Grid images for subsites:"
-    liststyle:
-      type: select
-      label: "Style modifier"
-      values: ['default', 'fivecols']
+      class: narrow 
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url  
+      group: "Related External Links"
+    link2:
+      type: text
+      required: false
+      label: "External link2:"
+      variant: inline
+      class: narrow 
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url  
+    link3:
+      type: text
+      required: false
+      label: "External link3:"
+      variant: inline
+      class: narrow 
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url  
     support_navigation:
       type: markdown
       label: "Support navigation:"
-      group: "Support navigation"
+      group: "Support Navigation"
     structure_sortorder:
       type: integer
       label: "Sort order in structure tree parent"
@@ -1051,24 +1030,14 @@ pages:
       label: "Blog posts"
       order: -id
       format: "{{ item.title|escape }}"
-    publications:
+    data:
       multiple: true
-      label: "Publications"
+      label: "Data"
       order: -id
       format: "{{ item.title|escape }}"
-    pressreleases:
+    apps:
       multiple: true
-      label: "Press releases"
-      order: -id
-      format: "{{ item.title|escape }}"
-    projects:
-      multiple: true
-      label: "Projects"
-      order: -id
-      format: "{{ item.title|escape }}"
-    taskforces:
-      multiple: true
-      label: "Task forces"
+      label: "Apps"
       order: -id
       format: "{{ item.title|escape }}"
     events:
@@ -1076,16 +1045,129 @@ pages:
       label: "Events"
       order: -id
       format: "{{ item.title|escape }}"
-    jobs:
+  record_template: record_page.twig
+  icon_many: "fa:files-o"
+  icon_one: "fa:files"
+
+Homepage:
+  name: Homepage
+  singular_name: Homepage
+  fields:
+    title:
+      type: text
+      required: true
+      label: "Title (required):"
+      variant: inline
+      postfix: "(max. 50 characters)"
+      pattern: "^.{1,50}$"
+      group: Page
+    slug:
+      type: slug
+      uses: title
+    intro:
+      type: textarea
+      label: "Intro:"
+      height: 150px
+    teaser:
+      type: html
+      label: "Teaser (required):"
+      height: 150px
+    body:
+      type: html
+      label: "Body (required):"
+      height: 300px
+    teaser_image:
+      type: image
+      required: false
+      label: "Teaser image:"
+    secondary_mail:
+      type: checkbox
+      label: "Show secondary email instead:"
+      group: "Page Options"
+    hide_related:
+      type: checkbox
+      label: "Hide from related content:"
+      postfix: "Check to hide this page from related content sections."
+    hide_related_section:
+      type: checkbox
+      label: "Hide related content section:"
+      postfix: "Check to hide the related content section."
+    files:
+      type: filelist
+      required: false
+      label: "Files:"
+      group: "Files"
+    link1:
+      type: text
+      required: false
+      label: "External link1:"
+      variant: inline
+      class: narrow 
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url  
+      group: "Related External Links"
+    link2:
+      type: text
+      required: false
+      label: "External link2:"
+      variant: inline
+      class: narrow 
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url  
+    link3:
+      type: text
+      required: false
+      label: "External link3:"
+      variant: inline
+      class: narrow 
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url  
+    support_navigation:
+      type: markdown
+      label: "Support navigation:"
+      group: "Support Navigation"
+    structure_sortorder:
+      type: integer
+      label: "Sort order in structure tree parent"
+  taxonomy: [ tags ]
+  relations:
+    structures:
+      label: "Tree parent"
+      multiple: false
+      order: title
+    persons:
+      label: "Contact(s)"
       multiple: true
-      label: "Jobs"
+      format: "{{ item.last_name }}, {{ item.first_name }}"
+      order: last_name
+    pages:
+      multiple: true
+      label: "Pages"
+      order: -id
+      format: "{{ item.title|escape }}"
+    blogposts:
+      multiple: true
+      label: "Blog posts"
+      order: -id
+      format: "{{ item.title|escape }}"
+    data:
+      multiple: true
+      label: "Data"
+      order: -id
+      format: "{{ item.title|escape }}"
+    apps:
+      multiple: true
+      label: "Apps"
+      order: -id
+      format: "{{ item.title|escape }}"
+    events:
+      multiple: true
+      label: "Events"
       order: -id
       format: "{{ item.title|escape }}"
   record_template: record_page.twig
   icon_many: "fa:files-o"
   icon_one: "fa:files"
-
-
 
 
 
@@ -1683,6 +1765,7 @@ data:
       label: "Title:"
       variant: inline
       class: narrow
+      group: "Data information"
     slug:
       type: slug
       uses: title
@@ -1704,8 +1787,7 @@ data:
     image:
       type: image
       required: true
-      label: "Teaser:"
-      attrib: title
+      label: "Image:"
       extensions: [ gif, jpg, png ]
     provided_by:
       type: text
@@ -1713,10 +1795,27 @@ data:
       label: "Provided by:"
       variant: inline
       class: narrow    
+      group: "Links"
     provided_by_link:
       type: text
       required: false
       label: "Provided by link:"
+      variant: inline
+      class: narrow 
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url  
+    portallink:
+      type: text
+      required: false
+      label: "Portal link:"
+      variant: inline
+      class: narrow 
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url  
+    apiconsolelink:
+      type: text
+      required: false
+      label: "Api console link:"
       variant: inline
       class: narrow 
       prefix: "<em>URL has to start with http:// or https://</em>"
@@ -1766,6 +1865,7 @@ apps:
       label: "Title:"
       variant: inline
       class: narrow
+      group: "app information"
     slug:
       type: slug
       uses: title
@@ -1790,50 +1890,17 @@ apps:
       label: "Image:"
       attrib: title
       extensions: [ gif, jpg, png ]
-    name:
-      type: text
-      required: false
-      label: "Name of contact:"
-      variant: inline
-      class: narrow
-      group: contact 
-    email:
-      type: text
-      required: false
-      label: "Email address:"
-      variant: inline
-      pattern: email
-      class: narrow
-    twitter:
-      type: text
-      required: false
-      label: "Twitter URL:"
-      variant: inline
-      postfix: '<em>For expample "https://twitter.com/Europeanaeu" </em>'
-      pattern: url
-      class: narrow
-    linked_in:
-      type: text
-      required: false
-      label: "Linked in:"
-      variant: inline
-      class: narrow 
-      prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url 
-    related_external_links:
-      type: text
-      required: false
-      label: "Portal link:"
-      variant: inline
-      class: narrow 
-      prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url 
   taxonomy: [ tags ]
   relations:
     structures:
       label: "Tree parent"
       multiple: false
       order: title
+    person:
+      multiple: true
+      label: "Contact(s)"
+      order: last_name
+      format: "{{ item.last_name }}, {{ item.first_name }}"
     pages:
       multiple: true
       label: "Pages"
@@ -1844,7 +1911,200 @@ apps:
       label: "Data"
       order: -id
       format: "{{ item.title|escape }}"
+    blogposts:
+      multiple: true
+      label: "Blog posts"
+      order: -id
+      format: "{{ item.title|escape }}"
+    events:
+      multiple: true
+      label: "Events"
+      order: -id
+      format: "{{ item.title|escape }}"
     apps:
+      multiple: true
+      label: "Apps"
+      order: -id
+      format: "{{ item.title|escape }}"
+  record_template : record_app.twig
+  listing_template: app_listing.twig 
+  recordsperpage: 1000
+
+Documentation:
+  name: Documentation
+  singular_name: Documentation
+  fields:
+    # Shown on Individual pages, Lists, Overviews, Teasers
+    title:
+      type: text
+      required: true
+      label: "Title (required):"
+      variant: inline
+      postfix: "(max. 50 characters)"
+      pattern: "^.{1,50}$"
+      group: Documentation
+    slug:
+      type: slug
+      uses: title
+    intro:
+      type: textarea
+      label: "Intro:"
+      height: 150px
+    # Shown on Individual pages, Lists
+    teaser:
+      type: html
+      label: "Teaser (required):"
+      height: 150px
+    # Shown on Individual pages
+    body:
+      type: html
+      label: "Body (required):"
+      height: 300px
+    # Shown on Individual pages, Lists, Overviews, Teasers
+    teaser_image:
+      type: image
+      required: false
+      label: "Teaser image:"
+    secondary_mail:
+      type: checkbox
+      label: "Show secondary email instead:"
+      group: "Documentation Options"
+    hide_related:
+      type: checkbox
+      label: "Hide from related content:"
+      postfix: "Check to hide this page from related content sections."
+    hide_related_section:
+      type: checkbox
+      label: "Hide related content section:"
+      postfix: "Check to hide the related content section."
+    files:
+      type: filelist
+      required: false
+      label: "Files:"
+      group: "Files"
+    link1:
+      type: text
+      required: false
+      label: "External link1:"
+      variant: inline
+      class: narrow 
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url  
+      group: "Related External Links"
+    link2:
+      type: text
+      required: false
+      label: "External link2:"
+      variant: inline
+      class: narrow 
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url  
+    link3:
+      type: text
+      required: false
+      label: "External link3:"
+      variant: inline
+      class: narrow 
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url  
+    support_navigation:
+      type: markdown
+      label: "Support navigation:"
+      group: "Support Navigation"
+    structure_sortorder:
+      type: integer
+      label: "Sort order in structure tree parent"
+  taxonomy: [ tags ]
+  relations:
+    structures:
+      label: "Tree parent"
+      multiple: false
+      order: title
+    persons:
+      label: "Contact(s)"
+      multiple: true
+      format: "{{ item.last_name }}, {{ item.first_name }}"
+      order: last_name
+    pages:
+      multiple: true
+      label: "Pages"
+      order: -id
+      format: "{{ item.title|escape }}"
+    blogposts:
+      multiple: true
+      label: "Blog posts"
+      order: -id
+      format: "{{ item.title|escape }}"
+    data:
+      multiple: true
+      label: "Data"
+      order: -id
+      format: "{{ item.title|escape }}"
+    apps:
+      multiple: true
+      label: "Apps"
+      order: -id
+      format: "{{ item.title|escape }}"
+    events:
+      multiple: true
+      label: "Events"
+      order: -id
+      format: "{{ item.title|escape }}"
+  record_template: record_page.twig
+  icon_many: "fa:files-o"
+  icon_one: "fa:files"
+
+livinglabs:
+  name: Livinglabs
+  singular_name: Livinglab
+  fields:
+    title:
+      type: text
+      required: false
+      label: "Title:"
+      variant: inline
+      class: narrow
+      group: "Living labs information"
+    slug:
+      type: slug
+      uses: title
+    intro:
+      type: textarea
+      label: "Intro:"
+      height: 150px
+    teaser:
+      type: html
+      required: true
+      label: "Teaser (required):"
+      height: 150px
+    body:
+      type: html
+      required: true
+      label: "Body (required):"
+      variant: inline
+      class: narrow   
+    image:
+      type: image
+      required: true
+      label: "Image:"
+      extensions: [ gif, jpg, png ]
+  taxonomy: [ tags ]
+  relations:
+    structures:
+      label: "Tree parent"
+      multiple: false
+      order: title
+    person:
+      multiple: true
+      label: "Contact(s)"
+      order: last_name
+      format: "{{ item.last_name }}, {{ item.first_name }}"
+    pages:
+      multiple: true
+      label: "Pages"
+      order: -id
+      format: "{{ item.title|escape }}"
+    data:
       multiple: true
       label: "Data"
       order: -id
@@ -1860,5 +2120,4 @@ apps:
       order: -id
       format: "{{ item.title|escape }}"
   record_template : record_page.twig
-  listing_template: app_listing.twig 
   recordsperpage: 1000

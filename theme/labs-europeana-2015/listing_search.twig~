@@ -8,17 +8,30 @@
 
         <div class="l-content">
 
-            <div class="l-breadcrumbs">
+            <div class="l-breadcrumbs page_header">
                 {% include 'items/_item-breadcrumb.twig' %}
+
+   <form id="search_inside" action="{{ paths.root }}search" data-cx="{{ cx }}" data-maxcompletions="{{ searchoptions.max_autocompletions }}" >
+<div class="sortby">
+ <label for="list_sortby">Sort by:</label>
+                                <select name="sort" id="list_sortby">
+                                    <option value="">Relevance</option>
+                                    {% if sort == "date" %}
+                                        <option value="date" selected>Date</option>
+                                    {% else %}
+                                        <option value="date">Date</option>
+                                    {% endif %}
+                                </select>
+</div>
             </div>
             
             <div class="l-filter filters">
                 <div class="is-open-globalsearch">
                 <div class="search-global" style="background: none">
 
-                    <form id="search_inside" action="{{ paths.root }}search" data-cx="{{ cx }}" data-maxcompletions="{{ searchoptions.max_autocompletions }}" >
+                 
 
-                        <fieldset>
+                        <fieldset style="display:none">
                             <input type="text" placeholder="{{ query }}" name="q" id="search_google" value="{{ query }}">
                             <button class="search_btn" type="submit">
                                 <svg class="icon icon-search">
@@ -37,17 +50,7 @@
                                         <label for="checkbox_{{ key }}">{{ filteroptions[key].label }}<input id="checkbox_{{ key }}" name="{{ filteroptions[key].name }}" type="checkbox" {{ filteroptions[key].checked }}></label>
                                     </li>
                                 {% endfor %}
-                                Sort by:
-                                <select name="sort">
-                                    <option value="">Relevance</option>
-                                    {% if sort == "date" %}
-                                        <option value="date" selected>Date</option>
-                                    {% else %}
-                                        <option value="date">Date</option>
-                                    {% endif %}
-                                </select>
-
-                            </ul>
+                                </ul>
                         </fieldset>
 
                      
@@ -58,8 +61,9 @@
 
                 <script type="text/javascript">
 
-                    var $form = $('#search_inside'),
+                     var $form = $('#search_inside'), 
                         $filters = $('input[type=checkbox], select', $form);
+
 
                     $filters.change(function() {
                         $form.submit();

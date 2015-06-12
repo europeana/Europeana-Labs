@@ -5,13 +5,34 @@ main:
     options: [toplevel1, toplevel2, toplevel3, toplevel4]
     has_sortorder: false
 
-
 tags:
     slug: tags
     singular_slug: tag
     behaves_like: tags
     listing_template: listing_tags.twig
 
+apptags:
+  slug: apptags
+  name: Tags
+  singular_name: Tag
+  behaves_like: tags
+
+appthemes:
+  slug: appthemes
+  name: Themes
+  singular_slug: theme
+  singular_name: Theme
+  behaves_like: categories
+  options: [t1,t2,t3]
+
+appcategories:
+  name: Categories
+  slug: appcategories
+  singular_name: Category
+  singular_slug: appcategory
+  behaves_like: categories
+  multiple: 1
+  options: [cat1, cat2, cat3, cat4, cat5]
 
 tree:
     slug: tree

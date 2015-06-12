@@ -34,10 +34,10 @@
         </li>
 
 	<li>
-                <a href="http://localhost/apps">event</a>
+                <a href="http://localhost/apps">apps</a>
         </li>
 	<li>
-                <a href="http://localhost/data">events</a>
+                <a href="http://localhost/data">data</a>
         </li>	
 <!--
 	<li>
