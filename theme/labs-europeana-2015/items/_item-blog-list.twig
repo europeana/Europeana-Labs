@@ -1,6 +1,6 @@
 {#
   used in:
-      - data	
+      - app
 #}
 
 {% if record is defined %}
@@ -18,9 +18,9 @@
 {% endif %}
 
         <div class="b-thumb">
-        {% if (contenttype.slug in [  'data' ]) %}
+        {% if (contenttype.slug in [  'apps' ]) %}
             
-                <a href="{{ listItemLink }}"><img src="{{ listItem.values['teaser_image']|default		(listItem.values['image'])|thumbnail() }}" alt="{{ listItem.image|title }}" /></a>
+                <a href="{{ listItemLink }}"><img src="{{ listItem.values['image']|default		(listItem.values['image'])|thumbnail() }}" alt="{{ listItem.image|title }}" /></a>
                 
         {% endif %}
 
@@ -33,7 +33,7 @@
 	   <h1 class="headline gama"><a href="{{ listItemLink }}">{{ listItem.title|striptags }}</a></h1>
            <div class="description">
 
-                {% if (contenttype.slug in [ "publications", "pressreleases", "blogposts", "blog-posts", "collections" ]) %}
+                {% if (contenttype.slug in [ "blogs", "blog-posts", "collections" ]) %}
                     {{ listItem.excerpt(app.config.get('general/excerpt_length')) }}
                 {% else %}
                     {{ listItem.teaser }}
@@ -48,12 +48,12 @@
 
            
                
-            {% if contenttype.slug == "data" %}
+            {% if contenttype.slug == "apps" %}
                 {# set tags #}
                 {% if record.taxonomy.tags is defined  %}
 			<i class="icon icon-tag"></i>
 			    {% for k,v in record.taxonomy.tags %}
-				<a class="tag_alt" href="{{ k }}">{{ v }}</a>
+				<a href="{{ k }}">{{ v }}</a>
 			    {% endfor %}
 		 	
 	    	{% endif %}

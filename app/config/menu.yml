@@ -1,16 +1,28 @@
 primary:
-  - label: 'Featured collections'
-    title: 'These are featured Europeana collections of interest to the research community'
-    path: /collections
-  - label: 'About our data'
-    path: /about-our-data
-    title: 'How the Europeana dataset is aggregated'
-  - label: 'Work with us'
-    path: /work-with-us
-    title: 'How to work with us'
-  - label: 'About us'
-    path: /about-us
-    title: 'About Europeana Research'
+  - label: 'Home'
+    title: 'Europeana Labs home'
+    path: /
+  - label: 'APIs'
+    title: 'Documentation for the Europeana API'
+    path: /api
+  - label: 'Apps'
+    path: /apps
+    title: 'Apps showcase'
+  - label: 'Data'
+    path: /data
+    title: 'Open datasets for re-use'
+  - label: 'Blog'
+    path: /blog
+    title: 'Europeana Labs blog'
+  - label: 'Events'
+    path: /events
+    title: 'Europeana Labs blog'
+  - label: 'Incubation'
+    path: /incubation
+    title: 'Business incubation from Europeana'
+  - label: 'Support'
+    path: /support
+    title: 'Support for users of the API and Europeana Labs'
 
 footer:
   - title: Home

@@ -96,26 +96,17 @@
 			</div>	
 		</div><!--
 --><div class="main-content">
-
 	<ul class="post-list l-post-list">
-			
-				
-		{% if showsortby and taxonomy is not defined and 				contenttype.slug in ['blogposts','collections'] %}
+		{% if showsortby and taxonomy is not defined and contenttype.slug in ['blog','collections'] %}
 		{# all blog posts or collections. #}
                 	 		{% setcontent records = contenttype.slug where { limit : 				amount, order : order, page : page } allowpaging %}
                  			{% endif %}
-
-
                     {% for listItem in records %}
 			{% if(loop.index <= 2) %}
-				<!--{% include 'items/_item-data-list.twig' with { record: listItem } %}			
+				<!--{% include 'items/_item-list.twig' with { record: listItem } %}			
 			{% else %} 
-				<!--{% include 'items/_item-data-list.twig' with { record: listItem, 'block':'defined' } %}
+				<!--{% include 'items/_item-list.twig' with { record: listItem, 'block':'defined' } %}
 			{% endif %}
-
-			
-			
-
                     {% endfor %}
            --></ul>
 		{{ pager() }}

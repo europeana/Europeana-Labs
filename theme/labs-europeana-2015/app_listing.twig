@@ -44,9 +44,13 @@
     {% endif %}
 
 {% setcontent allapp = 'apps' %}	
-{% set tag = app.request.get('tag')  %}
+{% set tag = app.request.get('category')  %}
 {% if tag != null %}
-	{% setcontent records= 'apps' where {tags: tag} allowpaging%}
+	{% setcontent records= 'apps' where {appcategories: tag} allowpaging%}
+{% endif %}
+{% set theme = app.request.get('theme')  %}
+{% if theme != null %}
+	{% setcontent records= 'apps' where {appthemes: theme} allowpaging%}
 {% endif %}
 
 <!-- Start content -->
@@ -71,27 +75,17 @@
 
 	<div class="grid">
 		<div class="sidebar">
-
 			<div class="subnav">
-
 				<h4 class="label epsilon"> Filter by:</h4>
-
 				<ul class="tags tags-large">
-				{% for listItem in allapp %}
-					{% if listItem.taxonomy.tags is defined %}
-					    {% for type, values in listItem.taxonomy %}
-		
-						{% for link, value in values %}
-							<li><a class="tag" href="{{ root }}?tag={{ value }}">{{ value }}</a>
-							{% if not loop.last %}
-								</li> 
-							{% endif %}
-						{% endfor %}
-						{% if not loop.last %} - {% endif %}
-					    {% endfor %}
-					{% endif %}
-				{% endfor %}
-
+                    {% for category in app.config.get('taxonomy/appthemes/options') -%}
+                        <li><a class="tag" href="{{ root }}?theme={{ category|slug }}">{{ category }}</a></li>
+                    {% endfor %}
+				</ul>		
+				<ul class="tags tags-large">
+                    {% for category in app.config.get('taxonomy/appcategories/options') -%}
+                        <li><a class="tag" href="{{ root }}?category={{ category|slug }}">{{ category }}</a></li>
+                    {% endfor %}
 				</ul>		
 			</div>	
 		</div><!--

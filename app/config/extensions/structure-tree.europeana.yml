@@ -1,5 +1,5 @@
 # possibles child contenttypes
-contenttypes: [ pages, blogposts, publications, pressreleases, events, projects, jobs, persons, taskforces, structures ]
+contenttypes: [ pages, blogs, publications, events, persons, structures ]
 # parent structure handle child contenttypes
 parenttype: structures
 # sitemap settings
@@ -30,38 +30,13 @@ sitemap:
       data:
         blog:
           label: 'Blog'
-          link: '/blogposts'
-        publications:
-          label: 'Publications'
-          link: '/publications'
+          link: '/blog'
         events:
           label: 'Events'
           link: '/events'
-        jobs:
-          label: 'Jobs'
-          link: '/jobs'
         about:
           label: 'About Us'
           slug: 'about-us'
-        press:
-          label: 'Press'
-          slug: 'press'
-    source_3:
-      type: 'list'
-      label: 'Explore Europeana'
-      data:
-        search_portal:
-          label: 'Search Portal'
-          link: '#'
-        labs:
-          label: Labs'
-          link: '#'
-        1914-1918:
-          label: '1914-1918'
-          link: '#'
-        end_user_blog:
-          label: 'End user blog'
-          link: '#'
-  contenttypes: ['persons', 'publications', 'structures', 'pages', 'blogposts', 'pressreleases', 'events', 'taskforces' ]
+  contenttypes: ['persons', 'structures', 'pages', 'blogs', 'events' ]
   template: 'sitemap.twig'
   xml_template: 'sitemap_xml.twig'

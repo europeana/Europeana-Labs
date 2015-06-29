@@ -9,19 +9,14 @@
     {% set listItem = record %}
     {% set contenttype = record.contenttype %}
     {% set listItemLink = structurelink(record) %}
+{# TODO: Clanup - style is here only until Tim fixes pattern lab! #}
+--><li class="list-item" style="width:100% !important;"><!--
 
-<li class="list-item">
-
-        <div class="item-supplementary">
-        {% if (contenttype.slug in [ 'publication', 'pressreleases', 'press-releases', 'blogposts', 'blog-posts', "collections" ]) %}
+        --><div class="item-supplementary">
+        {% if (contenttype.slug in [ 'blog']) %}
             <div class="item-image">
                 <a href="{{ listItemLink }}"><img src="{{ listItem.values['teaser_image']|default(listItem.values['image'])|thumbnail() }}" alt="{{ listItem.image|title }}" /></a>
             </div>
-        {% elseif (contenttype.slug == "projects" ) %}
-            <div class="item-image">
-                <a href="{{ listItemLink }}"><img src="{{ listItem.values['logo']|thumbnail() }}" alt="{{ listItem.image|title }}" /></a>
-            </div>
-        {# get footer logo for subsite in projects list view #}
         {% elseif 'subsite' in listItem.template %}
             {% setcontent footer = 'Footer' where {id: listItem.footer, order: 'id', limit: 1} %}
             <div class="item-image">
@@ -32,18 +27,12 @@
                 {% include 'items/_item-date-event.twig' with {record : listItem} %}
             </div>
         {% endif %}
-
         </div><!--
 
      --><div class="item-details">
         <h2 class="title"><a href="{{ listItemLink }}">{{ listItem.title|striptags }}</a></h2>
 
-        {% if (contenttype.slug in [ 'publications', 'pressreleases', 'press-releases' ]) %}
-            <div class="item-meta-primary">
-                {# set authors #}
-                {% include 'items/_item-author.twig' %}
-            </div>
-        {% elseif contenttype.slug in [ "blogposts", "blog-posts", "collections" ] %}
+        {% if contenttype.slug in [ "blog" ] %}
             <div class="item-meta-primary">
                 {# set author #}
                 {% include 'items/_item-author.twig' %}
@@ -53,42 +42,19 @@
 
             <div class="item-meta-secondary">
 
-            {% if (contenttype.slug in [ "publications", "pressreleases", "press-releases", "collections" ]) %}
-                {# set date #}
-                {% include 'items/_item-date.twig' %}
-                {# set tags#}
-                {% include 'items/_item-tags.twig' %}
-
-            {% elseif contenttype.slug in [ "blogposts", "blog-posts" ] %}
+            {% if contenttype.slug in [ "blog" ] %}
                 {# set date #}
                 {% include 'items/_item-date.twig' %}
                 {# set tags #}
                 {% include 'items/_item-tags.twig' %}
                 {# set discus comments #}
                 {% include 'items/_item-comments-link.twig' %}
-
             {% elseif contenttype.slug == "events" %}
                 {# set location #}
                 {% include 'items/_item-location.twig' %}
                 {# set tags #}
                 {% include 'items/_item-tags.twig' %}
-
-            {% elseif contenttype.slug == "jobs" %}
-                {# set date #}
-                {% include 'items/_item-date.twig' %}
-                {# set location #}
-                {% include 'items/_item-location.twig' %}
-                {# set department #}
-                {% include 'items/_item-department.twig' %}
-
-            {% elseif contenttype.slug == "taskforces" %}
-                {% include 'items/_item-date.twig' with { date: listItem.date_start } %}
-                <span>to: </span>
-                {% include 'items/_item-date.twig' with { date: listItem.date_end } %}
-                {# set tags #}
-                {% include 'items/_item-tags.twig' %}
-
-            {% elseif (contenttype.slug in [ "projects", "structures" ]) %}
+            {% elseif (contenttype.slug in [ "structures" ]) %}
                 {% include 'items/_item-date.twig' with { date: listItem.date_start } %}
                 <span>to: </span>
                 {% include 'items/_item-date.twig' with { date: listItem.date_end } %}
@@ -96,22 +62,15 @@
                 {# set tags #}
                 {% include 'items/_item-tags.twig' %}
             {% endif %}
-
             </div>
 
             <div class="item-preview">
-
-                {% if (contenttype.slug in [ "publications", "pressreleases", "blogposts", "blog-posts", "collections" ]) %}
+                {% if (contenttype.slug in [ "blog" ]) %}
                     {{ listItem.excerpt(app.config.get('general/excerpt_length')) }}
                 {% else %}
                     {{ listItem.teaser }}
                 {% endif %}
-
             </div>
-
-            {% if (contenttype.slug in [ "publications", "pressreleases" ] ) %}
-                {% include 'items/_item-filelist.twig' with {records: listItem.filelist} %}
-            {% endif %}
         </div>
-    </li>
+    </li><!--
 {% endif %}

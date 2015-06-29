@@ -15,10 +15,7 @@
 		--><div class="lc"><!--
 			--><div class="grid grid--rev"><!--
 				--><div class="main-content prose" id="documentation">{{ record.body|raw }}</div><!--
-				-->{% if record.filelist_downloads|length > 3 %}
-                        {{ file_browser({'mode': 'list', 'root': record.filelist_downloads}) }}
-                {% endif %}<!--
-                --><div class="sidebar">{% if record.support_navigation != "" %}{{ record.support_navigation|raw }}{% endif %}</div><!--
+				--><div class="sidebar">{% if record.support_navigation != "" %}{{ record.support_navigation|raw }}{% endif %}</div><!--
 			--></div><!--
 		--></div><!--
 	--></main><!--

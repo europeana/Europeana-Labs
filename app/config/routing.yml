@@ -15,6 +15,17 @@ homepage:
   path:               /
   defaults:           { _controller: 'Bolt\Controllers\Frontend::homepage' }
 
+supportbinding:
+  path:               /support
+  defaults:           { _controller: 'Bolt\Controllers\Frontend::record', 'contenttypeslug': 'page', 'slug': 'support' }
+  recordslug:         page/support
+
+apihomebinding:
+  path: /api
+  defaults: { _controller: 'Bolt\Controllers\Frontend::record', 'contenttypeslug': 'api', 'slug': 'introduction' }
+  recordslug: api/introduction
+
+
 #search:
 #  path:               /search
 #  defaults:           { _controller: 'Bolt\Controllers\Frontend::search' }

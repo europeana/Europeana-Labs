@@ -145,7 +145,7 @@ contenttypes:
         create: [ developer, admin ]
         change-ownership: [ developer, admin ]
         view: [ developer, admin ]
-    blogposts:
+    blogs:
         edit: [ developer, admin, chief-editor, blog-editor ]
         create: [ developer, admin, chief-editor, blog-editor ]
         change-ownership: [ developer, admin, chief-editor, blog-editor ]

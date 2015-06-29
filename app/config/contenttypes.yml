@@ -30,263 +30,20 @@
 
 ##################################################################
 #
-# The following contentypes are specified:
+# The following content types are specified:
 #
 # - LOCATION
 # - STRUCTURE
 # - PAGE
 # - BLOGPOST
-# - JOB
 # - EVENT
 # - PERSON
 # - PUBLICATION
 # - PRESSRELEASE
-# - PROJECTS
-# - TASKFORCES
 # - HOMEPAGE
 # - FOOTER
 #
 #################################################################
-
-
-
-#################################
-#
-# PUBLICATION
-#
-# Notes:
-# Image: The dimensions need to be specified. The image should appear as a thumbnail on all pages above,
-# but on the individual publications page it may be larger?
-#
-#
-#################################
-publications:
-  name: Publications
-  singular_name: Publication
-  fields:
-    # Show on Publication list page, Publication page, Teasers, Individual staff members page
-    title:
-      type: text
-      required: true
-      label: "Title (required):"
-      variant: inline
-      postfix: "(max. 50 characters)"
-      pattern: "^.{1,50}$"
-      group: Publications
-    slug:
-      type: slug
-      uses: title
-    teaser:
-      type: html
-      required: true
-      label: "Teaser:"
-      height: 150px
-    introduction:
-      type: text
-      required: false
-      label: "Introduction (120 chars MAX):"
-      pattern: "^.{1,120}$"
-      height: 150px
-    body:
-      type: html
-      required: false
-      label: "Body:"
-      height: 150px
-    filelist:
-      type: filelist
-      required: true
-      label: "Files:"
-    image:
-      type: image
-      required: true
-      label: "Image:"
-      attrib: title
-      extensions: [ gif, jpg, png ]
-    isbn:
-      type: text
-      required: false
-      label: "ISBN:"
-      variant: inline
-      group: "Secondary options"
-    structure_sortorder:
-      type: integer
-      label: "Sort order in structure tree parent"
-  taxonomy: [ tags ]
-  relations:
-    structures:
-      label: "Tree parent"
-      multiple: false
-      order: title
-    persons:
-      label: "Author(s)"
-      multiple: true
-      format: "{{ item.last_name }}, {{ item.first_name }}"
-      order: last_name
-    person:
-      multiple: true
-      label: "Contact(s)"
-      order: last_name
-      format: "{{ item.last_name }}, {{ item.first_name }}"
-      order: last_name
-    pages:
-      multiple: true
-      label: "Pages"
-      order: -id
-      format: "{{ item.title|escape }}"
-    blogposts:
-      multiple: true
-      label: "Blog posts"
-      order: -id
-      format: "{{ item.title|escape }}"
-    publications:
-      multiple: true
-      label: "Publications"
-      order: -id
-      format: "{{ item.title|escape }}"
-    pressreleases:
-      multiple: true
-      label: "Press releases"
-      order: -id
-      format: "{{ item.title|escape }}"
-    projects:
-      multiple: true
-      label: "Projects"
-      order: -id
-      format: "{{ item.title|escape }}"
-    taskforces:
-      multiple: true
-      label: "Task forces"
-      order: -id
-      format: "{{ item.title|escape }}"
-    events:
-      multiple: true
-      label: "Events"
-      order: -id
-      format: "{{ item.title|escape }}"
-    jobs:
-      multiple: true
-      label: "Jobs"
-      order: -id
-      format: "{{ item.title|escape }}"
-  sort: -datepublish
-  record_template : record_publication.twig
-  icon_many: "fa:book"
-  icon_one: "fa:book"
-
-
-
-#################################
-#
-# PRESSRELEASES
-#
-# Notes:
-# Copy of PUBLICATION
-#
-#
-#################################
-pressreleases:
-  name: 'Press Releases'
-  singular_name: 'Press Release'
-  slug: 'pressreleases'
-  singular_slug: 'pressrelease'
-  fields:
-    title:
-      type: text
-      required: true
-      label: "Title (required):"
-      variant: inline
-      postfix: "(max. 100 characters)"
-      pattern: "^.{1,100}$"
-      group: "Press releases"
-    slug:
-      type: slug
-      uses: title
-    introduction:
-      type: markdown
-      required: false
-      label: "Introduction (120 chars MAX):"
-      pattern: "^.{1,120}$"
-      height: 150px
-    body:
-      type: html
-      required: false
-      label: "Body:"
-      height: 150px
-    filelist:
-      type: filelist
-      required: true
-      label: "Files:"
-    image:
-      type: image
-      required: true
-      label: "Image:"
-      attrib: title
-      extensions: [ gif, jpg, png ]
-    structure_sortorder:
-      type: integer
-      label: "Sort order in structure tree parent"
-  taxonomy: [ tags ]
-  relations:
-    structures:
-      label: "Tree parent"
-      multiple: false
-      order: title
-    persons:
-      label: "Author(s)"
-      multiple: true
-      format: "{{ item.last_name }}, {{ item.first_name }}"
-      order: last_name
-    person:
-      multiple: true
-      label: "Contact(s)"
-      order: last_name
-      format: "{{ item.last_name }}, {{ item.first_name }}"
-      order: last_name
-    pages:
-      multiple: true
-      label: "Pages"
-      order: -id
-      format: "{{ item.title|escape }}"
-    blogposts:
-      multiple: true
-      label: "Blog posts"
-      order: -id
-      format: "{{ item.title|escape }}"
-    publications:
-      multiple: true
-      label: "Publications"
-      order: -id
-      format: "{{ item.title|escape }}"
-    pressreleases:
-      multiple: true
-      label: "Press releases"
-      order: -id
-      format: "{{ item.title|escape }}"
-    projects:
-      multiple: true
-      label: "Projects"
-      order: -id
-      format: "{{ item.title|escape }}"
-    taskforces:
-      multiple: true
-      label: "Task forces"
-      order: -id
-      format: "{{ item.title|escape }}"
-    events:
-      multiple: true
-      label: "Events"
-      order: -id
-      format: "{{ item.title|escape }}"
-    jobs:
-      multiple: true
-      label: "Jobs"
-      order: -id
-      format: "{{ item.title|escape }}"
-  sort: -datepublish
-  record_template : record_publication.twig
-  icon_many: "fa:newspaper-o"
-  icon_one: "fa:newspaper-o"
-
 
 
 #################################
@@ -343,25 +100,6 @@ persons:
       label: "Job Title:"
       variant: inline
       class: narrow
-    department:
-      type: select
-      values: ['Europeana Staff', 'Our Partner']
-    team:
-      type: select
-      required: false
-      label: "Team:"
-      values:
-        "(not set)": "(not set)"
-        "Aggregation": "Data Partner Services"
-        "Corporate Communication": "Communications"
-        "Distribution & Engagement": "End User Services"
-        "Facilitation": "Policy, Research, Knowledge & Programme Management"
-        "Management": "Management"
-        "Network & Sustainability": "Network & Sustainability"
-        "People & Business Support": "People & Business Support"
-        "Product Development": "Product Development"
-        "Technology": "Technology"
-        "Re-use Services": "Re-use Services"
     introduction:
       type: html
       required: false
@@ -459,21 +197,9 @@ persons:
     contact_event:
       type: checkbox
       label: "Main contact of events"
-    contact_job:
-      type: checkbox
-      label: "Main contact of the jobs page"
     contact_person:
       type: checkbox
       label: "Main contact of the staff page"
-    contact_publication:
-      type: checkbox
-      label: "Main contact of the publications page"
-    contact_pressrelease:
-      type: checkbox
-      label: "Main contact of the press releases page"
-    contact_taskforce:
-      type: checkbox
-      label: "Main contact of the task forces page"
     contact_tag:
       type: checkbox
       label: "Main contact of tag page"
@@ -486,8 +212,8 @@ persons:
       label: "Tree parent"
       multiple: false
       order: title
-  sort: team
-  # no pager for person, mabe there is a better solution
+  sort: last_name
+  # no pager for person, maybe there is a better solution
   listing_records: 10000
   record_template: record_person.twig
   listing_template : listing_person.twig
@@ -515,6 +241,8 @@ persons:
 events:
   name: Events
   singular_name: Event
+  slug: 'events'
+  singular_slug: 'events'
   fields:
     # Show on Events list page, Events page, Home page
     title:
@@ -523,8 +251,8 @@ events:
       label: "Title (required):"
       variant: inline
       postfix: "<hr>"
-      postfix: "(max. 50 characters)"
-      pattern: "^.{1,50}$"
+      postfix: "(max. 150 characters)"
+      pattern: "^.{1,150}$"
       group: "Event information"
     slug:
       type: slug
@@ -547,6 +275,14 @@ events:
       type: checkbox
       required: false
       label: "Unconfirmed:"
+    external_link:
+      type: text
+      required: false
+      label: "Link:"
+      variant: inline
+      class: narrow 
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url  
     teaser:
       type: html
       required: true
@@ -560,10 +296,6 @@ events:
       height: 150px
     # Shown on Individual pages, Lists, Overviews, Teasers
     teaser_image:
-      type: image
-      required: false
-      label: "Teaser image:"
-    image:
       type: image
       required: false
       label: "Teaser image:"
@@ -581,10 +313,6 @@ events:
     structure_sortorder:
       type: integer
       label: "Sort order in structure tree parent"
-    support_navigation:
-      type: markdown
-      label: "Support navigation:"
-      group: "Support navigation"
   taxonomy: [ tags ]
   relations:
     structures:
@@ -613,168 +341,10 @@ events:
       format: "{{ item.title|escape }}"
   sort: start_event
   record_template : record_event.twig
-  listing_template: event_listing.twig
+  listing_template: blog_listing.twig
   listing_records : 8
   icon_many: "fa:calendar"
   icon_one: "fa:calendar"
-
-#################################
-#
-# JOB
-#
-# Notes:
-# Type Location will show the Locations content types, that have the ʺThis is a Europeana place of workʺ checked
-# NOTE: All job posts will be appended with the following:
-# How to apply?
-# Send us your CV (in English) with a covering letter outlining what interests you about this position to: jobs@europeana.eu
-# Should you have any additional questions or require more information before deciding to apply, please send us an email.
-# You should respond before (depublication date)
-# More about us
-# For more information see: (Europeana Foundation about link)
-# The depublication date will be the last day that you should respond by, so if the depublication date was set to ʺFebruary 10, 2014ʺ
-# - then the job ad would be removed from the list, and the job page will be depublished. Before this date, there should
-# be text saying ʺYou should respond by February 10, 2014ʺ on the job page.
-#
-#
-#################################
-Jobs:
-  name: Jobs
-  singular_name: Job
-  fields:
-    # Show on Job list page, Job page
-    position:
-      type: text
-      required: true
-      label: "Position (required):"
-      variant: inline
-      class: wide
-      group: "Job information"
-    slug:
-      type: slug
-      uses: position
-    department:
-      type: select
-      required: false
-      label: "Position will be in this team:"
-      #values: [ "(not set)", "Aggregation", "Corporate Communication", "Distribution & Engagement", "Facilitation", "Managment", "Network & Sustainability", "People & Business Support", "Product Development", "Technology" ]
-      values:
-        - 'Data Partner Services'
-        - 'Communications'
-        - 'End User Services'
-        - 'Policy, Research, Knowledge & Programme Management'
-        - 'Management'
-        - 'Network & Sustainability'
-        - 'People & Business Support'
-        - 'Product Development'
-        - 'Re-use Services'
-        - 'Technology'
-    # Show on Job list page, Job page
-    postion_type:
-      type: select
-      required: false
-      label: "Contract type:"
-      values: [ "Full time", "Part time", "Internship", "Full time (Maternity cover)", "Full time (Temp)", "Part time (Temp)" ]
-    # Show on Job list page, Job page
-    teaser:
-      type: html
-      required: true
-      label: "Teaser (required):"
-      height: 150px
-    # Show on Job page
-    body:
-      type: html
-      required: true
-      label: "Body (required):"
-      height: 150px
-      postfix: "<hr>"
-    # Show on Job page
-    salary_eur:
-      type: text
-      required: false
-      variant: inline
-      label: "Monthly salary (EUR):"
-      index: true
-    # Show on Job page
-    scale_eur:
-      type: text
-      required: false
-      variant: inline
-      label: "Scale (EUR):"
-      index: true
-      postfix: "<hr>"
-    deadline:
-      type: date
-      required: false
-      label: "Deadline"
-    filelist:
-      type: filelist
-      required: false
-      label: "Files:"
-      group: "Secondary information"
-    structure_sortorder:
-      type: integer
-      label: "Sort order in structure tree parent"
-  taxonomy: [ ]
-  relations:
-    structures:
-      label: "Tree parent"
-      multiple: false
-      order: title
-    persons:
-      multiple: true
-      label: "Contact(s)"
-      order: last_name
-      format: "{{ item.last_name }}, {{ item.first_name }}"
-    locations:
-      label: "Locations"
-      multiple: false
-    pages:
-      multiple: true
-      label: "Pages"
-      order: -id
-      format: "{{ item.title|escape }}"
-    blogposts:
-      multiple: true
-      label: "Blog posts"
-      order: -id
-      format: "{{ item.title|escape }}"
-    publications:
-      multiple: true
-      label: "Publications"
-      order: -id
-      format: "{{ item.title|escape }}"
-    pressreleases:
-      multiple: true
-      label: "Press releases"
-      order: -id
-      format: "{{ item.title|escape }}"
-    projects:
-      multiple: true
-      label: "Projects"
-      order: -id
-      format: "{{ item.title|escape }}"
-    taskforces:
-      multiple: true
-      label: "Task forces"
-      order: -id
-      format: "{{ item.title|escape }}"
-    events:
-      multiple: true
-      label: "Events"
-      order: -id
-      format: "{{ item.title|escape }}"
-    jobs:
-      multiple: true
-      label: "Jobs"
-      order: -id
-      format: "{{ item.title|escape }}"
-  sort: -datepublish
-  record_template: record_job.twig
-  icon_many: "fa:money"
-  icon_one: "fa:money"
-
-
-
 
 #################################
 #
@@ -787,12 +357,12 @@ Jobs:
 #
 #
 #################################
-blogposts:
+blogs:
   name: 'Blog Posts'
   singular_name: 'BlogPost'
   display_name: 'Blog Posts'
-  slug: 'blogposts'
-  singular_slug: 'blogpost'
+  slug: 'blog'
+  singular_slug: 'blog'
   fields:
     # Show on Blog list page, Blog page, Related items snippet, Home page
     title:
@@ -852,29 +422,9 @@ blogposts:
       label: "Pages"
       order: -id
       format: "{{ item.title|escape }}"
-    blogposts:
+    blogs:
       multiple: true
       label: "Blog posts"
-      order: -id
-      format: "{{ item.title|escape }}"
-    publications:
-      multiple: true
-      label: "Publications"
-      order: -id
-      format: "{{ item.title|escape }}"
-    pressreleases:
-      multiple: true
-      label: "Press releases"
-      order: -id
-      format: "{{ item.title|escape }}"
-    projects:
-      multiple: true
-      label: "Projects"
-      order: -id
-      format: "{{ item.title|escape }}"
-    taskforces:
-      multiple: true
-      label: "Task forces"
       order: -id
       format: "{{ item.title|escape }}"
     events:
@@ -882,13 +432,19 @@ blogposts:
       label: "Events"
       order: -id
       format: "{{ item.title|escape }}"
-    jobs:
+    data:
       multiple: true
-      label: "Jobs"
+      label: "Data"
+      order: -id
+      format: "{{ item.title|escape }}"
+    apps:
+      multiple: true
+      label: "Apps"
       order: -id
       format: "{{ item.title|escape }}"
   record_template: record_blogpost.twig
   recordsperpage: 100
+  listing_template: blog_listing.twig
   icon_many: "fa:quote-left"
   icon_one: "fa:quote-right"
 
@@ -1025,7 +581,7 @@ pages:
       label: "Pages"
       order: -id
       format: "{{ item.title|escape }}"
-    blogposts:
+    blogs:
       multiple: true
       label: "Blog posts"
       order: -id
@@ -1101,274 +657,6 @@ locations:
   icon_one: "fa:map-marker"
   show_in_menu: false
 
-
-
-#################################
-#
-# PROJECTS
-#
-# Notes:
-#
-#
-#################################
-projects:
-  name: Projects
-  singular_name: Project
-  fields:
-    title:
-      type: text
-      required: true
-      label: "Title (required):"
-      variant: inline
-      postfix: "(max. 50 characters)"
-      pattern: "^.{1,50}$"
-      group: Projects
-    slug:
-      type: slug
-      uses: title
-    subtitle:
-      type: text
-      required: false
-      label: "Subtitle:"
-      variant: inline
-    date_start:
-      type: date
-      required: false
-      label: "Project start:"
-      variant: inline
-    date_end:
-      type: date
-      required: false
-      label: "Project end:"
-      variant: inline
-    teaser:
-      type: html
-      label: "Teaser (required):"
-      height: 150px
-    intro:
-      type: textarea
-      label: "Intro:"
-      height: 150px
-    body:
-      type: html
-      label: "Body (required):"
-      height: 300px
-    url:
-      type: text
-      required: false
-      label: "Link to projects website:"
-      variant: inline
-      prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url
-    logo:
-      type: image
-      required: false
-      label: "Project logo:"
-      extensions: [ gif, jpg, png ]
-    filelist:
-      type: filelist
-      required: true
-      label: "Downloads:"
-      group: "Secondary information"
-    filelist_downloads:
-      type: text
-      class: narrow
-      label: "Document folder:"
-      postfix: "Add the name of the folder to show as a 'File browser' listing, relative to the base 'files/' folder. If left blank, no file-browser will be shown."
-    structure_sortorder:
-      type: integer
-      label: "Sort order in structure tree parent"
-  taxonomy: [ tags ]
-  relations:
-    structures:
-      label: "Tree parent"
-      multiple: false
-      order: title
-    person:
-      multiple: true
-      label: "Contact(s)"
-      order: last_name
-      format: "{{ item.last_name }}, {{ item.first_name }}"
-    pages:
-      multiple: true
-      label: "Pages"
-      order: -id
-      format: "{{ item.title|escape }}"
-    blogposts:
-      multiple: true
-      label: "Blog posts"
-      order: -id
-      format: "{{ item.title|escape }}"
-    publications:
-      multiple: true
-      label: "Publications"
-      order: -id
-      format: "{{ item.title|escape }}"
-    pressreleases:
-      multiple: true
-      label: "Press releases"
-      order: -id
-      format: "{{ item.title|escape }}"
-    projects:
-      multiple: true
-      label: "Projects"
-      order: -id
-      format: "{{ item.title|escape }}"
-    taskforces:
-      multiple: true
-      label: "Task forces"
-      order: -id
-      format: "{{ item.title|escape }}"
-    events:
-      multiple: true
-      label: "Events"
-      order: -id
-      format: "{{ item.title|escape }}"
-    jobs:
-      multiple: true
-      label: "Jobs"
-      order: -id
-      format: "{{ item.title|escape }}"
-  record_template: record_project.twig
-  listing_records: 5
-  recordsperpage: 20
-  sort: -datepublish
-  icon_many: "fa:clipboard"
-  icon_one: "fa:clipboard"
-
-
-
-#################################
-#
-# Task forces
-#
-#
-#################################
-taskforces:
-  name: TaskForces
-  singular_name: TaskForce
-  fields:
-    title:
-      type: text
-      required: true
-      label: "Title (required):"
-      variant: inline
-      postfix: "(max. 50 characters)"
-      pattern: "^.{1,50}$"
-      group: "Task force"
-    slug:
-      type: slug
-      uses: title
-    department:
-      type: select
-      label: "Department:"
-      values: [ "Europeana Network", "Europeana Tech" ]
-    subtitle:
-      type: text
-      required: false
-      label: "Subtitle:"
-      variant: inline
-    date_start:
-      type: date
-      required: false
-      label: "Expected timeframe start:"
-      format: "{{d.Y}}"
-    date_end:
-      type: date
-      required: false
-      label: "Expected timeframe end:"
-      format: "{{d.Y}}"
-    teaser:
-      type: html
-      label: "Teaser (required):"
-      height: 150px
-    intro:
-      type: textarea
-      label: "Intro:"
-      height: 150px
-    body:
-      type: html
-      label: "Body (required):"
-      height: 300px
-    teaser_image:
-      type: image
-      required: false
-      label: "Teaser image:"
-    filelist_files:
-      type: filelist
-      label: "Files:"
-    filelist_downloads:
-      type: text
-      class: narrow
-      label: "Document folder:"
-      postfix: "Add the name of the folder to show as a 'File browser' listing, relative to the base 'files/' folder. If left blank, no file-browser will be shown."
-    structure_sortorder:
-      type: integer
-      label: "Sort order in structure tree parent"
-  taxonomy: [ tags ]
-  relations:
-    structures:
-      label: "Tree parent"
-      multiple: false
-      order: title
-    person:
-      multiple: true
-      label: "Contact(s)"
-      order: last_name
-      format: "{{ item.last_name }}, {{ item.first_name }}"
-      order: last_name
-    persons:
-      multiple: true
-      label: "Chair(s)"
-      order: last_name
-      format: "{{ item.last_name }}, {{ item.first_name }}"
-      order: last_name
-    pages:
-      multiple: true
-      label: "Pages"
-      order: -id
-      format: "{{ item.title|escape }}"
-    blogposts:
-      multiple: true
-      label: "Blog posts"
-      order: -id
-      format: "{{ item.title|escape }}"
-    publications:
-      multiple: true
-      label: "Publications"
-      order: -id
-      format: "{{ item.title|escape }}"
-    pressreleases:
-      multiple: true
-      label: "Press releases"
-      order: -id
-      format: "{{ item.title|escape }}"
-    projects:
-      multiple: true
-      label: "Projects"
-      order: -id
-      format: "{{ item.title|escape }}"
-    taskforces:
-      multiple: true
-      label: "Task forces"
-      order: -id
-      format: "{{ item.title|escape }}"
-    events:
-      multiple: true
-      label: "Events"
-      order: -id
-      format: "{{ item.title|escape }}"
-    jobs:
-      multiple: true
-      label: "Jobs"
-      order: -id
-      format: "{{ item.title|escape }}"
-  record_template: record_taskforce.twig
-  recordsperpage: 1000
-  icon_many: "fa:bullseye"
-  icon_one: "fa:bullseye"
-
-
 #################################
 #
 # STRUCTURE
@@ -1421,7 +709,7 @@ structures:
     content:
       type: select
       label: 'Contenttype'
-      values: ['default', 'Events', 'BlogPosts', 'Persons', 'PressReleases', 'Projects', 'Publications', 'TaskForces', 'Jobs']
+      values: ['default', 'Events', 'blogs', 'Persons']
       postfix: 'Set content by contenttype'
       group: "Content type"
     # subclass get a own body class
@@ -1473,7 +761,7 @@ structures:
 # Notes:
 #
 # ToDos:
-# - make default content (prepopulatd) for intro text and callout
+# - make default content (prepopulated) for intro text and callout
 #
 #################################
 homepage:
@@ -1549,23 +837,13 @@ homepage:
       required: true
       label: "Use Europeana data (required):"
       height: 150px
-    #callout_4:
-    #  type: html
-    #  required: true
-    #  label: "For developers (required):"
-    #  height: 150px
-    #callout_5:
-    #  type: html
-    #  required: true
-    #  label: "Europeana Labs (required):"
-    #  height: 150px
     callout_6:
       type: html
       required: true
       label: "Latest Updates (required):"
       height: 150px
   relations:
-    blogposts:
+    blogs:
       multiple: true
       label: Select blog posts
       order: -datepublish
@@ -1722,7 +1000,7 @@ data:
       label: "Data"
       order: -id
       format: "{{ item.title|escape }}"
-    blogposts:
+    blogs:
       multiple: true
       label: "Blog posts"
       order: -id
@@ -1739,6 +1017,8 @@ data:
 apps:
   name: Apps
   singular_name: App
+  singular_slug: 'apps'
+  slug: 'apps'
   fields:
     title:
       type: text
@@ -1771,7 +1051,32 @@ apps:
       label: "Image:"
       attrib: title
       extensions: [ gif, jpg, png ]
-  taxonomy: [ apptags, appthemes, appcategories ]
+    link1:
+      type: text
+      required: false
+      label: "External link1:"
+      variant: inline
+      class: narrow 
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url  
+      group: "Related External Links"
+    link2:
+      type: text
+      required: false
+      label: "External link2:"
+      variant: inline
+      class: narrow 
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url  
+    link3:
+      type: text
+      required: false
+      label: "External link3:"
+      variant: inline
+      class: narrow 
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url  
+  taxonomy: [ appthemes, appcategories, apptags ]
   relations:
     structures:
       label: "Tree parent"
@@ -1792,7 +1097,7 @@ apps:
       label: "Data"
       order: -id
       format: "{{ item.title|escape }}"
-    blogposts:
+    blogs:
       multiple: true
       label: "Blog posts"
       order: -id
@@ -1814,6 +1119,8 @@ apps:
 Documentation:
   name: Documentation
   singular_name: Documentation
+  slug: 'api'
+  singular_slug: 'api'
   fields:
     # Shown on Individual pages, Lists, Overviews, Teasers
     title:
@@ -1889,7 +1196,7 @@ Documentation:
       prefix: "<em>URL has to start with http:// or https://</em>"
       pattern: url  
     support_navigation:
-      type: markdown
+      type: html
       label: "Support navigation:"
       group: "Support Navigation"
     structure_sortorder:
@@ -1911,7 +1218,7 @@ Documentation:
       label: "Pages"
       order: -id
       format: "{{ item.title|escape }}"
-    blogposts:
+    blogs:
       multiple: true
       label: "Blog posts"
       order: -id
@@ -1931,13 +1238,15 @@ Documentation:
       label: "Events"
       order: -id
       format: "{{ item.title|escape }}"
-  record_template: record_page.twig
-  icon_many: "fa:files-o"
-  icon_one: "fa:files"
+  record_template : record_documentation.twig
+  recordsperpage: 1000
+  listing_template: listing.twig
 
 livinglabs:
   name: Livinglabs
   singular_name: Livinglab
+  slug: 'livinglab'
+  singular_slug: 'livinglab'
   fields:
     title:
       type: text
@@ -1990,7 +1299,7 @@ livinglabs:
       label: "Data"
       order: -id
       format: "{{ item.title|escape }}"
-    blogposts:
+    blogs:
       multiple: true
       label: "Blog posts"
       order: -id
@@ -2002,3 +1311,130 @@ livinglabs:
       format: "{{ item.title|escape }}"
   record_template : record_page.twig
   recordsperpage: 1000
+  listing_template: listing.twig
+
+incubation:
+  name: Incubation
+  singular_name: Incubation
+  slug: 'incubation'
+  singular_slug: 'incubation'
+  fields:
+    # Shown on Individual pages, Lists, Overviews, Teasers
+    title:
+      type: text
+      required: true
+      label: "Title (required):"
+      variant: inline
+      postfix: "(max. 50 characters)"
+      pattern: "^.{1,50}$"
+      group: Page
+    slug:
+      type: slug
+      uses: title
+    intro:
+      type: textarea
+      label: "Intro:"
+      height: 150px
+    # Shown on Individual pages, Lists
+    teaser:
+      type: html
+      label: "Teaser (required):"
+      height: 150px
+    # Shown on Individual pages
+    body:
+      type: html
+      label: "Body (required):"
+      height: 300px
+    # Shown on Individual pages, Lists, Overviews, Teasers
+    teaser_image:
+      type: image
+      required: false
+      label: "Teaser image:"
+    secondary_mail:
+      type: checkbox
+      label: "Show secondary email instead:"
+      group: "Page Options"
+    hide_related:
+      type: checkbox
+      label: "Hide from related content:"
+      postfix: "Check to hide this page from related content sections."
+    hide_related_section:
+      type: checkbox
+      label: "Hide related content section:"
+      postfix: "Check to hide the related content section."
+    files:
+      type: filelist
+      required: false
+      label: "Files:"
+      group: "Files"
+    link1:
+      type: text
+      required: false
+      label: "External link1:"
+      variant: inline
+      class: narrow 
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url  
+      group: "Related External Links"
+    link2:
+      type: text
+      required: false
+      label: "External link2:"
+      variant: inline
+      class: narrow 
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url  
+    link3:
+      type: text
+      required: false
+      label: "External link3:"
+      variant: inline
+      class: narrow 
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url  
+    support_navigation:
+      type: markdown
+      label: "Support navigation:"
+      group: "Support Navigation"
+    structure_sortorder:
+      type: integer
+      label: "Sort order in structure tree parent"
+  taxonomy: [ tags ]
+  relations:
+    structures:
+      label: "Tree parent"
+      multiple: false
+      order: title
+    persons:
+      label: "Contact(s)"
+      multiple: true
+      format: "{{ item.last_name }}, {{ item.first_name }}"
+      order: last_name
+    pages:
+      multiple: true
+      label: "Pages"
+      order: -id
+      format: "{{ item.title|escape }}"
+    blogs:
+      multiple: true
+      label: "Blog posts"
+      order: -id
+      format: "{{ item.title|escape }}"
+    data:
+      multiple: true
+      label: "Data"
+      order: -id
+      format: "{{ item.title|escape }}"
+    apps:
+      multiple: true
+      label: "Apps"
+      order: -id
+      format: "{{ item.title|escape }}"
+    events:
+      multiple: true
+      label: "Events"
+      order: -id
+      format: "{{ item.title|escape }}"
+  record_template: record_page.twig
+  icon_many: "fa:files-o"
+  icon_one: "fa:files"

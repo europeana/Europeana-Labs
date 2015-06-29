@@ -5,35 +5,35 @@ main:
     options: [toplevel1, toplevel2, toplevel3, toplevel4]
     has_sortorder: false
 
-tags:
-    slug: tags
-    singular_slug: tag
-    behaves_like: tags
-    listing_template: listing_tags.twig
+appthemes:
+  slug: appthemes
+  name: Type
+  singular_slug: type
+  singular_name: Type
+  behaves_like: categories
+  options: [Showcase, Tools, FLOSS]
 
+appcategories:
+  name: Theme
+  slug: appcategories
+  singular_name: Theme
+  singular_slug: theme
+  behaves_like: categories
+  multiple: 1
+  options: [API Implementation, Discovery, Hackathon Prototype, R&D Results, Curation/Annotation,Education, Client Library, Pilot, Gaming, Distribution, Tourism, Linked Open Data]
+  
 apptags:
   slug: apptags
   name: Tags
   singular_name: Tag
   behaves_like: tags
 
-appthemes:
-  slug: appthemes
-  name: Themes
-  singular_slug: theme
-  singular_name: Theme
-  behaves_like: categories
-  options: [t1,t2,t3]
-
-appcategories:
-  name: Categories
-  slug: appcategories
-  singular_name: Category
-  singular_slug: appcategory
-  behaves_like: categories
-  multiple: 1
-  options: [cat1, cat2, cat3, cat4, cat5]
-
+tags:
+    slug: tags
+    singular_slug: tag
+    behaves_like: tags
+    listing_template: listing_tags.twig
+    
 tree:
     slug: tree
     singular_slug: tree
