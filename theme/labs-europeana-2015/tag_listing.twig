@@ -43,12 +43,6 @@
         {% endif %}
     {% endif %}
 
-{% setcontent allevents = 'events' %}	
-{% set tag = app.request.get('tag')  %}
-{% if tag != null %}
-	{% setcontent records= 'events' where {tags: tag} allowpaging%}
-{% endif %}
-
 <!-- Start content -->
 <main role="main">
 
@@ -57,12 +51,9 @@
 		<div class="grid">
 			<div class="contents">
 				{# show title and intro for structrure listview #}
-				{% if record is defined %}
 				<div class="title">
-				     <h1 class="title">{{ record.title }}</h1>
-				     <p class="subhead">{{ record.teaser|raw }}</p>
+				     <h1 class="title">Entries tagged "{{ slug }}"</h1>
 				</div>
-				{% endif %}
 			</div>
 		</div>
 	</div>
@@ -73,50 +64,21 @@
 		<div class="sidebar">
 
 			<div class="subnav">
-
-				<h4 class="label epsilon"> Filter by:</h4>
-
-				<ul class="tags tags-large">
-				{% for listItem in allevents %}
-					{% if listItem.taxonomy.tags is defined %}
-					    {% for type, values in listItem.taxonomy %}
-		
-						{% for link, value in values %}
-							<li><a class="tag" href="{{ root }}?tag={{ value }}">{{ value }}</a>
-							{% if not loop.last %}
-								</li> 
-							{% endif %}
-						{% endfor %}
-						{% if not loop.last %} - {% endif %}
-					    {% endfor %}
-					{% endif %}
-				{% endfor %}
-
-				</ul>		
 			</div>	
 		</div><!--
 --><div class="main-content">
-
 	<ul class="post-list l-post-list">
-			
-				
-		{% if showsortby and taxonomy is not defined and 				contenttype.slug in ['blogposts','collections'] %}
+		{% if showsortby and taxonomy is not defined and contenttype.slug in ['blog','collections'] %}
 		{# all blog posts or collections. #}
-                	 		{% setcontent records = contenttype.slug where { limit : 				amount, order : order, page : page } allowpaging %}
+                	 		{% setcontent records = contenttype.slug where { limit : amount, order : order, page : page } allowpaging %}
                  			{% endif %}
-
-
-                    {% for listItem in records %}
+        {% for listItem in records %}
 			{% if(loop.index <= 2) %}
-				<!--{% include 'items/_item-event-list.twig' with { record: listItem } %}			
+				<!--{% include 'items/_item-list.twig' with { record: listItem } %}			
 			{% else %} 
-				<!--{% include 'items/_item-event-list.twig' with { record: listItem, 'block':'defined' } %}
+				<!--{% include 'items/_item-list.twig' with { record: listItem, 'block':'defined' } %}
 			{% endif %}
-
-			
-			
-
-                    {% endfor %}
+        {% endfor %}
            --></ul>
 		{{ pager() }}
 	</div>

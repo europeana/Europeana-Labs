@@ -1,4 +1,7 @@
 {% include '_header.twig' %}
+{% set filterroot = app.request.getSchemeAndHttpHost() ~  "/apps" %}
+
+{% setcontent allapp = 'apps' %}	
 
 {# set order #}
 {% set order = contenttype['sort'] %}
@@ -16,8 +19,9 @@
     {% set amount = app.config.get('general/listing_records') %}
 {% endif %}
 
-{% if records|length %}
+{% set amount = 6 %}
 
+{% if records|length %}
     {# show/hide sortby item and pager #}
     {% set showsortby = false %}
 
@@ -32,41 +36,45 @@
         {% else %}
             {% set contenttype = getContenttype(records|first.contenttype.name) %}
             {% set showsortby = true %}
-            {% set contenttypePager = contenttype['slug'] %}
+            {% set contenttypePager = 'apps' %}
         {% endif %}
 
     {# structure content #}
     {% elseif contenttype['name'] is defined %}
         {% if (contenttype['slug'] in app.config.get('general/sort_options/disabled')|keys ) %}
-            {% set contenttypePager = contenttype['slug'] %}
+            {% set contenttypePager = 'apps' %}
             {% set showsortby = true %}
         {% endif %}
     {% endif %}
 
-{% setcontent allapp = 'apps' %}	
-{% set tag = app.request.get('category')  %}
-{% if tag != null %}
-	{% setcontent records= 'apps' where {appcategories: tag} allowpaging%}
-{% endif %}
-{% set theme = app.request.get('theme')  %}
-{% if theme != null %}
-	{% setcontent records= 'apps' where {appthemes: theme} allowpaging%}
-{% endif %}
+    
+    {% set contentfilters = {} %}
+    {% set category = app.request.get('category')  %}
+    {% if category != null %}
+        {% set contentfilters = contentfilters|merge({ appcategories: category }) %}
+    {% endif %}
+    {% set theme = app.request.get('theme')  %}
+    {% if theme != null %}
+        {% set contentfilters = contentfilters|merge({ appthemes: theme }) %}
+    {% endif %}
+    {% set tag = app.request.get('tag')  %}
+    {% if tag != null %}
+        {% set contentfilters = contentfilters|merge({ apptags: tag }) %}
+    {% endif %}
+    {% setcontent records = 'apps' where contentfilters allowpaging limit 10 %}
 
+    
 <!-- Start content -->
 <main role="main">
-
 <section class="block-content-header">
 	<div class="grid_wrapper">
 		<div class="grid">
 			<div class="contents">
-				{# show title and intro for structrure listview #}
-				{% if record is defined %}
 				<div class="title">
-				     <h1 class="title">{{ record.title }}</h1>
-				     <p class="subhead">{{ record.teaser|raw }}</p>
+				     <h1 class="title">Apps showcase</h1>
+				     <p class="subhead">Explore our showcase of applications using the Europeana APIs and re-usable content. Discover tools to get you started, or browse our directory of open source software.</p>
+                     <p class="subhead">Is your app missing here? If so <a href="http://labs.europeana.eu/support/contact/">get in touch</a></p>
 				</div>
-				{% endif %}
 			</div>
 		</div>
 	</div>
@@ -76,43 +84,32 @@
 	<div class="grid">
 		<div class="sidebar">
 			<div class="subnav">
-				<h4 class="label epsilon"> Filter by:</h4>
+				<h4 class="label epsilon"> Categories:</h4>
 				<ul class="tags tags-large">
                     {% for category in app.config.get('taxonomy/appthemes/options') -%}
                         <li><a class="tag" href="{{ root }}?theme={{ category|slug }}">{{ category }}</a></li>
                     {% endfor %}
 				</ul>		
+                <h4 class="label epsilon"> Filter by:</h4>
 				<ul class="tags tags-large">
                     {% for category in app.config.get('taxonomy/appcategories/options') -%}
-                        <li><a class="tag" href="{{ root }}?category={{ category|slug }}">{{ category }}</a></li>
+                        {% set themefilter = "" %}
+                        {% if theme != null %}
+                            {% set themefilter = "&theme=" ~ theme %}
+                        {% endif %}
+                        <li><a class="tag" href="{{ root }}?category={{ category|slug ~ themefilter }}">{{ category }}</a></li>
                     {% endfor %}
 				</ul>		
 			</div>	
 		</div><!--
 --><div class="main-content">
 
-	<ul class="post-list l-post-list">
-			
-				
-		{% if showsortby and taxonomy is not defined and 				contenttype.slug in ['blogposts','collections'] %}
-		{# all blog posts or collections. #}
-                	 		{% setcontent records = contenttype.slug where { limit : 				amount, order : order, page : page } allowpaging %}
-                 			{% endif %}
-
-
-                    {% for listItem in records %}
-			{% if(loop.index <= 2) %}
-				<!--{% include 'items/_item-app-list.twig' with { record: listItem } %}			
-			{% else %} 
-				<!--{% include 'items/_item-app-list.twig' with { record: listItem, 'block':'defined' } %}
-			{% endif %}
-
-			
-			
-
-                    {% endfor %}
+	<ul class=""><!--
+            {% for listItem in records %}
+                {% include 'items/_item-list.twig' with { record: listItem } %}
+            {% endfor %}
            --></ul>
-		{{ pager() }}
+		{{ pager('apps') }}
 	</div>
 </div>
 

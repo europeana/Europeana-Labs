@@ -32,32 +32,19 @@
 	{% else %}
 	   <h1 class="headline gama"><a href="{{ listItemLink }}">{{ listItem.title|striptags }}</a></h1>
            <div class="description">
-
-                {% if (contenttype.slug in [ "publications", "pressreleases", "blogposts", "blog-posts", "collections" ]) %}
-                    {{ listItem.excerpt(app.config.get('general/excerpt_length')) }}
-                {% else %}
-                    {{ listItem.teaser }}
-                {% endif %}
-
+                    {{ listItem.teaser|excerpt(120) }}
             </div>
 
 	{% endif %}
 
      
 	    <div class="tags">
-
-           
-               
-            {% if contenttype.slug == "data" %}
                 {# set tags #}
-                {% if record.taxonomy.tags is defined  %}
-			<i class="icon icon-tag"></i>
+            {% if record.taxonomy.tags is defined  %}
+                <i class="icon icon-tag"></i>
 			    {% for k,v in record.taxonomy.tags %}
-				<a class="tag_alt" href="{{ k }}">{{ v }}</a>
+				<a class="tag_alt" href="{{ filterroot }}?tag={{ v|slug}}">{{ v }}</a>
 			    {% endfor %}
-		 	
-	    	{% endif %}
-
             {% endif %}
 
             </div>

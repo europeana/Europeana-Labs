@@ -43,10 +43,16 @@
         {% endif %}
     {% endif %}
 
-{% setcontent alldata = 'data' %}	
 {% set tag = app.request.get('tag')  %}
 {% if tag != null %}
-	{% setcontent records= 'data' where {tags: tag} allowpaging%}
+    {% set tagarray = tag|split(',') %}
+    {% set tagsquery = tagarray|performtagquery(contenttype, "tags")|join(' || ') %}
+    
+    {% setcontent records= 'blog' where {id: tagsquery} allowpaging limit 10 %}
+    {% set filterroot2 = filterroot ~ "?tag=" ~ (tag|url_encode) ~ ","|url_encode %} 
+{% else %}
+    {% setcontent records= 'blog' allowpaging limit 10 %}
+    {% set filterroot2 = filterroot ~ "?tag="  %}
 {% endif %}
 
 <!-- Start content -->
@@ -68,46 +74,18 @@
 	</div>
 </section>
 <section class="grid_wrapper">
-
 	<div class="grid">
 		<div class="sidebar">
-
 			<div class="subnav">
-
 				<h4 class="label epsilon"> Filter by:</h4>
-
-				<ul class="tags tags-large">
-                {% set values_added = [] %}
-				{% for listItem in alldata %}
-					{% if listItem.taxonomy.tags is defined %}
-					    {% for type, values in listItem.taxonomy %}
-                            {% for link, value in values %}
-                                {% if value in values_added %}
-                                {% else %}
-                                    {% set values_added = values_added|merge([value]) %}
-                                    <li><a class="tag" href="{{ root }}?tag={{ value }}">{{ value }}</a></li> 
-                                {% endif %}
-                            {% endfor %}
-					    {% endfor %}
-					{% endif %}
-				{% endfor %}
-
-				</ul>		
+                {{ tag_cloud(contenttype, "tags", tagarray, {list_options: {class: "tags tags-large"}, link_options : { class: "tag", root_url: filterroot2 } }) }}
 			</div>	
 		</div><!--
 --><div class="main-content">
-	<ul class="post-list l-post-list">
-		{% if showsortby and taxonomy is not defined and contenttype.slug in ['blog','collections'] %}
-		{# all blog posts or collections. #}
-                	 		{% setcontent records = contenttype.slug where { limit : 				amount, order : order, page : page } allowpaging %}
-                 			{% endif %}
-                    {% for listItem in records %}
-			{% if(loop.index <= 2) %}
-				<!--{% include 'items/_item-list.twig' with { record: listItem } %}			
-			{% else %} 
-				<!--{% include 'items/_item-list.twig' with { record: listItem, 'block':'defined' } %}
-			{% endif %}
-                    {% endfor %}
+	<ul class="results-list"><!--
+            {% for listItem in records %}
+                    {% include 'items/_item-list.twig' with { record: listItem } %}			
+            {% endfor %}
            --></ul>
 		{{ pager() }}
 	</div>

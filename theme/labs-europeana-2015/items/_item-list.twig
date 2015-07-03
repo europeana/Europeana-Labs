@@ -9,18 +9,12 @@
     {% set listItem = record %}
     {% set contenttype = record.contenttype %}
     {% set listItemLink = structurelink(record) %}
-{# TODO: Clanup - style is here only until Tim fixes pattern lab! #}
---><li class="list-item" style="width:100% !important;"><!--
+--><li class="list-item"><!--
 
         --><div class="item-supplementary">
-        {% if (contenttype.slug in [ 'blog']) %}
+        {% if (contenttype.slug in [ 'blog', 'locations', "data", "apps"]) %}
             <div class="item-image">
                 <a href="{{ listItemLink }}"><img src="{{ listItem.values['teaser_image']|default(listItem.values['image'])|thumbnail() }}" alt="{{ listItem.image|title }}" /></a>
-            </div>
-        {% elseif 'subsite' in listItem.template %}
-            {% setcontent footer = 'Footer' where {id: listItem.footer, order: 'id', limit: 1} %}
-            <div class="item-image">
-                <a href="{{ listItemLink }}"><img src="{{ footer.values['image']|thumbnail() }}" alt="{{ footer.image|title }}" /></a>
             </div>
         {% elseif contenttype.slug == "events" %}
             <div class="item-bigdate">
@@ -42,23 +36,28 @@
 
             <div class="item-meta-secondary">
 
-            {% if contenttype.slug in [ "blog" ] %}
+            {% if contenttype.slug in [ "blog", "locations", "data", "apps" ] %}
                 {# set date #}
-                {% include 'items/_item-date.twig' %}
+                {% if contenttype.slug in [ "blog" ] %}
+                    {% include 'items/_item-date.twig' %}
+                {% endif %}
                 {# set tags #}
-                {% include 'items/_item-tags.twig' %}
-                {# set discus comments #}
-                {% include 'items/_item-comments-link.twig' %}
+                
+                {% if contenttype.slug in [ "blog", "locations", "data" ] %}
+                    {% include 'items/_item-tags.twig' %}
+                {% else %}
+                    {# apps have a different view #}
+                    {% if record.taxonomy.appcategories is defined %}
+                        {% set usecategories = record.taxonomy.appcategories %}
+                    {% endif %}
+                    {% if record.taxonomy.apptags is defined %}
+                        {% set usetags = record.taxonomy.apptags %}
+                    {% endif %}
+                    {% include 'items/_item-tags.twig' %}
+                {% endif %}
             {% elseif contenttype.slug == "events" %}
                 {# set location #}
                 {% include 'items/_item-location.twig' %}
-                {# set tags #}
-                {% include 'items/_item-tags.twig' %}
-            {% elseif (contenttype.slug in [ "structures" ]) %}
-                {% include 'items/_item-date.twig' with { date: listItem.date_start } %}
-                <span>to: </span>
-                {% include 'items/_item-date.twig' with { date: listItem.date_end } %}
-                <br />
                 {# set tags #}
                 {% include 'items/_item-tags.twig' %}
             {% endif %}

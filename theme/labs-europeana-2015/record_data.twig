@@ -1,5 +1,5 @@
 {% include '_header.twig' %}<!--
-
+{% set filterroot = app.request.getSchemeAndHttpHost() ~  "/" ~ record.contenttype.slug %}
 	--><main role="main"><!--
 		--><section class="block-content-header"><!--
 			--><div class="grid_wrapper"><!--
@@ -16,6 +16,11 @@
 			--><div class="grid grid--rev"><!--
 				--><div class="main-content prose" id="documentation"><!--
                     -->{{ record.body|raw }}<!--
+                    --><section><p>Dataset provided by <a href="{{ record.provided_by_link }}">{{ record.provided_by }}</a>.<!--
+                    -->{% if record.contact_email!="" %}<!--
+                        -->&nbsp;Contact <a href="mailto:{{ record.contact_email|raw }}">{{ record.contact_email }}</a> for more details.<!--
+                    -->{% endif %}<!--
+                    --></p></section><!--
                     --><div class="section next-actions"><!--
                         --><h4>View this item in:</h4><!--
                         --><a title="View in the API Console" class="btn" href="{{ record.apiconsolelink }}">API Console</a><!--
@@ -27,6 +32,10 @@
                         -->{# set tags #}<!--
                         -->{% include 'items/_item-tags.twig' %}<!--
                     --></div><!--
+                    -->{% include 'items/_item-related.twig' with {title: "You might also like:", short: false} %}<!--
+                    --><aside><!--
+                        -->{% include 'items/_item-comments.twig' %}<!--
+                    --></aside><!--
                 --></div><!--
 				--><div class="sidebar">{% if record.support_navigation != "" %}{{ record.support_navigation|raw }}{% endif %}</div><!--
 			--></div><!--

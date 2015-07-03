@@ -1,7 +1,7 @@
 {% include '_header.twig' %}
 
 {% set event = record %}
-{% set location = record.related('locations')|first %}
+{% set location = record.related('places')|first %}
 {% set speakers =  record.related('persons') %}
 {% set contacts = record.related('person') %}
 

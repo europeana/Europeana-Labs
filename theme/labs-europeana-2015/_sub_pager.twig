@@ -4,6 +4,24 @@
     {% set filter = "" %}
 {% endif %}
 
+{% if "category" in app.request.query.all|keys %}
+    {% set category = "category=" ~ app.request.query.all.category ~ "&" %}
+{% else %}
+    {% set category = "" %}
+{% endif %}
+
+{% if "tag" in app.request.query.all|keys %}
+    {% set tag = "tag=" ~ app.request.query.all.tag ~ "&" %}
+{% else %}
+    {% set tag = "" %}
+{% endif %}
+
+{% if "theme" in app.request.query.all|keys %}
+    {% set theme = "theme=" ~ app.request.query.all.theme ~ "&" %}
+{% else %}
+    {% set theme = "" %}
+{% endif %}
+
 {% if "order" in app.request.query.all|keys %}
     {% set order = "order=" ~ app.request.query.all.order ~ "&" %}
 {% else %}
@@ -21,7 +39,7 @@
 {% if pager.link is defined %}
     {% set link = pager.link %}
 {% else %}
-    {% set link = "?" ~ filter ~ order ~ "page=" %}
+    {% set link = "?" ~ filter ~ order ~ category ~ theme ~ tag ~ "page=" %}
 {% endif %}
 
 {% if pager.totalpages > 1 %}

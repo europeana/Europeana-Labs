@@ -1,5 +1,5 @@
 {% include '_header.twig' %}<!--
-
+{% set filterroot = app.request.getSchemeAndHttpHost() ~  "/" ~ record.contenttype.slug %}
 	--><main role="main"><!--
 		--><section class="block-content-header"><!--
 			--><div class="grid_wrapper"><!--
@@ -14,10 +14,51 @@
 
 		--><div class="lc"><!--
 			--><div class="grid grid--rev"><!--
-				--><div class="main-content prose" id="documentation">{{ record.body|raw }}</div><!--
-				-->{% if record.filelist_downloads|length > 3 %}
-                        {{ file_browser({'mode': 'list', 'root': record.filelist_downloads}) }}
-                {% endif %}<!--
+				--><div class="main-content prose" id="documentation">{{ record.body|raw }}
+                    {% if record.filelist_downloads|length > 3 %}
+                            {{ file_browser({'mode': 'list', 'root': record.filelist_downloads}) }}
+                    {% endif %}
+                    {% if record.link1 is not empty %}
+                        <h2>Learn more:</h2>
+                        <ol><!--
+                            --><li>&nbsp;<a href="{{ record.link1 }}">{{ record.link1 }}</a></li><!--
+                            {% if record.link2 is not empty %}
+                                <li>&nbsp;<a href="{{ record.link2 }}">{{ record.link2 }}</a></li>
+                            {% endif %}
+                            {% if record.link3 is not empty %}
+                                <li>&nbsp;<a href="{{ record.link3 }}">{{ record.link3 }}</a></li>
+                            {% endif %}
+                        --></ol>
+                    {% endif %}
+                    {% if record.contact_name is not empty or record.contact_email is not empty or record.contact_website is not empty %}
+                        <h2>Contact information:</h2>
+                        {% if record.contact_name is not empty %}
+                            <p><strong>Name:</strong>&nbsp;{{ record.contact_name }}</li></p>
+                        {% endif %}
+                        {% if record.contact_email is not empty %}
+                            <p><strong>Email:</strong><a href="mailto:{{ record.contact_email }}">&nbsp;{{ record.contact_email }}</a></p>
+                        {% endif %}
+                        {% if record.contact_website is not empty %}
+                            <p><strong>Website:</strong>&nbsp;<a href="{{ record.contact_website }}">{{ record.contact_website }}</a></p>
+                        {% endif %}
+                    {% endif %}
+                    <div class="section item-meta-secondary"><!--
+                        -->{# set date #}<!--
+                        -->{% include 'items/_item-date.twig' %}<!--	
+                        -->{# set tags #}<!--
+                        -->{% if record.taxonomy.appcategories is defined %}<!--
+                            -->{% set usecategories = record.taxonomy.appcategories %}<!--
+                        -->{% endif %}<!--
+                        -->{% if record.taxonomy.apptags is defined %}<!--
+                            -->{% set usetags = record.taxonomy.apptags %}<!--
+                        -->{% endif %}<!--
+                        -->{% include 'items/_item-tags.twig' %}<!--
+                    --></div><!--
+                    -->{% include 'items/_item-related.twig' with {title: "You might also like:", short: false} %}<!--
+                    --><aside><!--
+                        -->{% include 'items/_item-comments.twig' %}<!--
+                    --></aside><!--
+                --></div><!--
                 --><div class="sidebar">{% if record.support_navigation != "" %}{{ record.support_navigation|raw }}{% endif %}</div><!--
 			--></div><!--
 		--></div><!--

@@ -43,11 +43,26 @@
         {% endif %}
     {% endif %}
 
-{% setcontent allevents = 'events' %}	
+{% if order == '-end_event' %} 
+    {% set end_event = '< today' %} 
+    {% set order = '-start_event' %} 
+{% else %} 
+    {% set end_event = '> today' %} 
+    {% set order = 'start_event' %} 
+{% endif %} 
+
 {% set tag = app.request.get('tag')  %}
 {% if tag != null %}
-	{% setcontent records= 'events' where {tags: tag} allowpaging%}
+    {% set tagarray = tag|split(',') %}
+    {% set tagsquery = tagarray|performtagquery(contenttype, "tags")|join(' || ') %}
+    
+    {% setcontent records= 'events' where {id: tagsquery} allowpaging limit 10 %}
+    {% set filterroot2 = filterroot ~ "?tag=" ~ (tag|url_encode) ~ ","|url_encode %} 
+{% else %}
+    {% setcontent records= 'events' allowpaging limit 10 %}
+    {% set filterroot2 = filterroot ~ "?tag="  %}
 {% endif %}
+
 
 <!-- Start content -->
 <main role="main">
@@ -56,68 +71,28 @@
 	<div class="grid_wrapper">
 		<div class="grid">
 			<div class="contents">
-				{# show title and intro for structrure listview #}
-				{% if record is defined %}
 				<div class="title">
-				     <h1 class="title">{{ record.title }}</h1>
-				     <p class="subhead">{{ record.teaser|raw }}</p>
+				     <h1 class="title">Events</h1>
+				     <p class="subhead">Take a look at all the hackdays, hackathons, conferences and other events we're involved in or organising. You can meet up with us there!</p>
 				</div>
-				{% endif %}
 			</div>
 		</div>
 	</div>
 </section>
 <section class="grid_wrapper">
-
 	<div class="grid">
 		<div class="sidebar">
-
 			<div class="subnav">
-
 				<h4 class="label epsilon"> Filter by:</h4>
-
-				<ul class="tags tags-large">
-				{% for listItem in allevents %}
-					{% if listItem.taxonomy.tags is defined %}
-					    {% for type, values in listItem.taxonomy %}
-		
-						{% for link, value in values %}
-							<li><a class="tag" href="{{ root }}?tag={{ value }}">{{ value }}</a>
-							{% if not loop.last %}
-								</li> 
-							{% endif %}
-						{% endfor %}
-						{% if not loop.last %} - {% endif %}
-					    {% endfor %}
-					{% endif %}
-				{% endfor %}
-
-				</ul>		
+                {{ tag_cloud(contenttype, "tags", tagarray, {list_options: {class: "tags tags-large"}, link_options : { class: "tag", root_url: filterroot2 } }) }}
 			</div>	
 		</div><!--
---><div class="main-content">
-
-	<ul class="post-list l-post-list">
-			
-				
-		{% if showsortby and taxonomy is not defined and 				contenttype.slug in ['blogposts','collections'] %}
-		{# all blog posts or collections. #}
-                	 		{% setcontent records = contenttype.slug where { limit : 				amount, order : order, page : page } allowpaging %}
-                 			{% endif %}
-
-
-                    {% for listItem in records %}
-			{% if(loop.index <= 2) %}
-				<!--{% include 'items/_item-event-list.twig' with { record: listItem } %}			
-			{% else %} 
-				<!--{% include 'items/_item-event-list.twig' with { record: listItem, 'block':'defined' } %}
-			{% endif %}
-
-			
-			
-
-                    {% endfor %}
-           --></ul>
+--><div class="main-content"><!--
+	--><ul class="results-list"><!--
+        {% for listItem in records %}
+			{% include 'items/_item-list.twig' with { record: listItem } %}			
+        {% endfor %}
+    --></ul>
 		{{ pager() }}
 	</div>
 </div>

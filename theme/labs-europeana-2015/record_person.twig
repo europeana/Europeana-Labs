@@ -4,7 +4,7 @@
 
 {% set events = record.related('events') %}
 {% set publications = record.related('publications') %}
-{% set blogposts = record.related('blogposts') %}
+{% set blogposts = record.related('blog') %}
 {% set contacts = record.related('person') %}
 
 <!-- Start content -->
@@ -68,7 +68,7 @@
                                 {% endif %}
                             </div>
 
-                            <ul class="contact-external">
+                            <ul class="contact-external"><!--
                                 {% if record.twitter != '' %}
                                 <li><a href="{{ record.twitter }}"><svg class="icon icon-twitter"><use xlink:href="#icon-twitter"></use></svg>{{ record.twitter|split('/')|last }}</a></li>
                                 {% endif %}
@@ -78,7 +78,7 @@
                                 {% if record.linkedin != '' %}
                                 <li><a href="{{ record.linkedin }}"><svg class="icon icon-linkedin"><use xlink:href="#icon-linkedin"></use></svg>{{ record.first_name }} {{ record.last_name }}</a></li>
                                 {% endif %}
-                            </ul>
+                            --></ul>
                         </div>
 
                         <div class="contact-additional">
@@ -105,11 +105,11 @@
                 <div class="section">
                     <h2>Speaking at</h2>
                     <div class="results">
-                        <ul class="results-list">
+                        <ul class="results-list"><!--
                             {% for event in events %}
                                 {% include 'items/_item-list.twig' with {record: event} %}
                             {% endfor %}
-                        </ul>
+                        ---></ul>
                     </div>
                 </div>
                 {% endif %}
@@ -117,22 +117,22 @@
                 {% if publications %}
                 <div class="section">
                     <h2>Publications</h2>
-                    <ul class="results-list">
+                    <ul class="results-list"><!--
                         {% for publication in publications %}
                             {% include 'items/_item-list.twig' with {record: publication} %}
                         {% endfor %}
-                    </ul>
+                    --></ul>
                 </div>
                 {% endif %}
 
                 {% if blogposts %}
                 <div class="section">
                     <h2>Blog posts</h2>
-                    <ul class="results-list">
+                    <ul class="results-list"><!--
                         {% for blogpost in blogposts %}
                             {% include 'items/_item-list.twig' with {record: blogpost} %}
                         {% endfor %}
-                    </ul>
+                    --></ul>
                 </div>
                 {% endif %}
             </div>

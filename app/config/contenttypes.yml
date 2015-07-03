@@ -56,7 +56,7 @@
 #
 #################################
 persons:
-  name: Persons
+  name: People
   singular_name: Person
   fields:
     # Show on Staff list page, Staff page, Events page (speakers), Contact info block
@@ -319,7 +319,7 @@ events:
       label: "Tree parent"
       multiple: false
       order: title
-    locations:
+    places:
       multiple: false
       label: "Location"
       order: title
@@ -341,7 +341,7 @@ events:
       format: "{{ item.title|escape }}"
   sort: start_event
   record_template : record_event.twig
-  listing_template: blog_listing.twig
+  listing_template: event_listing.twig
   listing_records : 8
   icon_many: "fa:calendar"
   icon_one: "fa:calendar"
@@ -357,7 +357,7 @@ events:
 #
 #
 #################################
-blogs:
+blog:
   name: 'Blog Posts'
   singular_name: 'BlogPost'
   display_name: 'Blog Posts'
@@ -422,7 +422,7 @@ blogs:
       label: "Pages"
       order: -id
       format: "{{ item.title|escape }}"
-    blogs:
+    blog:
       multiple: true
       label: "Blog posts"
       order: -id
@@ -581,7 +581,7 @@ pages:
       label: "Pages"
       order: -id
       format: "{{ item.title|escape }}"
-    blogs:
+    blog:
       multiple: true
       label: "Blog posts"
       order: -id
@@ -619,9 +619,9 @@ pages:
 # so the /permalink/locations area should not be in the sitemap, and should be ignored by robots.
 #
 #################################
-locations:
-  name: Locations
-  singular_name: Location
+places:
+  name: Places
+  singular_name: Place
   fields:
     # Shown on Job list page, Job page, Events list page, Events page, Home page
     title:
@@ -771,43 +771,45 @@ homepage:
     title:
       type: text
       required: false
+      group: "Hero image"
     bannerimage:
       type: image
       attrib: title
       extensions: [ gif, jpg, png ]
       required: true
       label: "Banner Image (required):"
+      group: "Hero image"
     imageattribution:
       label: Image Attribution
       type: text
+      group: "Hero image"
     imagelicense:
       label: Image License
       type: select
       values: [ 'CC0', 'CC-BY', 'CC-BY-SA', 'CC-BY-NC', 'CC-BY-NC-SA', 'Public Domain' ]
+      group: "Hero image"
     brandcolour:
       label: Color of graphic
       type: select
-      values: { brand-colour-site : "Europeana red", brand-colour-white : "White", brand-colour-black : "Black" }
+      values: { brand-colour-site : "Europeana Green", brand-colour-white : "White", brand-colour-black : "Black" }
+      group: "Hero graphic"
     brandopacity:
       label: Transparency of graphic
       type: select
       values: { brand-opacity25 : "25 percent", brand-opacity50 : "50 percent", brand-opacity75 : "75 percent", brand-opacity100 : "Not transparent" }
+      group: "Hero graphic"
     brandlocation:
       label: Location of graphic
       type: select
       values: { brand-topleft : "Top left", brand-topright  : "Top right", brand-bottomleft  : "Bottom left", brand-bottomright : "Bottom right"  }
+      group: "Hero graphic"
     bannertext:
       type: html
       required: true
       label: "Banner Text (required):"
       variant: inline
       class: wide
-    # This is the link that the "More" goes to.
-    #bannerlink_select:
-    #  type: select
-    #  required: true
-    #  label: "Banner link:"
-    #  values: page/id,title
+      group: "Hero graphic"
     bannerlink:
       type: text
       required: false
@@ -817,37 +819,174 @@ homepage:
       postfix: "(at least one of the above boxes is required)"
       pattern: url
       class: narrow
+      group: "Hero graphic"
     subtitle:
       type: html
       required: true
       label: "Intro text (required):"
       height: 150px
+      group: "Hero graphic"
     callout_1:
       type: html
       required: true
-      label: "Join the network (required):"
+      label: "Main CTA:"
       height: 150px
+      group: "CTA, Links"
     callout_2:
       type: html
       required: true
-      label: "Share your data (required):"
+      label: "Left Quick Links (required):"
       height: 150px
+      group: "CTA, Links"
     callout_3:
       type: html
       required: true
-      label: "Use Europeana data (required):"
+      label: "Right Quick Links (required):"
       height: 150px
-    callout_6:
+      group: "CTA, Links"
+    use_manual_1:
+      type: checkbox
+      label: "Use this settings:"
+      group: "Latest 1"
+    flag_colour_1:
+      label: "Color of flag 1: "
+      type: select
+      values: { category_1 : "Orange", category_2 : "Yellow", category_3 : "Blue", category_4 : "Raspberry", category_5 : "Jade green"}
+      group: "Latest 1"
+    flag_label_1:
+      label: "Label of flag 1:"
+      type: text
+      class: narrow
+      group: "Latest 1"
+    latest_title_1:
+      label: "Title of update 2:"
+      type: text
+      class: narrow
+      group: "Latest 1"
+    latest_teaser_1:
+      label: "Teaser for update 1:"
       type: html
       required: true
-      label: "Latest Updates (required):"
       height: 150px
+      group: "Latest 1"
+    latest_image_1:
+      label: "Image for update 1: "
+      type: image
+      attrib: title
+      group: "Latest 1"
+    latest_url_1:
+      label: "Url for update 1: "
+      type: text
+      required: false
+      variant: inline
+      class: narrow 
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url  
+      group: "Latest 1"
+    use_manual_2:
+      type: checkbox
+      label: "Use this settings:"
+      group: "Latest 2"
+    flag_colour_2:
+      label: "Color of flag 2: "
+      type: select
+      values: { category_1 : "Orange", category_2 : "Yellow", category_3 : "Blue", category_4 : "Raspberry", category_5 : "Jade green"}
+      group: "Latest 2"
+    flag_label_2:
+      label: "Label of flag 2:"
+      type: text
+      class: narrow
+      group: "Latest 2"
+    latest_title_2:
+      label: "Title of update 2:"
+      type: text
+      class: narrow
+      group: "Latest 2"
+    latest_teaser_2:
+      label: "Teaser for update 2:"
+      type: html
+      required: true
+      height: 150px
+      group: "Latest 2"
+    latest_image_2:
+      label: "Image for update 2: "
+      type: image
+      attrib: title
+      group: "Latest 2"
+    latest_url_2:
+      label: "Url for update 2: "
+      type: text
+      required: false
+      variant: inline
+      class: narrow 
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url  
+      group: "Latest 2"
+    use_manual_3:
+      type: checkbox
+      label: "Use this settings:"
+      group: "Latest 3"
+    flag_colour_3:
+      label: "Color of flag 3: "
+      type: select
+      values: { category_1 : "Orange", category_2 : "Yellow", category_3 : "Blue", category_4 : "Raspberry", category_5 : "Jade green"}
+      group: "Latest 3"
+    flag_label_3:
+      label: "Label of flag 3:"
+      type: text
+      class: narrow
+      group: "Latest 3"
+    latest_title_3:
+      label: "Title of update 3:"
+      type: text
+      group: "Latest 3"
+      class: narrow
+    latest_teaser_3:
+      label: "Teaser for update 3:"
+      type: html
+      required: true
+      height: 150px
+      group: "Latest 3"
+    latest_image_3:
+      label: "Image for update 3: "
+      type: image
+      attrib: title
+      group: "Latest 3"
+    latest_url_3:
+      label: "Url for update 3: "
+      type: text
+      required: false
+      variant: inline
+      class: narrow 
+      prefix: "<em>URL has to start with http:// or https://</em>"
+      pattern: url  
+      group: "Latest 3"
   relations:
-    blogs:
+    blog:
       multiple: true
       label: Select blog posts
       order: -datepublish
       format: "{{ item.title|escape }} <span>({{ item.id }})</span>"
+    data:
+      multiple: true
+      label: "Data"
+      order: -id
+      format: "{{ item.title|escape }}"
+    blog:
+      multiple: true
+      label: "Blog posts"
+      order: -id
+      format: "{{ item.title|escape }}"
+    events:
+      multiple: true
+      label: "Events"
+      order: -id
+      format: "{{ item.title|escape }}"
+    apps:
+      multiple: true
+      label: "Apps"
+      order: -id
+      format: "{{ item.title|escape }}"
     footers:
       label: "Footer"
       multiple: false
@@ -906,7 +1045,7 @@ footers:
       label: "Linklist others (required):"
       height: 300px
   relations:
-    locations:
+    places:
       label: "Location:"
       multiple: false
   viewless: true
@@ -979,6 +1118,20 @@ data:
       class: narrow 
       prefix: "<em>URL has to start with http:// or https://</em>"
       pattern: url  
+    contact_name:
+      type: text
+      required: false
+      label: "Name:"
+      variant: inline
+      class: narrow
+      group: "contact"
+    contact_email:
+      type: text
+      required: false
+      label: "Email:"
+      variant: inline
+      class: narrow
+      group: "contact"
   taxonomy: [ tags ]
   relations:
     structures:
@@ -1000,7 +1153,7 @@ data:
       label: "Data"
       order: -id
       format: "{{ item.title|escape }}"
-    blogs:
+    blog:
       multiple: true
       label: "Blog posts"
       order: -id
@@ -1076,6 +1229,27 @@ apps:
       class: narrow 
       prefix: "<em>URL has to start with http:// or https://</em>"
       pattern: url  
+    contact_name:
+      type: text
+      required: false
+      label: "Name:"
+      variant: inline
+      class: narrow
+      group: "contact"
+    contact_email:
+      type: text
+      required: false
+      label: "Email:"
+      variant: inline
+      class: narrow
+      group: "contact"
+    contact_website:
+      type: text
+      required: false
+      label: "Website:"
+      variant: inline
+      class: narrow
+      group: "contact"  
   taxonomy: [ appthemes, appcategories, apptags ]
   relations:
     structures:
@@ -1097,7 +1271,7 @@ apps:
       label: "Data"
       order: -id
       format: "{{ item.title|escape }}"
-    blogs:
+    blog:
       multiple: true
       label: "Blog posts"
       order: -id
@@ -1114,7 +1288,8 @@ apps:
       format: "{{ item.title|escape }}"
   record_template : record_app.twig
   listing_template: app_listing.twig 
-  recordsperpage: 1000
+  recordsperpage: 10
+  listing_records: 10
 
 Documentation:
   name: Documentation
@@ -1218,7 +1393,7 @@ Documentation:
       label: "Pages"
       order: -id
       format: "{{ item.title|escape }}"
-    blogs:
+    blog:
       multiple: true
       label: "Blog posts"
       order: -id
@@ -1243,10 +1418,10 @@ Documentation:
   listing_template: listing.twig
 
 livinglabs:
-  name: Livinglabs
-  singular_name: Livinglab
-  slug: 'livinglab'
-  singular_slug: 'livinglab'
+  name: Locations
+  singular_name: Location
+  slug: 'locations'
+  singular_slug: 'locations'
   fields:
     title:
       type: text
@@ -1278,17 +1453,33 @@ livinglabs:
       required: true
       label: "Image:"
       extensions: [ gif, jpg, png ]
+    contact_name:
+      type: text
+      required: false
+      label: "Name:"
+      variant: inline
+      class: narrow
+      group: "contact"
+    contact_email:
+      type: text
+      required: false
+      label: "Email:"
+      variant: inline
+      class: narrow
+      group: "contact"
+    contact_website:
+      type: text
+      required: false
+      label: "Website:"
+      variant: inline
+      class: narrow
+      group: "contact"  
   taxonomy: [ tags ]
   relations:
     structures:
       label: "Tree parent"
       multiple: false
       order: title
-    person:
-      multiple: true
-      label: "Contact(s)"
-      order: last_name
-      format: "{{ item.last_name }}, {{ item.first_name }}"
     pages:
       multiple: true
       label: "Pages"
@@ -1299,7 +1490,7 @@ livinglabs:
       label: "Data"
       order: -id
       format: "{{ item.title|escape }}"
-    blogs:
+    blog:
       multiple: true
       label: "Blog posts"
       order: -id
@@ -1309,10 +1500,15 @@ livinglabs:
       label: "Events"
       order: -id
       format: "{{ item.title|escape }}"
+    places:
+      multiple: false
+      label: "Location"
+      order: -id
+      format: "{{ item.title|escape }}"
   record_template : record_page.twig
   recordsperpage: 1000
-  listing_template: listing.twig
-
+  listing_template: listing_location.twig
+  
 incubation:
   name: Incubation
   singular_name: Incubation
@@ -1415,7 +1611,7 @@ incubation:
       label: "Pages"
       order: -id
       format: "{{ item.title|escape }}"
-    blogs:
+    blog:
       multiple: true
       label: "Blog posts"
       order: -id

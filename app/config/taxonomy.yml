@@ -32,7 +32,7 @@ tags:
     slug: tags
     singular_slug: tag
     behaves_like: tags
-    listing_template: listing_tags.twig
+    listing_template: tag_listing.twig
     
 tree:
     slug: tree
@@ -45,56 +45,6 @@ tree:
         work-with-us: 'Work with us'
         about-us: 'About us'
         staff: 'Staff'
-#         slug: 'title'
-#         about-us: 'About us'
-#         activities: 'Activities'
-#         advocacy: 'Advocacy'
-#         careers: 'Careers'
-#         case-studies: 'Case studies'
-#         community-resources: 'Community Resources'
-#         copyright-reform: 'Copyright Reform'
-# #        technical-requirements: 'Data Guidelines'
-#         data-guidelines: 'Data Guidelines'
-#         data-usage-guidelines: 'Data Usage Guidelines'
-#         dea: 'DEA'
-#         edm-case-studies: 'EDM Case studies'
-#         europeana-cloud: 'Europeana Cloud'
-#         europeana-cloud-blog: 'Europeana Cloud Blog'
-#         europeana-cloud-events: 'Europeana Cloud events'
-#         europeana-creative: 'Europeana Creative'
-#         europeana-creative-blog: 'Europeana Creative Blog'
-#         europeana-creative-events: 'Europeana Creative Events'
-#         europeana-ipr: 'Europeana IPR'
-#         europeana-tech: 'EuropeanaTech'
-#         europeanatech-insights: 'EuropeanaTech Insights'
-#         europeanatech-task-forces: 'EuropeanaTech Task forces'
-#         get-involved: 'Get involved'
-#         our-network: 'Our Network'
-#         project-list: 'Our Projects'
-#         partners: 'Partners'
-#         pilots: 'Pilots'
-#         policy-positions: 'Policy Positions'
-#         press: 'Press'
-#         press-releases: 'Press releases'
-#         projects: 'Projects'
-#         share-your-data: 'Provide your data'
-#         rights-statement-guidelines: 'Rights statement guidelines'
-#         staff: 'Staff'
-#         task-forces: 'Task forces'
-#         europeana-tech-events: 'Technical readings'
-#         the-licensing-framework: 'The Licensing Framework'
-#         tools: 'Tools'
-#         tools-resources: 'Tools & Resources'
-#         use-our-data: 'Use our data'
-#         ipr-working-groups: 'IPR Publications & Guides'
-#         ipr-publications-guides: 'IPR Working groups'
     multiple: false
     has_sortorder: true
 
-
-chapters:
-    slug: chapters
-    singular_slug: chapter
-    behaves_like: grouping
-    options: { main: 'The main chapter', sub: 'Meta Chapter', subsub: 'The other stuff' }
-    has_sortorder: true

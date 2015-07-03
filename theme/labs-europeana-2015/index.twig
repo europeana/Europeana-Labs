@@ -1,188 +1,95 @@
 {% include '_header.twig' %}
 
 {% set home = record %}
-
-<<!--{% include '_organisms_components_site-hero.twig' %}-->
+{% set latestUpdates = record.related('blog') | merge(record.related('data')) | merge(record.related('events')) | merge(record.related('apps')) %}
+{% set relatedIndex = 0 %}
+{% include '_organisms_components_site-hero.twig' %}
+{% set typemap = { apps : "category_1", data: "category_2", events: "category_3", blog: "category_4" } %}
 
 <!-- Start Main page content -->
-<main role="main" class="pro-home">
+<main role="main" class="labs-home"><!--
+    --><div class="strapline section"><!--
+        --><div class="lc"><!--
+            -->{{ home.subtitle }}<!--
+        --></div><!--
+    --></div><!--
+    --><div class="section home-news"><!--
+        --><div class="lc"><!--
+            --><h2 class="section-title">Latest Updates</h2><!--
+            --><div class="grid cf"><!--
+                --><div class="l-news"><!--
+                    --><div class="grid"><!--
+                        {% for i in 1..3 %}
+                            {% if record["use_manual_" ~ i] == 0 %}
+                                {% if latestUpdates[relatedIndex] is defined %} 
+                                    {% set currentUpdate = latestUpdates[relatedIndex] %}
+                                    {% set latestrecord = { flagcat : typemap[currentUpdate.contenttype.slug], url : structurelink(currentUpdate), imgsrc: currentUpdate.values['teaser_image']|default(currentUpdate.values['image'])|thumbnail(), title: currentUpdate.title, flagtitle: currentUpdate.contenttype.name, teaser: currentUpdate.teaser|excerpt(app.config.get('general/excerpt_length'))|default(currentUpdate.excerpt(app.config.get('general/excerpt_length'))) } %}
+                                    {% include 'items/_item-latest-update.twig' %}
+                                    {% set relatedIndex = relatedIndex + 1 %}
+                                {% endif %}
+                            {% else %}
+                                {% set latestrecord = { flagcat : record["flag_colour_" ~ i], url : record["latest_url_" ~ i], imgsrc: record["latest_image_" ~ i]|thumbnail(), title: record["latest_title_" ~ i], flagtitle: record["flag_label_" ~ i], teaser: record["latest_teaser_" ~ i] } %}
+                                {% include 'items/_item-latest-update.twig' %}
+                            {% endif %}
+                        {% endfor %}
+                    --></div><!--
+                --></div><!--
+            --></div><!--
+        --></div><!--
+    --></div><!--
 
+    --><div class="section quickinfo"><!--
+        --><div class="lc"><!--
+            --><div class="grid"><!--
+                --><div class="l-primaryaction"><!--
+                    --><div class="primaryaction"><!--
+                        -->{{ home.callout_1|raw  }}<!--
+                    --></div><!--
+                --></div><!--
+                --><div class="l-usefulinfo"><!--
+                    --><div class="usefulinfo"><!--
+                        --><h2>Quick Links</h2><!--
+                        --><div class="grid"><!--
+                            --><div class="l-usefulinfo-item"><!--
+                                --><div class="usefulinfo-item"><!--
+                                    -->{{ home.callout_2|raw  }}<!--
+                                --></div><!--
+                            --></div><!--
+                            --><div class="l-usefulinfo-item"><!--
+                                --><div class="usefulinfo-item"><!--
+                                    -->{{ home.callout_3|raw  }}<!--
+                                --></div><!--
+                            --></div><!--
+                        --></div><!--
+                    --></div><!--
+                --></div><!--
+            --></div><!--
+        --></div><!--
+    --></div><!--
 
-    <div class="promo-abouteuropeana section">
-        <div class="lc">
+    -->{# get the nearest two EVENTS #}<!--
+    -->{% setcontent events = 'Events' where { 'end_event': '>' ~ date()|date } limit 2 orderby 'start_event ASC' %}<!--
+    -->{% if events is defined %}<!--
 
-            {{ home.subtitle }}
+    --><div class="section events-upcoming"><!--
+        --><div class="lc"><!--
+            --><h2 class="section-title">Upcoming Events</h2><!--
+            --><div class="grid cf"><!--
+                -->{% for event in events %}<div class="event"><!--
+                     -->{% include 'items/_item-date-event.twig' with {record : event} %}<!--
+                        --><div class="event-details"><!--
+                            --><h2 class="event-title"><a href="{{ event.link }}">{{ event.title }}</a></h2><!--
+                            -->{{ event.teaser }}<!--
+                        --></div><!--
+                    --></div><!--
+                     -->{% endfor %}<!--
+            --></div><!--
 
-        </div>
-    </div>
+            --><a class="link-more" href="{{ paths.root }}events">More Events</a><!--
 
-<div class="section home-collections">
-    <div class="lc">
-
-    <h2 class="section-title">Collections</h2>
-
-    <div class="grid cf">
-
-        <div class="l-collections">
-            <div class="grid">
-
-            {% setcontent collections = "collections" %} 
-                
-            {% for collection in collections -%}   
-            <div class="l-post">
-                <div class="block block-inset">
-                    <a href="{{ collection.link }}" class="inner">
-                        <div class="b-thumb">
-                            <img src="{{ collection.image|thumbnail(685,470,"c") }}" alt="{{ collection.image|title }}" />
-                            <div class="b-text">
-                                <h2 class="headline">{{ collection.title }}</h2>
-                            </div>
-                        </div>
-                    </a>
-                    {% if collection.source is not empty %}
-                    <div class="excerpt">
-                        Provided by: <a href="{{ collection.source_url }}" class="external">{{ collection.source }}</a>
-                    </div>
-                {% endif %}
-                </div>
-            </div>
-            {%- endfor %}
-            
-            </div>
-
-            <a class="link-more" href="/collections">See all Collections</a>
-        </div>
-
-    </div>
-    </div>
-</div>
-
-
-<div class="section home-news">
-    <div class="lc">
-
-    <h2 class="section-title">What's New</h2>
-
-    <div class="l-news">
-        {% setcontent records = "blogposts/latest/1" %}
-        
-        {% for record in records -%}
-        <div class="block block-thumb">
-            <div class="b-thumb">
-                <a href="{{record.link}}"><img src="{{ record.image|thumbnail(685,470,"c") }}" alt="{{ record.image|title }}" /></a>
-            </div>
-            <div class="b-text">
-
-                <h2 class="headline"><a href="{{ record.link }}">{{ record.title }}</a> </h2>
-
-                {{ record.body|excerpt(400)}}
-
-                <div class="item-meta-primary">
-                    {# set author #}
-                    {% include 'items/_item-author.twig' %}
-                    {% include 'items/_item-readtime.twig' %}
-                </div>
-
-                <div class="item-meta-secondary">
-                    {# set date #}
-                    {% include 'items/_item-date.twig' %}
-                    {# set tags #}
-                    {% include 'items/_item-tags.twig' %}
-                    {# set discus comments #}
-                    {% include 'items/_item-comments-link.twig' %}
-                </div>
-
-                
-
-            </div>
-        </div>
-        {%- endfor %}
-
-    </div>
-
-    <a class="link-more" href="/blogposts">More from the Research Blog</a>
-        
-    </div>
-</div>
-
-
-{# BIS HERE #} 
-
-{# -- "pro-info section" commented out for 'research' -- 
-
-    <div class="pro-info section">
-    <div class="lc">
-
-    <div class="grid">
-
-        <div class="l-primaryaction">
-
-            <div class="jointhenetwork">
-                {{ home.callout_1|raw  }}
-            </div>
-
-        </div><!--
-     --><div class="l-usefulinfo">
-         <div class="usefulinfo">
-
-         <h2>Quick Links</h2>
-
-        <div class="grid">
-            <div class="l-usefulinfo-item">
-
-                <div class="usefulinfo-item">
-                    {{ home.callout_2|raw  }}
-                </div>
-
-            </div><!--
-         --><div class="l-usefulinfo-item">
-
-                <div class="usefulinfo-item">
-                    {{ home.callout_3|raw  }}
-                </div>
-
-            </div>
-        </div>
-        </div>
-        </div>
-
-    </div>
-
-
-    </div>
-    </div>
-    --------- #}
-
-
-
-    {# get the nearest two EVENTS #}
-    {# -- Events commented out for 'research' -- 
-    {% setcontent events = 'Events' limit 2 orderby 'start_event ASC' %}
-    {% if events is defined %}
-
-    <div class="section events-upcoming">
-        <div class="lc">
-
-            <h2 class="section-title">Upcoming Events</h2>
-
-            <div class="grid cf">
-                {% for event in events %}<div class="event"><!--
-                     -->{% include 'items/_item-date-event.twig' with {record : event} %}
-                        <div class="event-details">
-                            <h2 class="event-title"><a href="{{ event.link }}">{{ event.title }}</a></h2>
-                            {{ event.teaser }}
-                        </div>
-                    </div><!--
-                     -->{% endfor %}
-
-            </div>
-
-            <a class="link-more" href="{{ paths.root }}events">More Events</a>
-
-        </div>
-    </div>
-    {% endif %}
-    ------ #}
+        --></div><!--
+    --></div><!--
+    -->{% endif %}
 
 <!-- End main content -->
 </main>

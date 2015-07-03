@@ -4,15 +4,38 @@
     - listing_list
 #}
 
-{% if record.taxonomy.tags is defined  %}
+{% if usetags is defined %}
+    {% set uselist = usetags %}
+{% else %}
+    {% if record.taxonomy.tags is defined  %}
+        {% set uselist = record.taxonomy.tags %}
+    {% endif %}
+{% endif %}
+
+{% if uselist is defined or usecategories is defined %}
 <span class="item-tags">
     <svg class="icon icon-bookmark">
         <use xlink:href="#icon-bookmark"></use>
     </svg>
     <ul class="inline-list">
-    {% for k,v in record.taxonomy.tags %}
-        <li class="item-tag"><a href="{{ k }}">{{ v }}</a></li>
-    {% endfor %}
+    {% if usecategories is defined %}
+        {% for k,v in usecategories %}
+            {% if filterroot is defined %}
+                <li class="item-tag" style="width:auto;"><a href="{{ filterroot }}?category={{v|slug}}">{{ v }}</a></li>
+            {% else %}
+                <li class="item-tag" style="width:auto;"><a href="{{ k }}">{{ v }}</a></li>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {% if uselist is defined  %}
+        {% for k,v in uselist %}
+            {% if filterroot is defined %}
+                <li class="item-tag" style="width:auto;"><a href="{{ filterroot }}?tag={{v|slug}}">{{ v }}</a></li>
+            {% else %}
+                <li class="item-tag" style="width:auto;"><a href="{{ k }}">{{ v }}</a></li>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
     </ul>
 </span>
 {% endif %}

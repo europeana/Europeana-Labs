@@ -15,6 +15,14 @@ homepage:
   path:               /
   defaults:           { _controller: 'Bolt\Controllers\Frontend::homepage' }
 
+sitemapxml:
+  path: /sitemap.xml
+  defaults: { _controller: 'Bolt\Extension\Bolt\Sitemap\Extension::sitemapXml' }
+
+sitemap:
+  path: /sitemap
+  defaults: { _controller: 'Bolt\Extension\Bolt\Sitemap\Extension::sitemap' }
+
 supportbinding:
   path:               /support
   defaults:           { _controller: 'Bolt\Controllers\Frontend::record', 'contenttypeslug': 'page', 'slug': 'support' }
@@ -22,7 +30,7 @@ supportbinding:
 
 apihomebinding:
   path: /api
-  defaults: { _controller: 'Bolt\Controllers\Frontend::record', 'contenttypeslug': 'api', 'slug': 'introduction' }
+  defaults: { _controller: 'Bolt\Controllers\Frontend::record', 'contenttypeslug': 'api', 'slug': 'index' }
   recordslug: api/introduction
 
 

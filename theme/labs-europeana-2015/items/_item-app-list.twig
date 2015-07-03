@@ -19,25 +19,20 @@
     {% else %}
 	   <h1 class="headline gama"><a href="{{ listItemLink }}">{{ listItem.title|striptags }}</a></h1>
            <div class="description">
-                {{ listItem.teaser }}
+                {{ listItem.teaser|excerpt(120) }}
             </div>
     {% endif %}
 
     <div class="tags">
         <i class="icon icon-tag"></i>
-        {% if record.taxonomy.appthemes is defined  %}
-        {% for k,v in record.taxonomy.appthemes %}
-            <a class="tag_alt" href="{{ k }}">{{ v }}</a>
-        {% endfor %}
-        {% endif %}
         {% if record.taxonomy.appcategories is defined  %}
         {% for k,v in record.taxonomy.appcategories %}
-            <a class="tag_alt" href="{{ k }}">{{ v }}</a>
+            <a class="tag_alt" href="{{ filterroot }}?category={{ v|slug}}">{{ v }}</a>
         {% endfor %}
         {% endif %}
         {% if record.taxonomy.apptags is defined  %}
         {% for k,v in record.taxonomy.apptags %}
-            <a class="tag_alt" href="{{ k }}">{{ v }}</a>
+            <a class="tag_alt" href="{{ filterroot }}?tag={{ v|slug}}">{{ v }}</a>
         {% endfor %}
         {% endif %}
     </div>
