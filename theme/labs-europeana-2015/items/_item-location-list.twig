@@ -1,0 +1,43 @@
+{#
+  used in:
+      - app
+#}
+
+{% if record is defined %}
+
+    {% set listItem = record %}
+    {% set contenttype = record.contenttype %}
+    {% set listItemLink = structurelink(record) %}
+
+
+--><li>
+{% if block is defined %}
+	<div class="labs-item block block-thumb block-thumb-small">
+{% else %}
+	<div class="block block-thumb">
+{% endif %}
+
+        <div class="b-thumb">
+        {% if (contenttype.slug in [  'apps' ]) %}
+            
+                <a href="{{ listItemLink }}"><img src="{{ listItem.values['image']|default		(listItem.values['image'])|thumbnail() }}" alt="{{ listItem.image|title }}" /></a>
+                
+        {% endif %}
+
+        </div>
+	<div class="b-text">
+
+	{% if block is defined %}
+	   <h5><a href="{{ listItemLink }}">{{ listItem.title|striptags }}</a></h5>
+	{% else %}
+	   <h1 class="headline gama"><a href="{{ listItemLink }}">{{ listItem.title|striptags }}</a></h1>
+       <div class="description">
+            {{ listItem.excerpt(app.config.get('general/excerpt_length')) }}
+        </div>
+	{% endif %}
+
+           
+        </div>
+</div>
+    </li><!--
+{% endif %}

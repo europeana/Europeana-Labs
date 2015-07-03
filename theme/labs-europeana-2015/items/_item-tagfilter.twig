@@ -1,0 +1,25 @@
+<ul class="tags large-tags"><!--
+    {% for key,value in tagslist['tags'] %}
+    {% if key in tagarray %}
+        {% set filter_string='' %}
+        {% for curfilter in tagarray %}
+            {% if curfilter!=key %} 
+                {% if filter_string!='' %}
+                    {% set filter_string = filter_string ~ ',' ~ curfilter %}
+                {% else %}
+                    {% set filter_string = filter_string ~ curfilter %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        {%set addclass = 'is-active' %}
+    {% else %}
+        {% if tagarray|length!=0 %}
+            {% set filter_string = tagarray|join(',') ~ "," ~ key %}
+        {% else %}
+        {% set filter_string = tagarray|join(',') ~ key %}
+        {% endif %}
+        {% set addclass = '' %}
+    {% endif %}
+        --><li><a class="tag {{addclass}}" href="{{filterroot}}?tag={{filter_string}}">{{key}} ({{value}})</a></li><!--
+    {% endfor %}
+--></ul>

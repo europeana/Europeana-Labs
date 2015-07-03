@@ -1,0 +1,90 @@
+{% include '_header.twig' %}
+
+{# set order #}
+{% set order = contenttype['sort'] %}
+{% if app.request.get('order') %}
+    {% set order = app.request.get('order') %}
+{% endif %}
+
+{# set page number #}
+{% set page = app.request.get('page', 1) %}
+
+{# set amount #}
+{% if contenttype['listing_records'] is defined %}
+    {% set amount = contenttype['listing_records'] %}
+{% else %}
+    {% set amount = app.config.get('general/listing_records') %}
+{% endif %}
+
+{% if records|length %}
+
+    {# show/hide sortby item and pager #}
+    {% set showsortby = false %}
+
+    {# default list views #}
+    {% if record is not defined %}
+
+        {# tags #}
+        {% if taxonomy is defined %}
+            {% set showsortby = false %}
+            {% set contenttype = taxonomy %}
+
+        {% else %}
+            {% set contenttype = getContenttype(records|first.contenttype.name) %}
+            {% set showsortby = true %}
+            {% set contenttypePager = contenttype['slug'] %}
+        {% endif %}
+
+    {# structure content #}
+    {% elseif contenttype['name'] is defined %}
+        {% if (contenttype['slug'] in app.config.get('general/sort_options/disabled')|keys ) %}
+            {% set contenttypePager = contenttype['slug'] %}
+            {% set showsortby = true %}
+        {% endif %}
+    {% endif %}
+
+<!-- Start content -->
+<main role="main">
+
+<section class="block-content-header">
+	<div class="grid_wrapper">
+		<div class="grid">
+			<div class="contents">
+				{# show title and intro for structrure listview #}
+				<div class="title">
+				     <h1 class="title">Locations</h1>
+				     <p class="subhead">These locations across Europe offer real world places you can go to play, develop, test and build apps and products based on re-usable Europeana content.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<section class="grid_wrapper">
+
+	<div class="grid">
+		<div class="sidebar">
+			<div class="subnav">	
+			</div>	
+		</div><!--
+--><div class="main-content"><!--
+    --><ul class="post-list l-post-list"><!--
+        {% setcontent records = contenttype.slug where { limit : amount, order : order, page : page } allowpaging %}
+        {% for listItem in records %}
+            <!--{% include 'items/_item-list.twig' with { record: listItem } %}			
+        {% endfor %}
+    --></ul>
+    {{ pager() }}
+    </div>
+</div>
+
+</section>
+
+</main>
+<!-- End Content -->
+
+
+
+{% endif %}
+
+{% include '_footer.twig' %}
+
