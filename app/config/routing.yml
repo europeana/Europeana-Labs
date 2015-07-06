@@ -15,24 +15,15 @@ homepage:
   path:               /
   defaults:           { _controller: 'Bolt\Controllers\Frontend::homepage' }
 
-sitemapxml:
-  path: /sitemap.xml
-  defaults: { _controller: 'Bolt\Extension\Bolt\Sitemap\Extension::sitemapXml' }
-
-sitemap:
-  path: /sitemap
-  defaults: { _controller: 'Bolt\Extension\Bolt\Sitemap\Extension::sitemap' }
+supportbinding:
+  path:               /api
+  defaults:           { _controller: 'Bolt\Controllers\Frontend::record', 'contenttypeslug': 'api', 'slug': 'index' }
+  recordslug:         api/index
 
 supportbinding:
   path:               /support
   defaults:           { _controller: 'Bolt\Controllers\Frontend::record', 'contenttypeslug': 'page', 'slug': 'support' }
   recordslug:         page/support
-
-apihomebinding:
-  path: /api
-  defaults: { _controller: 'Bolt\Controllers\Frontend::record', 'contenttypeslug': 'api', 'slug': 'index' }
-  recordslug: api/introduction
-
 
 #search:
 #  path:               /search

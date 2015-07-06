@@ -37,3 +37,17 @@ footer:
   - label: 'About us'
     path: /about-us
     title: 'About Europeana Research'
+
+Explorer-Europeana:
+  - title: Search portal
+    path: /sitemap
+    label: Search portal
+  - title: Labs
+    path: /sitemap
+    label: Labs
+  - title: 1914-1918
+    path: /sitemap
+    label: 1914-1918
+  - title: End user blog
+    path: /sitemap
+    label: End user blog

@@ -45,28 +45,28 @@
 
 {% if order == '-end_event' %} 
     {% set end_event = '< today' %} 
-    {% set order = '-start_event' %} 
+    {% set order = '-end_event' %} 
 {% else %} 
     {% set end_event = '> today' %} 
-    {% set order = 'start_event' %} 
+    {% set order = 'end_event' %} 
 {% endif %} 
+
+{% set filterroot = app.request.getSchemeAndHttpHost() ~  "/events?order=" ~ order %}
 
 {% set tag = app.request.get('tag')  %}
 {% if tag != null %}
     {% set tagarray = tag|split(',') %}
     {% set tagsquery = tagarray|performtagquery(contenttype, "tags")|join(' || ') %}
     
-    {% setcontent records= 'events' where {id: tagsquery} allowpaging limit 10 %}
-    {% set filterroot2 = filterroot ~ "?tag=" ~ (tag|url_encode) ~ ","|url_encode %} 
+    {% setcontent records= 'events' where {id: tagsquery, order: order, 'end_event': end_event} allowpaging limit 10 %}
+    {% set tagslist = tagarray|filteredtags(contenttype, "tags") %}
 {% else %}
-    {% setcontent records= 'events' allowpaging limit 10 %}
-    {% set filterroot2 = filterroot ~ "?tag="  %}
+    {% setcontent records= 'events' where {order: order, 'end_event': end_event} allowpaging limit 10 %}
+    {% set tagslist = tag_cloud_array([], contenttype, "tags") %}
 {% endif %}
-
 
 <!-- Start content -->
 <main role="main">
-
 <section class="block-content-header">
 	<div class="grid_wrapper">
 		<div class="grid">
@@ -83,18 +83,25 @@
 	<div class="grid">
 		<div class="sidebar">
 			<div class="subnav">
+                {% include 'items/_item-sortby.twig' %}	
 				<h4 class="label epsilon"> Filter by:</h4>
-                {{ tag_cloud(contenttype, "tags", tagarray, {list_options: {class: "tags tags-large"}, link_options : { class: "tag", root_url: filterroot2 } }) }}
+                {% include 'items/_item-tagfilter.twig' %}
 			</div>	
 		</div><!--
 --><div class="main-content"><!--
 	--><ul class="results-list"><!--
-        {% for listItem in records %}
-			{% include 'items/_item-list.twig' with { record: listItem } %}			
-        {% endfor %}
+        {% if records is iterable %}
+            {% for listItem in records %}
+                {% include 'items/_item-list.twig' with { record: listItem } %}			
+            {% endfor %}
+        {% else %}
+            {% include 'items/_item-list.twig' with { record: records } %}
+        {% endif %}
     --></ul>
-		{{ pager() }}
-	</div>
+        {% if records is iterable %}
+            {{ pager() }}
+        {% endif %}
+    </div>
 </div>
 
 </section>

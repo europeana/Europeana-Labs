@@ -51,7 +51,7 @@
         {% endif %}
     {% endif %}
 
-    {% if record.image is defined %}
+    {% if record.image is defined and record.image is not empty %}
         {#
             image meta information
         #}

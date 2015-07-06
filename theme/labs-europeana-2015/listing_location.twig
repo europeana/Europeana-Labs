@@ -67,7 +67,7 @@
 			</div>	
 		</div><!--
 --><div class="main-content"><!--
-    --><ul class="post-list l-post-list"><!--
+    --><ul class="results-list"><!--
         {% setcontent records = contenttype.slug where { limit : amount, order : order, page : page } allowpaging %}
         {% for listItem in records %}
             <!--{% include 'items/_item-list.twig' with { record: listItem } %}			

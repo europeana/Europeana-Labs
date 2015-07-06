@@ -47,12 +47,11 @@
 {% if tag != null %}
     {% set tagarray = tag|split(',') %}
     {% set tagsquery = tagarray|performtagquery(contenttype, "tags")|join(' || ') %}
-    
+    {% set tagslist = tagarray|filteredtags(contenttype, "tags") %}
     {% setcontent records= 'blog' where {id: tagsquery} allowpaging limit 10 %}
-    {% set filterroot2 = filterroot ~ "?tag=" ~ (tag|url_encode) ~ ","|url_encode %} 
 {% else %}
+    {% set tagslist = tag_cloud_array([], contenttype, "tags") %}
     {% setcontent records= 'blog' allowpaging limit 10 %}
-    {% set filterroot2 = filterroot ~ "?tag="  %}
 {% endif %}
 
 <!-- Start content -->
@@ -78,16 +77,22 @@
 		<div class="sidebar">
 			<div class="subnav">
 				<h4 class="label epsilon"> Filter by:</h4>
-                {{ tag_cloud(contenttype, "tags", tagarray, {list_options: {class: "tags tags-large"}, link_options : { class: "tag", root_url: filterroot2 } }) }}
+                {% include 'items/_item-tagfilter.twig' %}
 			</div>	
 		</div><!--
 --><div class="main-content">
 	<ul class="results-list"><!--
+        {% if records is iterable %}
             {% for listItem in records %}
                     {% include 'items/_item-list.twig' with { record: listItem } %}			
             {% endfor %}
-           --></ul>
-		{{ pager() }}
+        {% else %}
+            {% include 'items/_item-list.twig' with { record: records } %}
+        {% endif %}
+    --></ul>
+        {% if records is iterable %}
+            {{ pager() }}
+        {% endif %}
 	</div>
 </div>
 

@@ -18,7 +18,6 @@
 {% endif %}
 
 {% if records|length %}
-
     {# show/hide sortby item and pager #}
     {% set showsortby = false %}
 
@@ -79,11 +78,17 @@
 		</div><!--
 --><div class="main-content">
 	<ul class="results-list"><!--
-        {% for listItem in records %}
-            <!--{% include 'items/_item-list.twig' with { record: listItem } %}			
-        {% endfor %}
+        {% if records is iterable %}
+            {% for listItem in records %}
+                {% include 'items/_item-list.twig' with { record: listItem } %}			
+            {% endfor %}
+        {% else %}
+            {% include 'items/_item-list.twig' with { record: records } %}
+        {% endif %}
     --></ul>
-		{{ pager() }}
+        {% if records is iterable %}
+            {{ pager() }}
+        {% endif %}
 	</div>
 </div>
 
@@ -91,8 +96,6 @@
 
 </main>
 <!-- End Content -->
-
-
 
 {% endif %}
 

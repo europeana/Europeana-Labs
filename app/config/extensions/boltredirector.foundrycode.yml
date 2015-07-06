@@ -18,23 +18,17 @@ options:
 # Redirects - The Main Redirects for this Installation
 
 redirects:
-
-    # Blog overrides.
-
-    # https://docs.google.com/spreadsheets/d/1b3NvCLTMRUFjrgkZNGp6MScAcUELIXHv2-GDxozAL9k/edit#gid=0': '/files/Europeana_Professional/EuropeanaTech/EuropeanaTech_taskforces/Mapping_Refinement_Extension//EDM%20mappings%20refinements%20extensions%20Overview.xlsx'
-    # Europeana Semantic Elements Specification and Guidelines': '/files/Europeana_Professional/Share_your_data/Technical_requirements/ESE_Documentation//Europeana%20Semantic%20Elements%20Specification%20and%20Guidelines%2014%20July%202013.pdf'
-    # http://www.cidoc-crm.org/docs/EDM-DC-ORE-CRM-FRBR_Integration_ORE_fix.ppt': '/files/Europeana_Professional/EuropeanaTech/EuropeanaTech_taskforces/EDM_FRBRoo//EDM-DC-ORE-CRM-FRBR_Integration_ORE_fix.ppt'
-
-
-    # html:
-    #     from: '{path}.{ext}'
-    #     to: '{path}'
-
-# Variables
-#
-# A simple array to make variable replacements in destination paths using the
-# {@<variable>} syntax. Be sure to avoid using global variables here as
-# they'll be overwritten!
+    '/api/linked-open-data/Credits': '/api/linked-open-data-credits'
+    '/api/linked-open-data/data-downloads': '/api/linked-open-data-data-downloads'
+    '/api/linked-open-data/data-structure': '/api/linked-open-data-data-structure'
+    '/api/linked-open-data/FAQ': '/api/linked-open-data-faq'
+    '/api/linked-open-data/introduction': '/api/linked-open-data-introduction'
+    '/api/linked-open-data/SPARQL-endpoint': '/api/linked-open-data-sparql-endpoint'
+    '/api/oai-pmh/access-key': '/api/oai-pmh-access-key'
+    '/api/oai-pmh/credits': '/api/oai-pmh-credits'
+    '/api/oai-pmh/getting-started': '/api/oai-pmh-getting-started'
+    '/api/oai-pmh/introduction': '/api/oai-pmh-introduction'
+    '/api/oai-pmh/resources': '/api/oai-pmh-resources'
 
 variables:
 

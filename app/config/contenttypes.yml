@@ -1632,5 +1632,6 @@ incubation:
       order: -id
       format: "{{ item.title|escape }}"
   record_template: record_page.twig
+  listing_template: listing_incubation.twig
   icon_many: "fa:files-o"
   icon_one: "fa:files"

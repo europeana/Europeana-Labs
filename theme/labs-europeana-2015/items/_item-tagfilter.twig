@@ -1,4 +1,5 @@
 <ul class="tags large-tags"><!--
+    --><li><a class="tag {{addclass}}" href="{{filterroot}}">All</a></li><!--
     {% for key,value in tagslist['tags'] %}
     {% if key in tagarray %}
         {% set filter_string='' %}
@@ -11,7 +12,7 @@
                 {% endif %}
             {% endif %}
         {% endfor %}
-        {%set addclass = 'is-active' %}
+        {% set addclass = 'is-active' %}
     {% else %}
         {% if tagarray|length!=0 %}
             {% set filter_string = tagarray|join(',') ~ "," ~ key %}
@@ -20,6 +21,10 @@
         {% endif %}
         {% set addclass = '' %}
     {% endif %}
-        --><li><a class="tag {{addclass}}" href="{{filterroot}}?tag={{filter_string}}">{{key}} ({{value}})</a></li><!--
+        {% if ('?' in filterroot) %}
+            --><li><a class="tag {{addclass}}" href="{{filterroot}}&tag={{filter_string}}">{{key}} ({{value}})</a></li><!--
+        {% else %}
+            --><li><a class="tag {{addclass}}" href="{{filterroot}}?tag={{filter_string}}">{{key}} ({{value}})</a></li><!--
+        {% endif %}
     {% endfor %}
 --></ul>

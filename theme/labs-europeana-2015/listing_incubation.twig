@@ -1,0 +1,115 @@
+{% include '_header.twig' %}
+
+{# set order #}
+{% set order = contenttype['sort'] %}
+{% if app.request.get('order') %}
+    {% set order = app.request.get('order') %}
+{% endif %}
+
+{# set page number #}
+{% set page = app.request.get('page', 1) %}
+
+{# set amount #}
+{% if contenttype['listing_records'] is defined %}
+    {% set amount = contenttype['listing_records'] %}
+{% else %}
+    {% set amount = app.config.get('general/listing_records') %}
+{% endif %}
+
+{% if records|length %}
+
+    {# show/hide sortby item and pager #}
+    {% set showsortby = false %}
+
+    {# default list views #}
+    {% if record is not defined %}
+
+        {# tags #}
+        {% if taxonomy is defined %}
+            {% set showsortby = false %}
+            {% set contenttype = taxonomy %}
+
+        {% else %}
+            {% set contenttype = getContenttype(records|first.contenttype.name) %}
+            {% set showsortby = true %}
+            {% set contenttypePager = contenttype['slug'] %}
+        {% endif %}
+
+    {# structure content #}
+    {% elseif contenttype['name'] is defined %}
+        {% if (contenttype['slug'] in app.config.get('general/sort_options/disabled')|keys ) %}
+            {% set contenttypePager = contenttype['slug'] %}
+            {% set showsortby = true %}
+        {% endif %}
+    {% endif %}
+
+<!-- Start content -->
+<!-- Start content -->
+<main role="main" class="l-page">
+<div class="lc">
+    <!-- Start grid -->
+    <div class="grid-main">
+        <div class="l-content">
+        <div class="l-breadcrumbs page_header">
+            {% include 'items/_item-breadcrumb.twig' %}
+        </div>
+            <div id="maincontent" class="maincontent">
+                <div class="page-intro">
+                    <h1 class="title">Incubation</h1>
+                    <p>We have designed a simple incubation process specifically for cultural heritage products, with services meeting your needs at every stage of the growth from an idea to a market-ready project.</p>
+                </div>
+
+                <ul class="l-next_options"><!--
+                    {% for listItem in records %}
+                        {% if listItem.hide_related == 0 %}
+                            --><li>
+                                <div class="link-block-text link-block block">
+                                    <a href="{{ structurelink(listItem) }}" class="b-inner">
+                                        <div class="b-text">
+                                            <h2 class="item-title">{{ listItem.title }}</h2>
+                                            <p>{{ listItem.teaser|raw }}</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </li><!--
+                        {% endif %}
+                    {% endfor %}
+                --></ul>
+            </div>
+        </div><!--
+     --><div class="l-sidebar">
+            <div class="inner">
+<div class="help-contact">
+
+        <h4>NEED HELP?</h4>
+        
+            
+            <a href="/person/milena-popova">
+                <img alt="2015-06/milena.jpg" src="/thumbs/600x600c/2015-06/milena.jpg">
+            </a>
+
+            <h5>Contact:</h5>
+
+            <div class="vcard">
+                <div class="fn">Milena Popova</div>
+                    <div class="tel">+31 (0) 70 314 0972<a title="Call: +31 (0) 70 314 0972"></a></span></div>
+                    <a class="email" href="mailto:milena.popova@europeana.eu">milena.popova@europeana.eu</a>
+            </div>
+
+    </div>            
+            </div>
+
+        </div>
+    </div>
+    <!-- End grid -->
+</div>
+</main>
+
+<!-- End Content -->
+
+
+
+{% endif %}
+
+{% include '_footer.twig' %}
+
