@@ -1,7 +1,7 @@
 # google search api docs https://developers.google.com/custom-search/docs/
 
 client: google-csbe
-cx: 009775384710117617031:r4qwwnlya8s
+cx: 009775384710117617031:pr-85tqjbje 
 output: xml_no_dtd
 template: listing_search.twig
 
