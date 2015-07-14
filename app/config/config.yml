@@ -51,22 +51,26 @@ excerpt_length: 140
 # our sites header navigation
 # three columns (left, middle, right)
 our_sites:
-  left:
+  col-1:
     title: Discover
     subtitle: Search Collections
     description: Search through Europe's cultural heritage
     link: http://europeana.eu/
-  middle:
+  col-2:
     title: Network
     subtitle: Pro
     description: For Culture Professionals
     link: http://pro.europeana.eu/
-  right:
+  col-3:
     title: Develop
     subtitle: Labs
     description: A playground for remixing cultural content
     link: http://labs.europeana.eu/
-
+  col-4:
+    title: Connect
+    subtitle: Research
+    description: Connecting to the academic community
+    link: http://research.europeana.eu/
 
 # Set maintenance mode true or false
 # While in maintenance mode, only users of level editor or higher can access the site.

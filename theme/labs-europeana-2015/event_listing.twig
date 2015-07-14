@@ -42,6 +42,8 @@
             {% set showsortby = true %}
         {% endif %}
     {% endif %}
+{% set tag = app.request.get('tag')  %}
+
 
 {% if order == '-end_event' %} 
     {% set end_event = '< today' %} 
@@ -53,12 +55,12 @@
 
 {% set filterroot = app.request.getSchemeAndHttpHost() ~  "/events?order=" ~ order %}
 
-{% set tag = app.request.get('tag')  %}
+
 {% if tag != null %}
     {% set tagarray = tag|split(',') %}
     {% set tagsquery = tagarray|performtagquery(contenttype, "tags")|join(' || ') %}
     
-    {% setcontent records= 'events' where {id: tagsquery, order: order, 'end_event': end_event} allowpaging limit 10 %}
+    {% setcontent records= 'events' where { id: tagsquery, order: '-end_event' } allowpaging limit 10 %}
     {% set tagslist = tagarray|filteredtags(contenttype, "tags") %}
 {% else %}
     {% setcontent records= 'events' where {order: order, 'end_event': end_event} allowpaging limit 10 %}
@@ -83,7 +85,9 @@
 	<div class="grid">
 		<div class="sidebar">
 			<div class="subnav">
-                {% include 'items/_item-sortby.twig' %}	
+                {% if tag == null %}
+                    {% include 'items/_item-sortby.twig' %}	
+                {% endif %}
 				<h4 class="label epsilon"> Filter by:</h4>
                 {% include 'items/_item-tagfilter.twig' %}
 			</div>	

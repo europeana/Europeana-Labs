@@ -35,7 +35,7 @@ namespace Bolt\Extension\Semantika\TagCloud
                 'highest_bolt_version' => "3.0.0",
                 'type' => "General",
                 'first_releasedate' => "2013-03-27",
-                'latest_releasedate' => "2015-06-22",
+                'latest_releasedate' => "2015-07-07",
                 'dependencies' => "",
                 'priority' => 10
             );
@@ -117,7 +117,8 @@ namespace Bolt\Extension\Semantika\TagCloud\Engine
     interface StorageInterface
     {
         public function fetchCloud($contentType, $taxonomyName, $taxonomyQuery);
-
+        public function fetchAppCloud($taxonomyQuery, $themeQuery);
+        
         public function deleteCloud($contentType);
     }
 
@@ -125,18 +126,22 @@ namespace Bolt\Extension\Semantika\TagCloud\Engine
     {
         public function getIdsForQuery($taxonomyQuery, $contentType, $taxonomyType);
         public function getTaxonomyGroupFor($contentType, $taxonomyType, $taxonomyQuery, $cloudSize);
+        public function getTaxonomyGroupForApps($taxonomyQuery, $themeQuery);
     }
 
     interface BuilderInterface
     {
         public function buildCloudFor($contentType, $taxonomyName, $taxonomyQuery);
+        public function buildAppCloudFor($taxonomyQuery, $themeQuery);
         public function buildIdsFor($taxonomyQuery, $contentType, $taxonomyType);
+        public function buildAppIdsFor($taxonomyQuery, $themeQuery);
     }
 
     interface ViewInterface
     {
         public function renderTagArray($taxonomyQuery, $contentType, $taxonomyType);
         public function render($contentType, $taxonomyName, $taxonomyQuery, array $options = array());
+        public function renderAppTagArray($taxonomyQuery, $themeQuery);
     }
 
     class Configuration implements ConfigurationInterface
@@ -175,18 +180,66 @@ namespace Bolt\Extension\Semantika\TagCloud\Engine
             }
             if (!isset($taxonomyQuery) || !is_array($taxonomyQuery) || count($taxonomyQuery) == 0) {
                 $taxonomyQueryKey = '';
+                $useCache = true;
             } else {
-                $taxonomyQueryKey = implode('_', $taxonomyQuery);
+                if (count($taxonomyQuery)>3) {
+                    //in case we have a complex query (more than 3 items), we do not cache it as they are expected to be fairly uncommon during normal use and the time/memory offset does not pay off any more
+                    $useCache=false;
+                } else {
+                    $taxonomyQueryKey = implode('_', $taxonomyQuery);
+                    $useCache=true; 
+                }
             }
             
             $cloud = null;
-            $key = $this->getKeyFor($contentType . $taxonomyName . $taxonomyQueryKey);
-
-            if ($this->cache->contains($key)) {
+            
+            if ($useCache) {
+                $key = $this->getKeyFor($contentType . $taxonomyName . $taxonomyQueryKey);
+            }   
+            
+            if ($useCache && $this->cache->contains($key)) {
                 $cloud = $this->cache->fetch($key);
             } else {
                 $cloud = $this->builder->buildCloudFor($contentType, $taxonomyName, $taxonomyQuery);
-                if (false !== $cloud) {
+                if ($useCache && false !== $cloud) {
+                    $this->cache->save($key, $cloud);
+                }
+            }
+
+            return $cloud;
+        }
+        
+        public function fetchAppCloud($taxonomyQuery, $themeQuery)
+        {          
+            if (isset($themeQuery)) {
+                $taxonomyQueryKey = 'apps_' . $themeQuery;
+            } else {
+                $taxonomyQueryKey = 'apps_';
+            }
+            
+            if (!isset($taxonomyQuery) || !is_array($taxonomyQuery) || count($taxonomyQuery) == 0) {
+                $useCache = true;
+            } else {
+                if (count($taxonomyQuery)>3) {
+                    //in case we have a complex query (more than 3 items), we do not cache it as they are expected to be fairly uncommon during normal use and the time/memory offset does not pay off any more
+                    $useCache=false;
+                } else {
+                    $taxonomyQueryKey = $taxonomyQueryKey . "_" . implode('_', $taxonomyQuery);
+                    $useCache=true;
+                }
+            }
+            
+            $cloud = null;
+            
+            if ($useCache) {
+                $key = $this->getKeyFor($taxonomyQueryKey);
+            }   
+            
+            if ($useCache && $this->cache->contains($key)) {
+                $cloud = $this->cache->fetch($key);
+            } else {
+                $cloud = $this->builder->buildAppCloudFor($taxonomyQuery, $themeQuery);
+                if ($useCache && false !== $cloud) {
                     $this->cache->save($key, $cloud);
                 }
             }
@@ -219,8 +272,6 @@ namespace Bolt\Extension\Semantika\TagCloud\Engine
 
         public function getIdsForQuery($taxonomyQuery, $contentType, $taxonomyType)
         {
-            
-            
             if(is_array($taxonomyQuery) && count($taxonomyQuery) > 0) {
                 $tagCount = count($taxonomyQuery);
                 $inQuery = implode(',', array_fill(0, count($taxonomyQuery), '?'));
@@ -244,6 +295,47 @@ namespace Bolt\Extension\Semantika\TagCloud\Engine
                 $stmt->bindValue($tagCount + 3, $tagCount);
                 
                 $stmt->execute();
+                $ids = array();
+                while (false !== ($row = $stmt->fetch(PDO::FETCH_NUM))) {
+                    array_push($ids, $row[0]);
+                }
+
+                return array_unique($ids);
+            }
+            
+            return array();
+        }
+        
+        public function getAppIdsForQuery($taxonomyQuery, $themeQuery)
+        {
+            if(!is_array($taxonomyQuery)) {
+                $taxonomyQuery = array();
+            }
+            
+            if(count($taxonomyQuery) > 0 || isset($themeQuery)) {
+                if (isset($themeQuery)) {
+                    array_push($taxonomyQuery, $themeQuery);
+                }
+                
+                $tagCount = count($taxonomyQuery);
+                $inQuery = implode(',', array_fill(0, count($taxonomyQuery), '?'));
+
+                $stmt = $this->conn->prepare(
+                    'SELECT content_id
+                     FROM bolt_taxonomy
+                     WHERE contenttype = \'apps\'
+                     AND taxonomytype IN (\'appthemes\', \'appcategories\')
+                     AND slug IN(' . $inQuery . ') ' .'
+                     GROUP BY content_id
+                     HAVING count(content_id) = ?'
+                );
+
+                foreach ($taxonomyQuery as $k => $tag) {
+                    $stmt->bindValue(($k+1), $tag);
+                }
+                $stmt->bindValue($tagCount + 1, $tagCount);
+                $stmt->execute();
+                
                 $ids = array();
                 while (false !== ($row = $stmt->fetch(PDO::FETCH_NUM))) {
                     array_push($ids, $row[0]);
@@ -315,6 +407,183 @@ namespace Bolt\Extension\Semantika\TagCloud\Engine
 
             return $tags;
         }
+
+        public function getTaxonomyGroupForApps($taxonomyQuery, $themeQuery)
+        {
+            if (!isset($taxonomyQuery) || !is_array($taxonomyQuery)) {
+                $taxonomyQuery = array();
+            }
+            
+            if (!isset($themeQuery)) {
+                //There is no theme defined - check if we have any active category filters
+                if (count($taxonomyQuery) == 0) {
+                    //There are no category filters active  - we need to get independent counts for themes and for categories. It makes more (performance) sense to make two relatively simple SQL queries instead of performing a large nested one and calculating results in the app logic
+
+                    //Get the theme counts
+                    $stmtThemes = $this->conn->prepare(
+                        'SELECT bt2.name, count(bt2.id) AS count FROM labs.bolt_taxonomy AS bt2
+                        WHERE contenttype = \'apps\' AND bt2.taxonomytype like \'appthemes\'
+                        GROUP BY bt2.name
+                        ORDER BY count DESC'
+                    );
+                    $stmtThemes->execute();
+
+                    //Get the category counts
+                    $stmtCategories = $this->conn->prepare(
+                        'SELECT bt2.name, count(bt2.id) AS count FROM labs.bolt_taxonomy AS bt2
+                        WHERE contenttype = \'apps\' AND bt2.taxonomytype like \'appcategories\'
+                        GROUP BY bt2.name
+                        ORDER BY count DESC'
+                    );
+                    $stmtCategories->execute();
+                } else {
+                    //There are category filters active, but no theme filter. We need to filter only the tags that are included in at least one of the articles that are present in the filter list
+                     $stmtThemes = $this->conn->prepare(
+                        'SELECT bt2.name, count(bt2.id) AS count FROM labs.bolt_taxonomy AS bt2
+                        WHERE contenttype = \'apps\' AND bt2.taxonomytype like \'appthemes\'
+                        AND bt2.content_id IN (SELECT bt.content_id
+													FROM bolt_taxonomy AS bt
+													WHERE contenttype = \'apps\'
+													AND taxonomytype = \'appcategories\'
+													AND slug IN(' . implode(', ', array_fill(0, count($taxonomyQuery), '?')) . ') ' . '
+													GROUP BY content_id
+													HAVING count(content_id) = ?
+												)
+                        GROUP BY bt2.name
+                        ORDER BY count DESC'
+                    );            
+                    
+                    foreach ($taxonomyQuery as $k => $tag) {
+                        $stmtThemes->bindValue(($k+1), $tag); 
+                    }
+                    $stmtThemes->bindValue(count($taxonomyQuery)+1, count($taxonomyQuery));
+                    $stmtThemes->execute();
+                    
+                    $stmtCategories = $this->conn->prepare(
+                        'SELECT bt2.name, count(bt2.id) AS count FROM labs.bolt_taxonomy AS bt2
+                        WHERE contenttype = \'apps\' AND bt2.taxonomytype like \'appcategories\'
+                        AND bt2.content_id IN (SELECT bt.content_id
+													FROM bolt_taxonomy AS bt
+													WHERE contenttype = \'apps\'
+													AND taxonomytype = \'appcategories\'
+													AND slug IN(' . implode(', ', array_fill(0, count($taxonomyQuery), '?')) . ') ' . '
+													GROUP BY content_id
+													HAVING count(content_id) = ?
+												)
+                        GROUP BY bt2.name
+                        ORDER BY count DESC'
+                    );
+                    foreach ($taxonomyQuery as $k => $tag) {
+                        $stmtCategories->bindValue(($k+1), $tag); 
+                    }
+                    $stmtCategories->bindValue(count($taxonomyQuery)+1, count($taxonomyQuery));
+                    $stmtCategories->execute();
+                }
+            } else {
+                //We have a theme defined 
+                if (count($taxonomyQuery) == 0) {
+                    // we have no category filter - since we can only have one category filter, an inner join can be used to get the list of appropriate results
+                    //do a self inner join to get all themes that have the theme defined
+                    $stmtThemes = $this->conn->prepare(
+                        'SELECT bt2.name, count(bt2.id) AS Count FROM labs.bolt_taxonomy AS bt
+                        INNER JOIN labs.bolt_taxonomy AS bt2 
+                            ON bt.content_id = bt2.content_id 
+                                AND bt.taxonomytype like \'appthemes\' AND bt.slug LIKE ?
+                                AND bt2.taxonomytype like \'appthemes\'
+						WHERE bt.contenttype=\'apps\' AND bt2.contenttype=\'apps\'
+                        GROUP BY bt2.name
+                        ORDER BY count DESC'
+                    );
+
+                    $stmtThemes->bindValue(1, $themeQuery);
+                    $stmtThemes->execute();
+
+                    //do a self inner join to get all categories that have the theme defined
+                    $stmtCategories = $this->conn->prepare(
+                        'SELECT bt2.name, count(bt2.id) AS Count FROM labs.bolt_taxonomy AS bt
+                        INNER JOIN labs.bolt_taxonomy AS bt2 
+                            ON bt.content_id = bt2.content_id 
+                                AND bt.taxonomytype like \'appthemes\' AND bt.slug LIKE ?
+                                AND bt2.taxonomytype like \'appcategories\'
+						WHERE bt.contenttype=\'apps\' AND bt2.contenttype=\'apps\'
+                        GROUP BY bt2.name
+                        ORDER BY count DESC'
+                    );
+                    
+                    $stmtCategories->bindValue(1, $themeQuery);
+                    $stmtCategories->execute();
+                } else {
+                    //We have both - a category filter and a theme filter
+                     $stmtThemes = $this->conn->prepare(
+                        'SELECT bt2.name, count(bt2.id) AS count FROM labs.bolt_taxonomy AS bt
+                        INNER JOIN labs.bolt_taxonomy AS bt2 
+                            ON bt.content_id = bt2.content_id 
+                                AND bt.taxonomytype like \'appthemes\' AND bt.slug LIKE ?
+                                AND bt2.taxonomytype like \'appthemes\'
+						WHERE bt.contenttype=\'apps\' AND bt2.contenttype=\'apps\'
+                        AND bt.content_id IN (SELECT bt3.content_id
+													FROM bolt_taxonomy AS bt3
+													WHERE contenttype = \'apps\'
+													AND taxonomytype = \'appcategories\'
+													AND slug IN(' . implode(', ', array_fill(0, count($taxonomyQuery), '?')) . ') ' . '
+													GROUP BY content_id
+													HAVING count(content_id) = ?
+												)
+                        GROUP BY bt2.name
+                        ORDER BY count DESC'
+                    );
+
+                    $stmtThemes->bindValue(1, $themeQuery);
+                    foreach ($taxonomyQuery as $k => $tag) {
+                        $stmtThemes->bindValue(($k+2), $tag); 
+                    }
+                    $stmtThemes->bindValue(count($taxonomyQuery)+2, count($taxonomyQuery));
+                    $stmtThemes->execute();
+                    
+                    $stmtCategories = $this->conn->prepare(
+                        'SELECT bt2.name, count(bt2.id) AS Count FROM labs.bolt_taxonomy AS bt
+                        INNER JOIN labs.bolt_taxonomy AS bt2 
+                            ON bt.content_id = bt2.content_id 
+                                AND bt.taxonomytype like \'appthemes\' AND bt.slug LIKE ?
+                                AND bt2.taxonomytype like \'appcategories\'
+						WHERE bt.contenttype=\'apps\' AND bt2.contenttype=\'apps\'
+                        AND bt.content_id IN (SELECT bt3.content_id
+													FROM bolt_taxonomy AS bt3
+													WHERE contenttype = \'apps\'
+													AND taxonomytype = \'appcategories\'
+													AND slug IN(' . implode(', ', array_fill(0, count($taxonomyQuery), '?')) . ') ' . '
+													GROUP BY content_id
+													HAVING count(content_id) = ?
+												)
+                        GROUP BY bt2.name
+                        ORDER BY Count DESC'
+                    );
+                    $stmtCategories->bindValue(1, $themeQuery);
+                    foreach ($taxonomyQuery as $k => $tag) {
+                        $stmtCategories->bindValue(($k+2), $tag); 
+                    }
+                    $stmtCategories->bindValue(count($taxonomyQuery)+2, count($taxonomyQuery));
+                    $stmtCategories->execute(); 
+                }
+            }
+                        
+            $themes = array();
+            while (false !== ($row = $stmtThemes->fetch(PDO::FETCH_NUM))) {
+                $themes[$row[0]] = $row[1];
+            }
+
+            $categories = array();
+            while (false !== ($row = $stmtCategories->fetch(PDO::FETCH_NUM))) {
+                $categories[$row[0]] = $row[1];
+            }
+            
+            $result = array();
+            $result['themes']=$themes;
+            $result['categories']=$categories;
+            
+            return $result;
+        }
+
     }
 
     class Builder implements BuilderInterface
@@ -329,6 +598,20 @@ namespace Bolt\Extension\Semantika\TagCloud\Engine
             $this->repository = $repository;
         }
 
+        public function buildAppCloudFor($taxonomyQuery, $themeQuery)
+        {
+            $tags = $this->repository->getTaxonomyGroupForApps($taxonomyQuery, $themeQuery);
+
+            if (!empty($tags['themes'])) {
+                arsort($tags['themes']);
+            }
+
+            if (!empty($tags['categories'])) {
+                arsort($tags['categories']);
+            }
+            return $tags;
+        }
+        
         public function buildCloudFor($contentType, $taxonomyName, $taxonomyQuery)
         {
             if (!isset($taxonomyName)) {
@@ -350,6 +633,10 @@ namespace Bolt\Extension\Semantika\TagCloud\Engine
         public function buildIdsFor($taxonomyQuery, $contentType, $taxonomyType) {
             return $this->repository->getIdsForQuery($taxonomyQuery, $contentType, $taxonomyType);
         }
+        
+        public function buildAppIdsFor($taxonomyQuery, $themeQuery) {
+            return $this->repository->getAppIdsForQuery($taxonomyQuery, $themeQuery);
+        }    
     }
 
     class View implements ViewInterface
@@ -372,6 +659,15 @@ namespace Bolt\Extension\Semantika\TagCloud\Engine
             return $cloud;
         }
         
+        public function renderAppTagArray($taxonomyQuery, $themeQuery) {
+            if (isset($taxonomyQuery) && is_array($taxonomyQuery)) {
+                $taxonomyQuery = array_unique($taxonomyQuery);
+            }
+            
+            $cloud = $this->storage->fetchAppCloud($taxonomyQuery, $themeQuery);
+            
+            return $cloud;
+        }
         public function render($contentType, $taxonomyName, $taxonomyQuery, array $options = array())
         {
             $html = false;
@@ -488,7 +784,8 @@ namespace Bolt\Extension\Semantika\TagCloud\Engine
                 new \Twig_SimpleFunction('tag_cloud', array($this, 'render'), array('is_safe' => array('html'))),
                 new \Twig_SimpleFunction('tag_cloud_raw', array($this, 'renderRaw'), array('is_safe' => array('html'))),
                 new \Twig_SimpleFunction('tag_cloud_list', array($this, 'renderList'), array('is_safe' => array('html'))),
-                new \Twig_SimpleFunction('tag_cloud_array', array($this, 'getTags'))
+                new \Twig_SimpleFunction('tag_cloud_array', array($this, 'getTags')),
+                new \Twig_SimpleFunction('apptag_cloud_array', array($this, 'getAppTags'))
             );
         }
 
@@ -497,7 +794,9 @@ namespace Bolt\Extension\Semantika\TagCloud\Engine
             return array(
                 new \Twig_SimpleFilter('contenttype', array($this, 'getContentType')),
                 new \Twig_SimpleFilter('performtagquery', array($this, 'getRecordIds')),
-                new \Twig_SimpleFilter('filteredtags', array($this, 'getTags'))
+                new \Twig_SimpleFilter('performapptagquery', array($this, 'getAppRecordIds')),
+                new \Twig_SimpleFilter('filteredtags', array($this, 'getTags')),
+                new \Twig_SimpleFilter('filteredapptags', array($this, 'getAppTags'))
             );
         }
 
@@ -510,13 +809,21 @@ namespace Bolt\Extension\Semantika\TagCloud\Engine
             return $this->builder->buildIdsFor($taxonomyQuery, $contentType['slug'], $taxonomyType);
         }
 
+        public function getAppRecordIds($taxonomyQuery, $themeQuery) {
+            return $this->builder->buildAppIdsFor($taxonomyQuery, $themeQuery);
+        }
+
         public function getTags($taxonomyQuery, $contentType, $taxonomyType) {
             return $this->view->renderTagArray($taxonomyQuery, $contentType, $taxonomyType);
         }
 
+        public function getAppTags($taxonomyQuery, $themeQuery) {
+            return $this->view->renderAppTagArray($taxonomyQuery, $themeQuery);
+        }
+
         public function render($contentType, $taxonomyName, $taxonomyQuery, array $options = array())
         {
-            return $this->view->render($contentType, $taxonomyName, $taxonomyQuery, $options);
+            return $this->view->renderTagArray($contentType, $taxonomyName, $taxonomyQuery, $options);
         }
 
         public function renderRaw($contentType, $taxonomyName, $taxonomyQuery, $linkOptions = array(), $marker = null)

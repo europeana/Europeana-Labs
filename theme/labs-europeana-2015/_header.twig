@@ -58,33 +58,33 @@
 
     <header class="header">
 
-    <div class="menu-top">
+    <div class="menu-top"><!--
         {# molecules-global-topdrawer #}
-        <nav class="our-sites" aria-expanded="false">
-            <div class="lc">
-            <div class="grid">
+        --><nav class="our-sites" aria-expanded="false"><!--
+            --><div class="lc"><!--
+            --><div class="grid"><!--
 
             {% set ourSites = app.config.get('general/our_sites')  %}
             {% for site in ourSites %}
-                <div class="l-linklist">
-                    <div class="inner">
-                    <h2 class="title h3">{{ site.title }}</h2>
-                    <ul>
-                        <li class="globallink">
-                            <a href="{{ site.link }}">
-                                <h3 class="globallink-title">{{ site.subtitle }}</h3>
-                                <p class="globallink-desc">{{ site.description }}</p>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+                --><div class="l-linklist"><!--
+                    --><div class="inner"><!--
+                    --><h2 class="title h3">{{ site.title }}</h2><!--
+                    --><ul><!--
+                        --><li class="globallink"><!--
+                            --><a href="{{ site.link }}"><!--
+                                --><h3 class="globallink-title">{{ site.subtitle }}</h3><!--
+                                --><p class="globallink-desc">{{ site.description }}</p><!--
+                            --></a><!--
+                        --></li><!--
+                    --></ul><!--
+                --></div><!--
+            --></div><!--
             {% endfor %}
 
-            </div>
-            </div>
-        </nav>
-    </div>
+            --></div><!--
+            --></div><!--
+        --></nav><!--
+    --></div>
 
     <!-- Off canvas search bar -->
     <div class="search-global">

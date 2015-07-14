@@ -30,7 +30,11 @@
     {% if uselist is defined  %}
         {% for k,v in uselist %}
             {% if filterroot is defined %}
-                <li class="item-tag" style="width:auto;"><a href="{{ filterroot }}?tag={{v|slug}}">{{ v }}</a></li>
+                {% if ('?' in filterroot) %}
+                    <li class="item-tag" style="width:auto;"><a href="{{ filterroot }}&tag={{v|slug}}">{{ v }}</a></li>
+                {% else %}
+                    <li class="item-tag" style="width:auto;"><a href="{{ filterroot }}?tag={{v|slug}}">{{ v }}</a></li>
+                {% endif %}
             {% else %}
                 <li class="item-tag" style="width:auto;"><a href="{{ k }}">{{ v }}</a></li>
             {% endif %}

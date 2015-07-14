@@ -19,51 +19,21 @@
     {% set amount = app.config.get('general/listing_records') %}
 {% endif %}
 
-{% set amount = 6 %}
+{% set category = app.request.get('category')  %}
+{% if category != null %}
+    {% set catarray = category|split(',') %}
+{% endif %}
 
-{% if records|length %}
-    {# show/hide sortby item and pager #}
-    {% set showsortby = false %}
+{% set theme = app.request.get('theme')  %}
 
-    {# default list views #}
-    {% if record is not defined %}
+{% set filterlists = apptag_cloud_array(catarray, theme) %}
+{% if category!=null or theme!=null %}
+    {% set idquery = catarray|performapptagquery(theme)|join(' || ') %}       
+    {% setcontent records = 'apps' where {id: idquery} allowpaging limit 10 %}
+{% else %}
+    {% setcontent records = 'apps' allowpaging limit 10 %}
+{% endif %}
 
-        {# tags #}
-        {% if taxonomy is defined %}
-            {% set showsortby = false %}
-            {% set contenttype = taxonomy %}
-
-        {% else %}
-            {% set contenttype = getContenttype(records|first.contenttype.name) %}
-            {% set showsortby = true %}
-            {% set contenttypePager = 'apps' %}
-        {% endif %}
-
-    {# structure content #}
-    {% elseif contenttype['name'] is defined %}
-        {% if (contenttype['slug'] in app.config.get('general/sort_options/disabled')|keys ) %}
-            {% set contenttypePager = 'apps' %}
-            {% set showsortby = true %}
-        {% endif %}
-    {% endif %}
-
-    
-    {% set contentfilters = {} %}
-    {% set category = app.request.get('category')  %}
-    {% if category != null %}
-        {% set contentfilters = contentfilters|merge({ appcategories: category }) %}
-    {% endif %}
-    {% set theme = app.request.get('theme')  %}
-    {% if theme != null %}
-        {% set contentfilters = contentfilters|merge({ appthemes: theme }) %}
-    {% endif %}
-    {% set tag = app.request.get('tag')  %}
-    {% if tag != null %}
-        {% set contentfilters = contentfilters|merge({ apptags: tag }) %}
-    {% endif %}
-    {% setcontent records = 'apps' where contentfilters allowpaging limit 10 %}
-
-    
 <!-- Start content -->
 <main role="main">
 <section class="block-content-header">
@@ -80,36 +50,81 @@
 	</div>
 </section>
 <section class="grid_wrapper">
-
 	<div class="grid">
 		<div class="sidebar">
 			<div class="subnav">
 				<h4 class="label epsilon"> Categories:</h4>
 				<ul class="tags tags-large">
-                    {% for category in app.config.get('taxonomy/appthemes/options') -%}
-                        <li><a class="tag" href="{{ root }}?theme={{ category|slug }}">{{ category }}</a></li>
+                    {% if category != null %}
+                        <li><a class="tag" href="{{ root }}/apps?category={{category}}" >All</a></li>
+                    {% else %}
+                        <li><a class="tag" href="{{ root }}/apps">All</a></li>
+                    {% endif %}
+                    {% for cur_category in app.config.get('taxonomy/appthemes/options') -%}
+                        {% set count = filterlists['themes'][cur_category] %}
+                        {% if count == null %} 
+                            {% set count = 0 %}
+                        {% endif %}
+                        {% if cur_category|slug == theme %}
+                            {% set add_class='is-active' %}
+                        {% else %}
+                            {% set add_class='' %}
+                        {% endif %}
+                        <li><a class="tag {{ add_class }}" href="{{ root }}?theme={{ cur_category|slug }}">{{ cur_category }} ({{ count }})</a></li>
                     {% endfor %}
 				</ul>		
                 <h4 class="label epsilon"> Filter by:</h4>
-				<ul class="tags tags-large">
-                    {% for category in app.config.get('taxonomy/appcategories/options') -%}
-                        {% set themefilter = "" %}
-                        {% if theme != null %}
-                            {% set themefilter = "&theme=" ~ theme %}
+                {% set themefilter = "" %}
+                {% if theme != null %}
+                    {% set themefilter = "&theme=" ~ theme %}
+                {% endif %}
+                
+                <ul class="tags tags-large"><!--
+                    {% if theme != null %}
+                        --><li><a class="tag" href="{{filterroot}}?theme={{theme}}">All</a></li><!--
+                    {% else %}
+                        --><li><a class="tag" href="{{filterroot}}">All</a></li><!--
+                    {% endif %}
+                    {% for key,value in filterlists['categories'] %}
+                    {% if key|slug in catarray %}
+                        {% set filter_string='' %}
+                        {% for curfilter in catarray %}
+                            {% if curfilter!=key|slug %} 
+                                {% if filter_string!='' %}
+                                    {% set filter_string = filter_string ~ ',' ~ curfilter %}
+                                {% else %}
+                                    {% set filter_string = filter_string ~ curfilter %}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {% set addclass = 'is-active' %}
+                    {% else %}
+                        {% if catarray|length!=0 %}
+                            {% set filter_string = catarray|join(',') ~ "," ~ key|slug %}
+                        {% else %}
+                        {% set filter_string = catarray|join(',') ~ key|slug %}
                         {% endif %}
-                        <li><a class="tag" href="{{ root }}?category={{ category|slug ~ themefilter }}">{{ category }}</a></li>
+                        {% set addclass = '' %}
+                    {% endif %}
+                    --><li><a class="tag {{addclass}}" href="{{filterroot}}?category={{filter_string}}{{themefilter}}">{{key}} ({{value}})</a></li><!--
                     {% endfor %}
-				</ul>		
+				--></ul>		
 			</div>	
 		</div><!--
 --><div class="main-content">
 
 	<ul class=""><!--
+        {% if records is iterable %}
             {% for listItem in records %}
                 {% include 'items/_item-list.twig' with { record: listItem } %}
             {% endfor %}
            --></ul>
-		{{ pager('apps') }}
+        {% else %}
+            {% include 'items/_item-list.twig' with { record: records } %}
+        {% endif %}
+        {% if records is iterable %}
+            {{ pager('apps') }}
+        {% endif %}
 	</div>
 </div>
 
@@ -118,9 +133,6 @@
 </main>
 <!-- End Content -->
 
-
-
-{% endif %}
 
 {% include '_footer.twig' %}
 
