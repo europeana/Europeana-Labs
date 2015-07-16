@@ -421,7 +421,7 @@ namespace Bolt\Extension\Semantika\TagCloud\Engine
 
                     //Get the theme counts
                     $stmtThemes = $this->conn->prepare(
-                        'SELECT bt2.name, count(bt2.id) AS count FROM labs.bolt_taxonomy AS bt2
+                        'SELECT bt2.name, count(bt2.id) AS count FROM bolt_taxonomy AS bt2
                         WHERE contenttype = \'apps\' AND bt2.taxonomytype like \'appthemes\'
                         GROUP BY bt2.name
                         ORDER BY count DESC'
@@ -430,7 +430,7 @@ namespace Bolt\Extension\Semantika\TagCloud\Engine
 
                     //Get the category counts
                     $stmtCategories = $this->conn->prepare(
-                        'SELECT bt2.name, count(bt2.id) AS count FROM labs.bolt_taxonomy AS bt2
+                        'SELECT bt2.name, count(bt2.id) AS count FROM bolt_taxonomy AS bt2
                         WHERE contenttype = \'apps\' AND bt2.taxonomytype like \'appcategories\'
                         GROUP BY bt2.name
                         ORDER BY count DESC'
@@ -439,7 +439,7 @@ namespace Bolt\Extension\Semantika\TagCloud\Engine
                 } else {
                     //There are category filters active, but no theme filter. We need to filter only the tags that are included in at least one of the articles that are present in the filter list
                      $stmtThemes = $this->conn->prepare(
-                        'SELECT bt2.name, count(bt2.id) AS count FROM labs.bolt_taxonomy AS bt2
+                        'SELECT bt2.name, count(bt2.id) AS count FROM bolt_taxonomy AS bt2
                         WHERE contenttype = \'apps\' AND bt2.taxonomytype like \'appthemes\'
                         AND bt2.content_id IN (SELECT bt.content_id
 													FROM bolt_taxonomy AS bt
@@ -460,7 +460,7 @@ namespace Bolt\Extension\Semantika\TagCloud\Engine
                     $stmtThemes->execute();
                     
                     $stmtCategories = $this->conn->prepare(
-                        'SELECT bt2.name, count(bt2.id) AS count FROM labs.bolt_taxonomy AS bt2
+                        'SELECT bt2.name, count(bt2.id) AS count FROM bolt_taxonomy AS bt2
                         WHERE contenttype = \'apps\' AND bt2.taxonomytype like \'appcategories\'
                         AND bt2.content_id IN (SELECT bt.content_id
 													FROM bolt_taxonomy AS bt
@@ -485,8 +485,8 @@ namespace Bolt\Extension\Semantika\TagCloud\Engine
                     // we have no category filter - since we can only have one category filter, an inner join can be used to get the list of appropriate results
                     //do a self inner join to get all themes that have the theme defined
                     $stmtThemes = $this->conn->prepare(
-                        'SELECT bt2.name, count(bt2.id) AS Count FROM labs.bolt_taxonomy AS bt
-                        INNER JOIN labs.bolt_taxonomy AS bt2 
+                        'SELECT bt2.name, count(bt2.id) AS Count FROM bolt_taxonomy AS bt
+                        INNER JOIN bolt_taxonomy AS bt2 
                             ON bt.content_id = bt2.content_id 
                                 AND bt.taxonomytype like \'appthemes\' AND bt.slug LIKE ?
                                 AND bt2.taxonomytype like \'appthemes\'
@@ -500,8 +500,8 @@ namespace Bolt\Extension\Semantika\TagCloud\Engine
 
                     //do a self inner join to get all categories that have the theme defined
                     $stmtCategories = $this->conn->prepare(
-                        'SELECT bt2.name, count(bt2.id) AS Count FROM labs.bolt_taxonomy AS bt
-                        INNER JOIN labs.bolt_taxonomy AS bt2 
+                        'SELECT bt2.name, count(bt2.id) AS Count FROM bolt_taxonomy AS bt
+                        INNER JOIN bolt_taxonomy AS bt2 
                             ON bt.content_id = bt2.content_id 
                                 AND bt.taxonomytype like \'appthemes\' AND bt.slug LIKE ?
                                 AND bt2.taxonomytype like \'appcategories\'
@@ -515,8 +515,8 @@ namespace Bolt\Extension\Semantika\TagCloud\Engine
                 } else {
                     //We have both - a category filter and a theme filter
                      $stmtThemes = $this->conn->prepare(
-                        'SELECT bt2.name, count(bt2.id) AS count FROM labs.bolt_taxonomy AS bt
-                        INNER JOIN labs.bolt_taxonomy AS bt2 
+                        'SELECT bt2.name, count(bt2.id) AS count FROM bolt_taxonomy AS bt
+                        INNER JOIN bolt_taxonomy AS bt2 
                             ON bt.content_id = bt2.content_id 
                                 AND bt.taxonomytype like \'appthemes\' AND bt.slug LIKE ?
                                 AND bt2.taxonomytype like \'appthemes\'
@@ -541,8 +541,8 @@ namespace Bolt\Extension\Semantika\TagCloud\Engine
                     $stmtThemes->execute();
                     
                     $stmtCategories = $this->conn->prepare(
-                        'SELECT bt2.name, count(bt2.id) AS Count FROM labs.bolt_taxonomy AS bt
-                        INNER JOIN labs.bolt_taxonomy AS bt2 
+                        'SELECT bt2.name, count(bt2.id) AS Count FROM bolt_taxonomy AS bt
+                        INNER JOIN bolt_taxonomy AS bt2 
                             ON bt.content_id = bt2.content_id 
                                 AND bt.taxonomytype like \'appthemes\' AND bt.slug LIKE ?
                                 AND bt2.taxonomytype like \'appcategories\'
