@@ -653,7 +653,7 @@ pages:
 #################################
 locations:
   name: Locations
-  singular_name: Locations
+  singular_name: Location
   fields:
     # Shown on Job list page, Job page, Events list page, Events page, Home page
     title:
