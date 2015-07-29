@@ -687,7 +687,7 @@ locations:
   record_template: record_location.twig
   icon_many: "fa:map-marker"
   icon_one: "fa:map-marker"
-  show_in_menu: false
+  show_in_menu: ture
 
 #################################
 #
