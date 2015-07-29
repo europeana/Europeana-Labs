@@ -635,6 +635,7 @@ pages:
   record_template: record_page.twig
   icon_many: "fa:files-o"
   icon_one: "fa:files"
+  recordsperpage: 100
 
 
 
@@ -650,9 +651,9 @@ pages:
 # so the /permalink/locations area should not be in the sitemap, and should be ignored by robots.
 #
 #################################
-places:
-  name: Places
-  singular_name: Place
+locations:
+  name: Locations
+  singular_name: Locations
   fields:
     # Shown on Job list page, Job page, Events list page, Events page, Home page
     title:
@@ -1328,7 +1329,7 @@ apps:
   recordsperpage: 10
   listing_records: 10
 
-Documentation:
+documentation:
   name: Documentation
   singular_name: Documentation
   slug: 'api'
@@ -1460,97 +1461,97 @@ Documentation:
   recordsperpage: 1000
   listing_template: listing.twig
 
-livinglabs:
-  name: Locations
-  singular_name: Location
-  slug: 'locations'
-  singular_slug: 'locations'
-  fields:
-    title:
-      type: text
-      required: false
-      label: "Title:"
-      variant: inline
-      class: narrow
-      group: "Living labs information"
-    slug:
-      type: slug
-      uses: title
-    intro:
-      type: textarea
-      label: "Intro:"
-      height: 150px
-    teaser:
-      type: html
-      required: true
-      label: "Teaser (required):"
-      height: 150px
-    body:
-      type: html
-      required: true
-      label: "Body (required):"
-      variant: inline
-      class: narrow
-    image:
-      type: image
-      required: true
-      label: "Image:"
-      extensions: [ gif, jpg, png ]
-    contact_name:
-      type: text
-      required: false
-      label: "Name:"
-      variant: inline
-      class: narrow
-      group: "contact"
-    contact_email:
-      type: text
-      required: false
-      label: "Email:"
-      variant: inline
-      class: narrow
-      group: "contact"
-    contact_website:
-      type: text
-      required: false
-      label: "Website:"
-      variant: inline
-      class: narrow
-      group: "contact"
-  taxonomy: [ tags ]
-  relations:
-    # structures:
-    #   label: "Tree parent"
-    #   multiple: false
-    #   order: title
-    pages:
-      multiple: true
-      label: "Pages"
-      order: -id
-      format: "{{ item.title|escape }}"
-    data:
-      multiple: true
-      label: "Data"
-      order: -id
-      format: "{{ item.title|escape }}"
-    blog:
-      multiple: true
-      label: "Blog posts"
-      order: -id
-      format: "{{ item.title|escape }}"
-    events:
-      multiple: true
-      label: "Events"
-      order: -id
-      format: "{{ item.title|escape }}"
-    places:
-      multiple: false
-      label: "Location"
-      order: -id
-      format: "{{ item.title|escape }}"
-  record_template : record_page.twig
-  recordsperpage: 1000
-  listing_template: listing_location.twig
+# livinglabs:
+#   name: Locations
+#   singular_name: Location
+#   slug: 'locations'
+#   singular_slug: 'locations'
+#   fields:
+#     title:
+#       type: text
+#       required: false
+#       label: "Title:"
+#       variant: inline
+#       class: narrow
+#       group: "Living labs information"
+#     slug:
+#       type: slug
+#       uses: title
+#     intro:
+#       type: textarea
+#       label: "Intro:"
+#       height: 150px
+#     teaser:
+#       type: html
+#       required: true
+#       label: "Teaser (required):"
+#       height: 150px
+#     body:
+#       type: html
+#       required: true
+#       label: "Body (required):"
+#       variant: inline
+#       class: narrow
+#     image:
+#       type: image
+#       required: true
+#       label: "Image:"
+#       extensions: [ gif, jpg, png ]
+#     contact_name:
+#       type: text
+#       required: false
+#       label: "Name:"
+#       variant: inline
+#       class: narrow
+#       group: "contact"
+#     contact_email:
+#       type: text
+#       required: false
+#       label: "Email:"
+#       variant: inline
+#       class: narrow
+#       group: "contact"
+#     contact_website:
+#       type: text
+#       required: false
+#       label: "Website:"
+#       variant: inline
+#       class: narrow
+#       group: "contact"
+#   taxonomy: [ tags ]
+#   relations:
+#     # structures:
+#     #   label: "Tree parent"
+#     #   multiple: false
+#     #   order: title
+#     pages:
+#       multiple: true
+#       label: "Pages"
+#       order: -id
+#       format: "{{ item.title|escape }}"
+#     data:
+#       multiple: true
+#       label: "Data"
+#       order: -id
+#       format: "{{ item.title|escape }}"
+#     blog:
+#       multiple: true
+#       label: "Blog posts"
+#       order: -id
+#       format: "{{ item.title|escape }}"
+#     events:
+#       multiple: true
+#       label: "Events"
+#       order: -id
+#       format: "{{ item.title|escape }}"
+#     places:
+#       multiple: false
+#       label: "Location"
+#       order: -id
+#       format: "{{ item.title|escape }}"
+#   record_template : record_page.twig
+#   recordsperpage: 1000
+#   listing_template: listing_location.twig
 
 # incubation:
 #   name: Incubation
