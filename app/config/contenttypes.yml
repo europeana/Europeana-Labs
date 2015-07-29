@@ -203,15 +203,21 @@ persons:
     contact_tag:
       type: checkbox
       label: "Main contact of tag page"
+    structure_parent:
+       type: select
+       values: structures/id,title
+       autocomplete: true
+       label: "Select structure tree parent"
+       group: Structure
     structure_sortorder:
       type: integer
       label: "Sort order in structure tree parent"
   taxonomy: [ tags ]
   relations:
-    structures:
-      label: "Tree parent"
-      multiple: false
-      order: title
+    # structures:
+    #   label: "Tree parent"
+    #   multiple: false
+    #   order: title
   sort: last_name
   # no pager for person, maybe there is a better solution
   listing_records: 10000
@@ -310,15 +316,21 @@ events:
       type: checkbox
       required: false
       label: "Show secondary email instead:"
+    structure_parent:
+       type: select
+       values: structures/id,title
+       autocomplete: true
+       label: "Select structure tree parent"
+       group: Structure
     structure_sortorder:
       type: integer
       label: "Sort order in structure tree parent"
   taxonomy: [ tags ]
   relations:
-    structures:
-      label: "Tree parent"
-      multiple: false
-      order: title
+    # structures:
+    #   label: "Tree parent"
+    #   multiple: false
+    #   order: title
     places:
       multiple: false
       label: "Location"
@@ -396,16 +408,22 @@ blog:
       required: false
       label: "Files:"
       group: "Secondary information"
+    structure_parent:
+       type: select
+       values: structures/id,title
+       autocomplete: true
+       label: "Select structure tree parent"
+       group: Structure
     structure_sortorder:
       type: integer
       label: "Sort order in structure tree parent"
   # Show on Blog page
   taxonomy: [ tags ]
   relations:
-    structures:
-      label: "Tree parent"
-      multiple: false
-      order: title
+    # structures:
+    #   label: "Tree parent"
+    #   multiple: false
+    #   order: title
     persons:
       label: "Author(s)"
       multiple: true
@@ -562,15 +580,21 @@ pages:
       type: markdown
       label: "Support navigation:"
       group: "Support Navigation"
+    structure_parent:
+       type: select
+       values: structures/id,title
+       autocomplete: true
+       label: "Select structure tree parent"
+       group: Structure
     structure_sortorder:
       type: integer
       label: "Sort order in structure tree parent"
   taxonomy: [ tags ]
   relations:
-    structures:
-      label: "Tree parent"
-      multiple: false
-      order: title
+    # structures:
+    #   label: "Tree parent"
+    #   multiple: false
+    #   order: title
     persons:
       label: "Contact(s)"
       multiple: true
@@ -734,15 +758,21 @@ structures:
       required: false
       label: "Project end:"
       variant: inline
+    structure_parent:
+       type: select
+       values: structures/id,title
+       autocomplete: true
+       label: "Select structure tree parent"
+       group: Structure
     structure_sortorder:
       type: integer
       label: "Sort order in structure tree parent"
   taxonomy: [ tags ]
   relations:
-    structures:
-      label: "Tree parent"
-      multiple: false
-      order: title
+    # structures:
+    #   label: "Tree parent"
+    #   multiple: false
+    #   order: title
     persons:
       label: "Contact(s)"
       multiple: true
@@ -1134,10 +1164,10 @@ data:
       group: "contact"
   taxonomy: [ tags ]
   relations:
-    structures:
-      label: "Tree parent"
-      multiple: false
-      order: title
+    # structures:
+    #   label: "Tree parent"
+    #   multiple: false
+    #   order: title
     person:
       multiple: true
       label: "Contact(s)"
@@ -1252,10 +1282,10 @@ apps:
       group: "contact"
   taxonomy: [ appthemes, appcategories, apptags ]
   relations:
-    structures:
-      label: "Tree parent"
-      multiple: false
-      order: title
+    # structures:
+    #   label: "Tree parent"
+    #   multiple: false
+    #   order: title
     person:
       multiple: true
       label: "Contact(s)"
@@ -1374,15 +1404,21 @@ Documentation:
       type: html
       label: "Support navigation:"
       group: "Support Navigation"
+    structure_parent:
+       type: select
+       values: structures/id,title
+       autocomplete: true
+       label: "Select structure tree parent"
+       group: Structure
     structure_sortorder:
       type: integer
       label: "Sort order in structure tree parent"
   taxonomy: [ tags ]
   relations:
-    structures:
-      label: "Tree parent"
-      multiple: false
-      order: title
+    # structures:
+    #   label: "Tree parent"
+    #   multiple: false
+    #   order: title
     persons:
       label: "Contact(s)"
       multiple: true
@@ -1476,10 +1512,10 @@ livinglabs:
       group: "contact"
   taxonomy: [ tags ]
   relations:
-    structures:
-      label: "Tree parent"
-      multiple: false
-      order: title
+    # structures:
+    #   label: "Tree parent"
+    #   multiple: false
+    #   order: title
     pages:
       multiple: true
       label: "Pages"
@@ -1592,15 +1628,21 @@ incubation:
       type: markdown
       label: "Support navigation:"
       group: "Support Navigation"
+    structure_parent:
+       type: select
+       values: structures/id,title
+       autocomplete: true
+       label: "Select structure tree parent"
+       group: Structure
     structure_sortorder:
       type: integer
       label: "Sort order in structure tree parent"
   taxonomy: [ tags ]
   relations:
-    structures:
-      label: "Tree parent"
-      multiple: false
-      order: title
+    # structures:
+    #   label: "Tree parent"
+    #   multiple: false
+    #   order: title
     persons:
       label: "Contact(s)"
       multiple: true

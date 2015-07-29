@@ -1,0 +1,69 @@
+{% extends '_base/_page-nav.twig' %}
+
+{% block page_main %}
+{# --- recursively add children in sub-lists --- #}
+{% macro dumpchildren(records, processed, userelations = false) %}
+  {% for record in records %}
+    {% if record.id not in processed %}
+    <li>
+      <span>№ {{ record.id }}</span> <strong><a href="{{ record.link }}">{{ record.title }}</a></strong> {# [<a href="{{ record.editlink }}">edit</a>] #}
+      {% set processed = processed|merge([record.id]) %}
+      {% if userelations == false %}
+        {% set children = getTreeChildren( record )|sort('structure_sortorder') %}
+        {% if children|length %}
+          <ul>
+            {{ _self.dumpchildren( children, processed, usechildren) }}
+          </ul>
+        {% endif %}
+      {% else %}
+        {# -- only works for legacy version -- #}
+        {% if record.relation.structures|length %}
+          <ul>
+            {{ _self.dumpchildren( record.related('structures')|sort('structure_sortorder'), processed, usechildren) }}
+          </ul>
+        {% endif %}
+      {% endif %}
+    </li>
+    {% endif %}
+  {% endfor %}
+{% endmacro %}
+
+{% setcontent records = 'structures' where { 'id': roots|join(' || ') } orderby 'structure_sortorder' limit 1000 %}
+
+{#
+<h2>Structure-only</h2>
+<ul>
+  {% set processed = [] %}
+  {{ _self.dumpchildren(records, processed, true) }}
+</ul>
+#}
+
+
+<link rel="stylesheet" href="{{ app.paths.extensions }}local/europeana/structure-tree/assets/css/jquery.sapling.css">
+
+<script type="text/javascript" src="{{ app.paths.extensions }}local/europeana/structure-tree/assets/js/jquery.sapling.min.js"></script>
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+    $('#structuretree').sapling();
+
+    $('#expandAll').click(function() {
+        $('#structuretree').data('sapling').expand();
+    });
+
+    $('#collapseAll').click(function() {
+        $('#structuretree').data('sapling').collapse();
+    });
+
+});
+
+</script>
+
+<h2>Structure Tree Overview</h2>
+<a id="expandAll" href="#">Expand All</a> - <a id="collapseAll" href="#">Collapse All</a>
+<ul id="structuretree">
+  {% set processed = [] %}
+  {{ _self.dumpchildren(records, processed, false) }}
+</ul>
+{% endblock %}
