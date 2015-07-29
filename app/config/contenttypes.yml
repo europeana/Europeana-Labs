@@ -1236,6 +1236,10 @@ apps:
       label: "Body (required):"
       variant: inline
       class: narrow
+    hero:
+      type: html
+      label: "'Hero' block contents:"
+      group: "Secondary information"
     image:
       type: image
       required: true
