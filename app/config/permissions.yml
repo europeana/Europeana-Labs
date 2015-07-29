@@ -57,7 +57,7 @@ global:
     dbupdate_result: [ admin, developer ]
     extensions: [ developer ]
     fileedit: [ admin, developer ]
-    files:config: [ developer ] 
+    files:config: [ developer ]
     files:theme: [ developer ]
     files:uploads: [ admin, developer, chief-editor, blog-editor ]
     files: [ editor, admin, developer, chief-editor, blog-editor ]

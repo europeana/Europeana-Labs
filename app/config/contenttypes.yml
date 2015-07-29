@@ -280,9 +280,9 @@ events:
       required: false
       label: "Link:"
       variant: inline
-      class: narrow 
+      class: narrow
       prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url  
+      pattern: url
     teaser:
       type: html
       required: true
@@ -538,26 +538,26 @@ pages:
       required: false
       label: "External link1:"
       variant: inline
-      class: narrow 
+      class: narrow
       prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url  
+      pattern: url
       group: "Related External Links"
     link2:
       type: text
       required: false
       label: "External link2:"
       variant: inline
-      class: narrow 
+      class: narrow
       prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url  
+      pattern: url
     link3:
       type: text
       required: false
       label: "External link3:"
       variant: inline
-      class: narrow 
+      class: narrow
       prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url  
+      pattern: url
     support_navigation:
       type: markdown
       label: "Support navigation:"
@@ -879,9 +879,9 @@ homepage:
       type: text
       required: false
       variant: inline
-      class: narrow 
+      class: narrow
       prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url  
+      pattern: url
       group: "Latest 1"
     use_manual_2:
       type: checkbox
@@ -918,9 +918,9 @@ homepage:
       type: text
       required: false
       variant: inline
-      class: narrow 
+      class: narrow
       prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url  
+      pattern: url
       group: "Latest 2"
     use_manual_3:
       type: checkbox
@@ -957,9 +957,9 @@ homepage:
       type: text
       required: false
       variant: inline
-      class: narrow 
+      class: narrow
       prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url  
+      pattern: url
       group: "Latest 3"
   relations:
     blog:
@@ -1081,7 +1081,7 @@ data:
       required: true
       label: "Body (required):"
       variant: inline
-      class: narrow   
+      class: narrow
     image:
       type: image
       required: true
@@ -1092,32 +1092,32 @@ data:
       required: false
       label: "Provided by:"
       variant: inline
-      class: narrow    
+      class: narrow
       group: "Links"
     provided_by_link:
       type: text
       required: false
       label: "Provided by link:"
       variant: inline
-      class: narrow 
+      class: narrow
       prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url  
+      pattern: url
     portallink:
       type: text
       required: false
       label: "Portal link:"
       variant: inline
-      class: narrow 
+      class: narrow
       prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url  
+      pattern: url
     apiconsolelink:
       type: text
       required: false
       label: "Api console link:"
       variant: inline
-      class: narrow 
+      class: narrow
       prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url  
+      pattern: url
     contact_name:
       type: text
       required: false
@@ -1197,7 +1197,7 @@ apps:
       required: true
       label: "Body (required):"
       variant: inline
-      class: narrow   
+      class: narrow
     image:
       type: image
       required: true
@@ -1209,26 +1209,26 @@ apps:
       required: false
       label: "External link1:"
       variant: inline
-      class: narrow 
+      class: narrow
       prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url  
+      pattern: url
       group: "Related External Links"
     link2:
       type: text
       required: false
       label: "External link2:"
       variant: inline
-      class: narrow 
+      class: narrow
       prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url  
+      pattern: url
     link3:
       type: text
       required: false
       label: "External link3:"
       variant: inline
-      class: narrow 
+      class: narrow
       prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url  
+      pattern: url
     contact_name:
       type: text
       required: false
@@ -1249,7 +1249,7 @@ apps:
       label: "Website:"
       variant: inline
       class: narrow
-      group: "contact"  
+      group: "contact"
   taxonomy: [ appthemes, appcategories, apptags ]
   relations:
     structures:
@@ -1287,7 +1287,7 @@ apps:
       order: -id
       format: "{{ item.title|escape }}"
   record_template : record_app.twig
-  listing_template: app_listing.twig 
+  listing_template: app_listing.twig
   recordsperpage: 10
   listing_records: 10
 
@@ -1350,26 +1350,26 @@ Documentation:
       required: false
       label: "External link1:"
       variant: inline
-      class: narrow 
+      class: narrow
       prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url  
+      pattern: url
       group: "Related External Links"
     link2:
       type: text
       required: false
       label: "External link2:"
       variant: inline
-      class: narrow 
+      class: narrow
       prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url  
+      pattern: url
     link3:
       type: text
       required: false
       label: "External link3:"
       variant: inline
-      class: narrow 
+      class: narrow
       prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url  
+      pattern: url
     support_navigation:
       type: html
       label: "Support navigation:"
@@ -1447,7 +1447,7 @@ livinglabs:
       required: true
       label: "Body (required):"
       variant: inline
-      class: narrow   
+      class: narrow
     image:
       type: image
       required: true
@@ -1473,7 +1473,7 @@ livinglabs:
       label: "Website:"
       variant: inline
       class: narrow
-      group: "contact"  
+      group: "contact"
   taxonomy: [ tags ]
   relations:
     structures:
@@ -1508,7 +1508,7 @@ livinglabs:
   record_template : record_page.twig
   recordsperpage: 1000
   listing_template: listing_location.twig
-  
+
 incubation:
   name: Incubation
   singular_name: Incubation
@@ -1568,26 +1568,26 @@ incubation:
       required: false
       label: "External link1:"
       variant: inline
-      class: narrow 
+      class: narrow
       prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url  
+      pattern: url
       group: "Related External Links"
     link2:
       type: text
       required: false
       label: "External link2:"
       variant: inline
-      class: narrow 
+      class: narrow
       prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url  
+      pattern: url
     link3:
       type: text
       required: false
       label: "External link3:"
       variant: inline
-      class: narrow 
+      class: narrow
       prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url  
+      pattern: url
     support_navigation:
       type: markdown
       label: "Support navigation:"

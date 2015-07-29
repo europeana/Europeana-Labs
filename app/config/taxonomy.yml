@@ -21,7 +21,7 @@ appcategories:
   behaves_like: categories
   multiple: 1
   options: [API Implementation, Discovery, Hackathon Prototype, R&D Results, Curation/Annotation,Education, Client Library, Pilot, Gaming, Distribution, Tourism, Linked Open Data]
-  
+
 apptags:
   slug: apptags
   name: Tags
@@ -33,7 +33,7 @@ tags:
     singular_slug: tag
     behaves_like: tags
     listing_template: tag_listing.twig
-    
+
 tree:
     slug: tree
     singular_slug: tree
