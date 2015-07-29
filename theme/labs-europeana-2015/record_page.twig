@@ -13,6 +13,18 @@
                 {% include 'items/_item-breadcrumb.twig' %}
             </div>
 
+            {% if record.hero is not empty %}
+            <section class="block-content-header">
+                <div class="grid_wrapper">
+                    <div class="grid">
+                        <div class="contents">
+                            {{ record.hero }}
+                        </div>
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+
             <div class="maincontent">
                 <div class="textcontent prose">
                     <h1 class="title">{{ record.title }}</h1>

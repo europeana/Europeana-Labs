@@ -403,6 +403,10 @@ blog:
       attrib: title
       extensions: [ gif, jpg, png ]
     # Show on Blog page
+    hero:
+      type: html
+      label: "'Hero' block contents:"
+      group: "Secondary information"
     files:
       type: filelist
       required: false
@@ -576,10 +580,13 @@ pages:
       class: narrow
       prefix: "<em>URL has to start with http:// or https://</em>"
       pattern: url
+    hero:
+      type: html
+      label: "'Hero' block contents:"
+      group: "Support Navigation"
     support_navigation:
       type: markdown
       label: "Support navigation:"
-      group: "Support Navigation"
     structure_parent:
        type: select
        values: structures/id,title
