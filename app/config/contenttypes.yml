@@ -596,7 +596,7 @@ pages:
     structure_sortorder:
       type: integer
       label: "Sort order in structure tree parent"
-  taxonomy: [ tags ]
+  taxonomy: [ chapters, tags ]
   relations:
     # structures:
     #   label: "Tree parent"
@@ -1552,135 +1552,135 @@ livinglabs:
   recordsperpage: 1000
   listing_template: listing_location.twig
 
-incubation:
-  name: Incubation
-  singular_name: Incubation
-  slug: 'incubation'
-  singular_slug: 'incubation'
-  fields:
-    # Shown on Individual pages, Lists, Overviews, Teasers
-    title:
-      type: text
-      required: true
-      label: "Title (required):"
-      variant: inline
-      postfix: "(max. 50 characters)"
-      pattern: "^.{1,50}$"
-      group: Page
-    slug:
-      type: slug
-      uses: title
-    intro:
-      type: textarea
-      label: "Intro:"
-      height: 150px
-    # Shown on Individual pages, Lists
-    teaser:
-      type: html
-      label: "Teaser (required):"
-      height: 150px
-    # Shown on Individual pages
-    body:
-      type: html
-      label: "Body (required):"
-      height: 300px
-    # Shown on Individual pages, Lists, Overviews, Teasers
-    teaser_image:
-      type: image
-      required: false
-      label: "Teaser image:"
-    secondary_mail:
-      type: checkbox
-      label: "Show secondary email instead:"
-      group: "Page Options"
-    hide_related:
-      type: checkbox
-      label: "Hide from related content:"
-      postfix: "Check to hide this page from related content sections."
-    hide_related_section:
-      type: checkbox
-      label: "Hide related content section:"
-      postfix: "Check to hide the related content section."
-    files:
-      type: filelist
-      required: false
-      label: "Files:"
-      group: "Files"
-    link1:
-      type: text
-      required: false
-      label: "External link1:"
-      variant: inline
-      class: narrow
-      prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url
-      group: "Related External Links"
-    link2:
-      type: text
-      required: false
-      label: "External link2:"
-      variant: inline
-      class: narrow
-      prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url
-    link3:
-      type: text
-      required: false
-      label: "External link3:"
-      variant: inline
-      class: narrow
-      prefix: "<em>URL has to start with http:// or https://</em>"
-      pattern: url
-    support_navigation:
-      type: markdown
-      label: "Support navigation:"
-      group: "Support Navigation"
-    structure_parent:
-       type: select
-       values: structures/id,title
-       autocomplete: true
-       label: "Select structure tree parent"
-       group: Structure
-    structure_sortorder:
-      type: integer
-      label: "Sort order in structure tree parent"
-  taxonomy: [ tags ]
-  relations:
-    # structures:
-    #   label: "Tree parent"
-    #   multiple: false
-    #   order: title
-    persons:
-      label: "Contact(s)"
-      multiple: true
-      format: "{{ item.last_name }}, {{ item.first_name }}"
-      order: last_name
-    pages:
-      multiple: true
-      label: "Pages"
-      order: -id
-      format: "{{ item.title|escape }}"
-    blog:
-      multiple: true
-      label: "Blog posts"
-      order: -id
-      format: "{{ item.title|escape }}"
-    data:
-      multiple: true
-      label: "Data"
-      order: -id
-      format: "{{ item.title|escape }}"
-    apps:
-      multiple: true
-      label: "Apps"
-      order: -id
-      format: "{{ item.title|escape }}"
-    events:
-      multiple: true
-      label: "Events"
-      order: -id
-      format: "{{ item.title|escape }}"
-  record_template: record_page.twig
-  listing_template: listing_incubation.twig
-  icon_many: "fa:files-o"
-  icon_one: "fa:files"
+# incubation:
+#   name: Incubation
+#   singular_name: Incubation
+#   slug: 'incubation'
+#   singular_slug: 'incubation'
+#   fields:
+#     # Shown on Individual pages, Lists, Overviews, Teasers
+#     title:
+#       type: text
+#       required: true
+#       label: "Title (required):"
+#       variant: inline
+#       postfix: "(max. 50 characters)"
+#       pattern: "^.{1,50}$"
+#       group: Page
+#     slug:
+#       type: slug
+#       uses: title
+#     intro:
+#       type: textarea
+#       label: "Intro:"
+#       height: 150px
+#     # Shown on Individual pages, Lists
+#     teaser:
+#       type: html
+#       label: "Teaser (required):"
+#       height: 150px
+#     # Shown on Individual pages
+#     body:
+#       type: html
+#       label: "Body (required):"
+#       height: 300px
+#     # Shown on Individual pages, Lists, Overviews, Teasers
+#     teaser_image:
+#       type: image
+#       required: false
+#       label: "Teaser image:"
+#     secondary_mail:
+#       type: checkbox
+#       label: "Show secondary email instead:"
+#       group: "Page Options"
+#     hide_related:
+#       type: checkbox
+#       label: "Hide from related content:"
+#       postfix: "Check to hide this page from related content sections."
+#     hide_related_section:
+#       type: checkbox
+#       label: "Hide related content section:"
+#       postfix: "Check to hide the related content section."
+#     files:
+#       type: filelist
+#       required: false
+#       label: "Files:"
+#       group: "Files"
+#     link1:
+#       type: text
+#       required: false
+#       label: "External link1:"
+#       variant: inline
+#       class: narrow
+#       prefix: "<em>URL has to start with http:// or https://</em>"
+#       pattern: url
+#       group: "Related External Links"
+#     link2:
+#       type: text
+#       required: false
+#       label: "External link2:"
+#       variant: inline
+#       class: narrow
+#       prefix: "<em>URL has to start with http:// or https://</em>"
+#       pattern: url
+#     link3:
+#       type: text
+#       required: false
+#       label: "External link3:"
+#       variant: inline
+#       class: narrow
+#       prefix: "<em>URL has to start with http:// or https://</em>"
+#       pattern: url
+#     support_navigation:
+#       type: markdown
+#       label: "Support navigation:"
+#       group: "Support Navigation"
+#     structure_parent:
+#        type: select
+#        values: structures/id,title
+#        autocomplete: true
+#        label: "Select structure tree parent"
+#        group: Structure
+#     structure_sortorder:
+#       type: integer
+#       label: "Sort order in structure tree parent"
+#   taxonomy: [ tags ]
+#   relations:
+#     # structures:
+#     #   label: "Tree parent"
+#     #   multiple: false
+#     #   order: title
+#     persons:
+#       label: "Contact(s)"
+#       multiple: true
+#       format: "{{ item.last_name }}, {{ item.first_name }}"
+#       order: last_name
+#     pages:
+#       multiple: true
+#       label: "Pages"
+#       order: -id
+#       format: "{{ item.title|escape }}"
+#     blog:
+#       multiple: true
+#       label: "Blog posts"
+#       order: -id
+#       format: "{{ item.title|escape }}"
+#     data:
+#       multiple: true
+#       label: "Data"
+#       order: -id
+#       format: "{{ item.title|escape }}"
+#     apps:
+#       multiple: true
+#       label: "Apps"
+#       order: -id
+#       format: "{{ item.title|escape }}"
+#     events:
+#       multiple: true
+#       label: "Events"
+#       order: -id
+#       format: "{{ item.title|escape }}"
+#   record_template: record_page.twig
+#   listing_template: listing_incubation.twig
+#   icon_many: "fa:files-o"
+#   icon_one: "fa:files"

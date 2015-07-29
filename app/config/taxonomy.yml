@@ -48,3 +48,9 @@ tree:
     multiple: false
     has_sortorder: true
 
+chapters:
+    slug: chapters
+    singular_slug: chapter
+    behaves_like: grouping
+    options: { main: "Common pages", incubation: "Incubation", locations: "Locations", 'api': "API documentation" }
+    has_sortorder: true
