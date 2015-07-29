@@ -8,8 +8,13 @@ $baseDir = dirname($vendorDir);
 return array(
     'FileBrowser\\' => array($vendorDir . '/europeana/filebrowser'),
     'Disqus\\' => array($vendorDir . '/bolt/disqus'),
+    'Bolt\\Extension\\Semantika\\TagCloud\\' => array($baseDir . '/local/axsy/bolt-extension-tagcloud'),
     'Bolt\\Extension\\FoundryCode\\' => array($vendorDir . '/foundrycode/boltredirector'),
+    'Bolt\\Extension\\Europeana\\StructureTree\\' => array($baseDir . '/local/europeana/structure-tree'),
+    'Bolt\\Extension\\Europeana\\GoogleSearch\\' => array($baseDir . '/local/europeana/google-search'),
+    'Bolt\\Extension\\Europeana\\FileHelper\\' => array($baseDir . '/local/europeana/file-helper'),
     'Bolt\\Extension\\Bolt\\Sitemap\\' => array($vendorDir . '/bolt/sitemap'),
     'Bolt\\Extension\\Bolt\\RSSFeed\\' => array($vendorDir . '/bolt/rssfeed', $vendorDir . '/bolt/rssfeed/src'),
+    'Bolt\\Extension\\Bolt\\RSSAggregator\\' => array($baseDir . '/local/europeana/rssaggregator'),
     'Bolt\\Composer\\' => array($baseDir . '/'),
 );
