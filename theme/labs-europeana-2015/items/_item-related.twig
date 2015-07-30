@@ -19,7 +19,7 @@
 
 {% if record %}
     {% set allRelatedContent = record.related() %}
-    {% set relatedExceptions = ['persons', 'locations'] %}
+    {% set relatedExceptions = ['persons', 'locations', 'homepage', 'footers'] %}
     {% set relatedContents = [] %}
 
     {# collect all related content objects #}
@@ -68,26 +68,28 @@
     {% endif %}
 
         <h4>{{ title }}</h4>
-        <ul class="l-relatedlinks"><!--
-        -->{% for related in records|slice(0,3) %}<!--
-        --><li class="related-item"><!--
-                -->{% if short %}<!--
-                        --><a href="{{ structurelink(related) }}">{{ related.title }}</a><!--
-                -->{% else %}<!--
-                --><div class="link-block-text link-block block"><!--
-                    --><a href="{{ structurelink(related) }}" class="b-inner"><!--
-                        --><div class="b-text"><!--
-                            --><h2 class="item-title">{{ related.title }}</h2><!--
-                            --><p>{{ related.teaser|default(related.excerpt(app.config.get('general/excerpt_length'))) }}</p><!--
-                        --></div><!--
-                    --></a><!--
-                --></div><!--
-                -->{% endif %}<!--
-            --></li><!--
-        -->{% endfor %}<!--
-        --></ul><!--
-
-    --></div>
+        {% spaceless %}
+        <ul class="l-relatedlinks">
+        {% for related in records|slice(0,3) %}
+        <li class="related-item">
+                {% if short %}
+                        <a href="{{ structurelink(related) }}">{{ related.title }}</a>
+                {% else %}
+                <div class="link-block-text link-block block">
+                    <a href="{{ structurelink(related) }}" class="b-inner">
+                        <div class="b-text">
+                            <h2 class="item-title">{{ related.title }}</h2>
+                            {# lin: {{ related.contenttype.slug }} / {{ related.slug }} #}
+                            <p>{{ related.teaser|default(related.excerpt(app.config.get('general/excerpt_length'))) }}</p>
+                        </div>
+                    </a>
+                </div>
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+        {% endspaceless %}
+    </div>
 
 {% endif %}
 
