@@ -9,9 +9,9 @@
     {% set listItem = record %}
     {% set contenttype = record.contenttype %}
     {% set listItemLink = structurelink(record) %}
---><li class="list-item"><!--
+<li class="list-item">
 
-        --><div class="item-supplementary">
+        <div class="item-supplementary">
         {% if (contenttype.slug in [ 'blog', 'locations', "data", "apps"]) %}
             <div class="item-image">
                 <a href="{{ listItemLink }}"><img src="{{ listItem.values['teaser_image']|default(listItem.values['image'])|thumbnail() }}" alt="{{ listItem.image|title }}" /></a>
@@ -21,9 +21,9 @@
                 {% include 'items/_item-date-event.twig' with {record : listItem} %}
             </div>
         {% endif %}
-        </div><!--
+        </div>
 
-     --><div class="item-details">
+     <div class="item-details">
         <h2 class="title"><a href="{{ listItemLink }}">{{ listItem.title|striptags }}</a></h2>
 
         {% if contenttype.slug in [ "blog" ] %}
@@ -42,7 +42,7 @@
                     {% include 'items/_item-date.twig' %}
                 {% endif %}
                 {# set tags #}
-                
+
                 {% if contenttype.slug in [ "blog", "locations", "data" ] %}
                     {% include 'items/_item-tags.twig' %}
                 {% else %}
@@ -71,5 +71,5 @@
                 {% endif %}
             </div>
         </div>
-    </li><!--
+    </li>
 {% endif %}

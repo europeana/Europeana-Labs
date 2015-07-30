@@ -19,9 +19,9 @@
     {% if date ==  '0000-00-00' %}
         <span>not set</span>
     {% else %}
-    <span class="item-day">{{ date|localdate("%e") }}</span>
-    <span class="item-month">{{ date|localdate("%B") }}</span>
-    <span class="item-year">{{ date|localdate("%Y") }}</span>
+    <span class="item-day">{{ date|localdate("%e") }}</span>&thinsp;
+    <span class="item-month">{{ date|localdate("%B") }}</span>&thinsp;
+    <span class="item-year">{{ date|localdate("%Y") }}</span>&thinsp;
      {% endif %}
 </span>
 {% endif %}

@@ -46,9 +46,8 @@
 		<div class="grid">
 			<div class="contents">
 				<div class="title">
-				     <h1 class="title">Apps showcase</h1>
-				     <p class="subhead">Explore our showcase of applications using the Europeana APIs and re-usable content. Discover tools to get you started, or browse our directory of open source software.</p>
-                     <p class="subhead">Is your app missing here? If so <a href="http://labs.europeana.eu/support/contact/">get in touch</a></p>
+				     <h1 class="title">{{ record.title }}</h1>
+				     {{ record.teaser }}
 				</div>
 			</div>
 		</div>
@@ -57,15 +56,15 @@
 
 {% spaceless %}
 <section class="grid_wrapper">
-	<div class="grid"><!--
---><div class="main-content">
+	<div class="grid">
+    <div class="main-content">
 
-	<ul class=""><!--
+	<ul class="">
         {% if records is iterable %}
             {% for listItem in records %}
                 {% include 'items/_item-list.twig' with { record: listItem } %}
             {% endfor %}
-           --></ul>
+           </ul>
         {% else %}
             {% include 'items/_item-list.twig' with { record: records } %}
         {% endif %}
@@ -102,11 +101,11 @@
                     {% set themefilter = "&theme=" ~ theme %}
                 {% endif %}
 
-                <ul class="tags tags-large"><!--
+                <ul class="tags tags-large">
                     {% if theme != null %}
-                        --><li><a class="tag" href="{{filterroot}}?theme={{theme}}">All</a></li><!--
+                        <li><a class="tag" href="{{filterroot}}?theme={{theme}}">All</a></li>
                     {% else %}
-                        --><li><a class="tag" href="{{filterroot}}">All</a></li><!--
+                        <li><a class="tag" href="{{filterroot}}">All</a></li>
                     {% endif %}
                     {% for key,value in filterlists['categories'] %}
                     {% if key|slug in catarray %}
@@ -129,9 +128,9 @@
                         {% endif %}
                         {% set addclass = '' %}
                     {% endif %}
-                    --><li><a class="tag {{addclass}}" href="{{filterroot}}?category={{filter_string}}{{themefilter}}">{{key}} ({{value}})</a></li><!--
+                    <li><a class="tag {{addclass}}" href="{{filterroot}}?category={{filter_string}}{{themefilter}}">{{key}} ({{value}})</a></li>
                     {% endfor %}
-                --></ul>
+                </ul>
             </div>
         </div>
 

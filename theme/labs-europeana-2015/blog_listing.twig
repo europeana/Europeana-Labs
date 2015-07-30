@@ -59,47 +59,53 @@
 
 <section class="block-content-header">
 	<div class="grid_wrapper">
+
 		<div class="grid">
 			<div class="contents">
 				{# show title and intro for structrure listview #}
-				{% if record is defined %}
 				<div class="title">
-				     <h1 class="title">{{ record.title }}</h1>
-				     <p class="subhead">{{ record.teaser|raw }}</p>
+				     {% setcontent page = "structure/blog" %}
+                     <h1 class="title">{{ page.title }}</h1>
+                     {{ page.teaser }}
 				</div>
-				{% endif %}
 			</div>
 		</div>
+
 	</div>
 </section>
 <section class="grid_wrapper">
 	<div class="grid">
-		<div class="sidebar">
-			<div class="subnav">
-				<h4 class="label epsilon"> Filter by:</h4>
-                {% include 'items/_item-tagfilter.twig' %}
-			</div>	
-		</div><!--
---><div class="main-content">
-	<ul class="results-list"><!--
+    {% spaceless %}
+
+    <div class="main-content">
+	<ul class="results-list">
         {% if records is iterable %}
             {% for listItem in records %}
-                    {% include 'items/_item-list.twig' with { record: listItem } %}			
+                    {% include 'items/_item-list.twig' with { record: listItem } %}
             {% endfor %}
         {% else %}
             {% include 'items/_item-list.twig' with { record: records } %}
         {% endif %}
-    --></ul>
+    </ul>
         {% if records is iterable %}
             {{ pager() }}
         {% endif %}
 	</div>
+
+        <div class="sidebar">
+            <div class="subnav">
+                <h4 class="label epsilon"> Filter by:</h4>
+                {% include 'items/_item-tagfilter.twig' %}
+            </div>
+        </div>
+
+    {% endspaceless %}
 </div>
 
 </section>
 
 </main>
-<!-- End Content -->
+ <!-- End Content -->
 
 
 

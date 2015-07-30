@@ -1,23 +1,25 @@
-{% include '_header.twig' %}<!--
+{% include '_header.twig' %}
+{% spaceless %}
 
-	--><main role="main"><!--
-		--><section class="block-content-header"><!--
-			--><div class="grid_wrapper"><!--
-			--><div class="grid"><!--
-				--><div class="contents"><!--
-					--><h1 class="title">{{ record.title }}</h1><!--
-					--><p class="subhead">{{ record.intro }}</p><!--
-				--></div><!--
-			--></div><!--
-			--></div><!--
-		--></section><!--
+	<main role="main">
+		<section class="block-content-header">
+			<div class="grid_wrapper">
+			<div class="grid">
+				<div class="contents">
+					<h1 class="title">{{ record.title }}</h1>
+					<p class="subhead">{{ record.intro }}</p>
+				</div>
+			</div>
+			</div>
+		</section>
 
-		--><div class="lc"><!--
-			--><div class="grid grid--rev"><!--
-				--><div class="main-content prose" id="documentation">{{ record.body|raw }}</div><!--
-				--><div class="sidebar">{% if record.support_navigation != "" %}{{ record.support_navigation|raw }}{% endif %}</div><!--
-			--></div><!--
-		--></div><!--
-	--></main><!--
+		<div class="lc">
+			<div class="grid grid--rev">
+				<div class="main-content prose" id="documentation">{{ record.body|raw }}</div>
+				<div class="sidebar">{% if record.support_navigation != "" %}{{ record.support_navigation|raw }}{% endif %}</div>
+			</div>
+		</div>
+	</main>
 
--->{% include '_footer.twig' %}
+{% endspaceless %}
+{% include '_footer.twig' %}
