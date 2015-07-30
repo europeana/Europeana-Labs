@@ -1,45 +1,108 @@
-{% include '_header.twig' %}<!--
-{% set filterroot = app.request.getSchemeAndHttpHost() ~  "/" ~ record.contenttype.slug %}
-	--><main role="main"><!--
-		--><section class="block-content-header"><!--
-			--><div class="grid_wrapper"><!--
-			--><div class="grid"><!--
-				--><div class="contents"><!--
-					--><h1 class="title">{{ record.title }}</h1><!--
-					--><p class="subhead">{{ record.intro }}</p><!--
-				--></div><!--
-			--></div><!--
-			--></div><!--
-		--></section><!--
+{% include '_header.twig' %}
+{% set contacts = record.related('person') %}
 
-		--><div class="lc"><!--
-			--><div class="grid grid--rev"><!--
-				--><div class="main-content prose" id="documentation"><!--
-                    -->{{ record.body|raw }}<!--
-                    --><section><p>Dataset provided by <a href="{{ record.provided_by_link }}">{{ record.provided_by }}</a>.<!--
-                    -->{% if record.contact_email!="" %}<!--
-                        -->&nbsp;Contact <a href="mailto:{{ record.contact_email|raw }}">{{ record.contact_email }}</a> for more details.<!--
-                    -->{% endif %}<!--
-                    --></p></section><!--
-                    --><div class="section next-actions"><!--
-                        --><h4>View this item in:</h4><!--
-                        --><a title="View in the API Console" class="btn" href="{{ record.apiconsolelink }}">API Console</a><!--
-                        --><a title="View the portal" class="btn" href="{{ record.portallink }}">Portal</a><!--
-                    --></div><!--
-                    --><div class="section item-meta-secondary"><!--
-                        -->{# set date #}<!--
-                        -->{% include 'items/_item-date.twig' %}<!--	
-                        -->{# set tags #}<!--
-                        -->{% include 'items/_item-tags.twig' %}<!--
-                    --></div><!--
-                    -->{% include 'items/_item-related.twig' with {title: "You might also like:", short: false} %}<!--
-                    --><aside><!--
-                        -->{% include 'items/_item-comments.twig' %}<!--
-                    --></aside><!--
-                --></div><!--
-				--><div class="sidebar">{% if record.support_navigation != "" %}{{ record.support_navigation|raw }}{% endif %}</div><!--
-			--></div><!--
-		--></div><!--
-	--></main><!--
+<!-- Start content -->
+<main role="main" class="l-page">
+<div class="lc">
+    <!-- Start grid -->
+    <div class="grid-main">
 
--->{% include '_footer.twig' %}
+        <div class="l-content">
+
+            <div class="l-breadcrumbs page_header">
+                {% include 'items/_item-breadcrumb.twig' %}
+            </div>
+
+            {% if record.hero is not empty %}
+            <section class="block-content-header">
+                <div class="grid_wrapper">
+                    <div class="grid">
+                        <div class="contents">
+                            {{ record.hero }}
+                        </div>
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+
+            <div class="maincontent">
+                <div class="textcontent prose">
+                    <h1 class="title">{{ record.title }}</h1>
+                    <p class="intro">{{ record.intro }}</p>
+                    {{ record.body|raw }}
+                    {% if record.filelist_downloads|length > 3 %}
+                        {{ file_browser({'mode': 'list', 'root': record.filelist_downloads}) }}
+                    {% endif %}
+
+
+                    <section><p>Dataset provided by <a href="{{ record.provided_by_link }}">{{ record.provided_by }}</a>.
+                    {% if record.contact_email!="" %}
+                        &nbsp;Contact <a href="mailto:{{ record.contact_email|raw }}">{{ record.contact_email }}</a> for more details.
+                    {% endif %}
+                    </p></section>
+                    <div class="section next-actions">
+                        <h4>View this item in:</h4>
+                        <a title="View in the API Console" class="btn" href="{{ record.apiconsolelink }}">API Console</a>
+                        <a title="View the portal" class="btn" href="{{ record.portallink }}">Portal</a>
+                    </div>
+                    <div class="section item-meta-secondary">
+                        {# set date #}
+                        {% include 'items/_item-date.twig' %}
+                        {# set tags #}
+                        {% include 'items/_item-tags.twig' %}
+                    </div>
+
+
+
+                </div>
+
+                {#
+                    filelist section
+                #}
+                {% if record.filelist_files %}
+                <div class="section files">
+                    <h2>{{ record.contenttype.fields.filelist_files.label }}</h2>
+                    {% include 'items/_item-filelist-detail.twig' with { filelist: record.filelist_files } %}
+                </div>
+                {% endif %}
+
+                {#
+                    include image grid with page record
+                #}
+                {% include 'items/_item-imagegrid.twig' with { record: record} %}
+
+
+                {#
+                    include related items
+                #}
+                {% if not record.hide_related_section %}
+                    {% include 'items/_item-related.twig' with {title: "Next steps", short: false} %}
+                {% endif %}
+
+
+            </div>
+        </div><!--
+
+     --><div class="l-sidebar">
+             <div class="inner">
+
+                {% include 'items/_item-help.twig' with { records: contacts, title: "Need help?", use_secondary_mail: record.secondary_mail } %}
+
+                {% if record.support_navigation != "" %}
+        <div class="sticky-wrapper" id="undefined-sticky-wrapper" style="height: 364px;">
+                <ul class="nav_tertiary js-sticky">
+                    {{ record.support_navigation|raw }}
+                </ul>
+        </div>
+                {% endif %}
+
+            </div>
+
+        </div>
+    </div>
+    <!-- End grid -->
+</div>
+</main>
+<!-- End Content -->
+
+{% include '_footer.twig' %}
