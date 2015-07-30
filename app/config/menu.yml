@@ -1,7 +1,7 @@
 primary:
-  - label: 'Home'
-    title: 'Europeana Labs home'
-    path: /
+  # - label: 'Home'
+  #   title: 'Europeana Labs home'
+  #   path: /
   - label: 'APIs'
     title: 'Documentation for the Europeana API'
     path: /api
