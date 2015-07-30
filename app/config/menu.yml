@@ -11,12 +11,12 @@ primary:
   - label: 'Data'
     path: /data
     title: 'Open datasets for re-use'
-  - label: 'Blog'
-    path: /blog
-    title: 'Europeana Labs blog'
-  - label: 'Events'
-    path: /events
-    title: 'Europeana Labs blog'
+  # - label: 'Blog'
+  #   path: /blog
+  #   title: 'Europeana Labs blog'
+  # - label: 'Events'
+  #   path: /events
+  #   title: 'Europeana Labs blog'
   - label: 'Incubation'
     path: /incubation
     title: 'Business incubation from Europeana'
