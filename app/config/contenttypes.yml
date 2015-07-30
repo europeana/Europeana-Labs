@@ -1069,7 +1069,7 @@ footers:
       height: 300px
     linklist-right:
       type: html
-      required: true
+      # required: true
       label: "Linklist right (required):"
       height: 300px
     mission:
