@@ -542,6 +542,10 @@ pages:
       type: checkbox
       label: "Show secondary email instead:"
       group: "Page Options"
+    hide_list:
+      type: checkbox
+      label: "Hide from list views:"
+      postfix: "Check to hide this page from overview."
     hide_related:
       type: checkbox
       label: "Hide from related content:"
