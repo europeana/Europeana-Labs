@@ -3,15 +3,17 @@
 
     <head>
 
-        {% if curtitle is defined %}
-            {% set title = curtitle %}
+        {% if app.request.get('_route') == "homepage" %}
+            {% set title =  app.config.get('general/sitename') ~ ' - Home' %}
+        {% elseif curtitle is defined %}
+            {% set title = curtitle ~ ' - ' ~ app.config.get('general/sitename') %}
         {% elseif record is defined %}
-            {% set title = record.title|striptags %}
+            {% set title = record.title|striptags ~ ' - ' ~ app.config.get('general/sitename') %}
         {% elseif records is defined %}
-            {% set title = records|first.contenttype.name %}
+            {% set title = records|first.contenttype.name ~ ' - ' ~ app.config.get('general/sitename') %}
         {% endif %}
 
-        <title>{{ title|striptags }} - {{ app.config.get('general/sitename') }}</title>
+        <title>{{ title|striptags }}</title>
 
         {% include 'items/_item-meta-open-graph.twig' %}
 
@@ -55,6 +57,8 @@
 
 
     <!-- Super global navigation -->
+
+    {{ dump(app.request.get('_route'))}}
 
     <header class="header">
 
