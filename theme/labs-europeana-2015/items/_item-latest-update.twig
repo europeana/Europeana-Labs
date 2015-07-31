@@ -1,19 +1,19 @@
 {% if latestrecord is defined %}
-    --><div class="l-post"><!--
-        --><div class="block block-inset {{ latestrecord['flagcat'] }} "><!--
-            --><a href="{{ latestrecord['url'] }}" class="inner"><!--
-                --><div class="b-thumb"><!--
-                    --><img src="{{ latestrecord['imgsrc'] }}" alt="4x3 Image" /><!--
+    <div class="l-post">
+        <div class="block block-inset {{ latestrecord['flagcat'] }} ">
+            <a href="{{ latestrecord['url'] }}" class="inner">
+                <div class="b-thumb">
+                    <img src="{{ latestrecord['imgsrc'] }}" alt="4x3 Image" />
 
-                    --><div class="b-text"><!--
-                        --><h2 class="headline">{{ latestrecord['title'] }}</h2><!--
-                    --></div><!--
-                    --><div class="category-flag">{{ latestrecord['flagtitle'] }}</div><!--
-                --></div><!--
-                --><div class="excerpt"><!--
-                    --><p>{{ latestrecord['teaser'] }}</p><!--
-                --></div><!--
-            --></a><!--
-        --></div><!--
-    --></div><!--
+                    <div class="b-text">
+                        <h2 class="headline">{{ latestrecord['title'] }}</h2>
+                    </div>
+                    <div class="category-flag">{{ latestrecord['flagtitle'] }}</div>
+                </div>
+                <div class="excerpt">
+                    <p>{{ latestrecord['teaser'] }}</p>
+                </div>
+            </a>
+        </div>
+    </div>
 {% endif %}

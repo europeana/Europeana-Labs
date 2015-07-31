@@ -33,7 +33,14 @@
                     {% if record.filelist_downloads|length > 3 %}
                         {{ file_browser({'mode': 'list', 'root': record.filelist_downloads}) }}
                     {% endif %}
+
                 </div>
+
+                    <div class="section item-meta-secondary">
+
+                        {# set discus comments #}
+                        {% include 'items/_item-comments-link.twig' %}
+                    </div>
 
                 {#
                     filelist section
@@ -57,6 +64,10 @@
                 {% if not record.hide_related_section %}
                     {% include 'items/_item-related.twig' with {title: "Next steps", short: false} %}
                 {% endif %}
+
+                <aside>
+                    {% include 'items/_item-comments.twig' %}
+                </aside>
 
 
             </div>
