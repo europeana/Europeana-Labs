@@ -41,7 +41,8 @@
         {#
             default record view
         #}
-        {% else %}
+        {% elseif record.contenttype.name not in [ 'Events', 'Publications', 'Pages' ] %}
+
             <li><a href="{{ paths.root }}{{ record.contenttype.slug }}">{{ record.contenttype.name }}</a></li>
         {% endif %}
 
