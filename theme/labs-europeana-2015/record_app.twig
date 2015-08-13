@@ -3,32 +3,51 @@
 
 <!-- Start content -->
 <main role="main" class="l-page">
-<div class="lc">
-    <!-- Start grid -->
-    <div class="grid-main">
 
-        <div class="l-content">
+<div class="l-breadcrumbs page_header">
+    {% include 'items/_item-breadcrumb.twig' %}
+</div>
 
-            <div class="l-breadcrumbs page_header">
-                {% include 'items/_item-breadcrumb.twig' %}
+{% if record.hero is not empty %}
+<section class="block-content-header">
+    <div class="grid_wrapper">
+        <div class="grid">
+            <div class="contents">
+                {{ record.hero }}
             </div>
+        </div>
+    </div>
+</section>
+{% endif %}
 
-            {% if record.hero is not empty %}
-            <section class="block-content-header">
-                <div class="grid_wrapper">
-                    <div class="grid">
-                        <div class="contents">
-                            {{ record.hero }}
-                        </div>
-                    </div>
+{% spaceless %}
+<section class="grid_wrapper">
+    <div class="grid">
+        <div class="main-content">
+            <div class="textcontent">
+
+                <div class="articleheader">
+
+                    <div class="item-meta-secondary">
+                        {% include 'items/_item-tags.twig' %}
+                        <span class="item-tags">
+
+                        <span class="item-comments">
+                            <svg class="icon icon-comments">
+                                <use xlink:href="#icon-comments"></use>
+                            </svg>
+
+                            {# set discus comments #}
+                            {% include 'items/_item-comments-link.twig' %}
+
+                        </span>
                 </div>
-            </section>
-            {% endif %}
 
-            <div class="maincontent">
-                <div class="textcontent prose">
-                    <h1 class="title">{{ record.title }}</h1>
+                </div>
+
+                <div class="prose">
                     <p class="intro">{{ record.intro }}</p>
+
                     {{ record.body|raw }}
                     {% if record.filelist_downloads|length > 3 %}
                         {{ file_browser({'mode': 'list', 'root': record.filelist_downloads}) }}
@@ -36,11 +55,6 @@
 
                 </div>
 
-                    <div class="section item-meta-secondary">
-
-                        {# set discus comments #}
-                        {% include 'items/_item-comments-link.twig' %}
-                    </div>
 
                 {#
                     filelist section
@@ -65,33 +79,30 @@
                     {% include 'items/_item-related.twig' with {title: "Next steps", short: false} %}
                 {% endif %}
 
-                <aside>
-                    {% include 'items/_item-comments.twig' %}
-                </aside>
-
 
             </div>
-        </div><!--
+        </div>
 
-     --><div class="l-sidebar">
-             <div class="inner">
+        <div class="sidebar">
+
+            <div class="inner js-getstickywidth">
 
                 {% include 'items/_item-help.twig' with { records: contacts, title: "Need help?", use_secondary_mail: record.secondary_mail } %}
 
                 {% if record.support_navigation != "" %}
-        <div class="sticky-wrapper" id="undefined-sticky-wrapper" style="height: 364px;">
-                <ul class="nav_tertiary js-sticky">
-                    {{ record.support_navigation|raw }}
-                </ul>
-        </div>
+                    <div class="sticky-wrapper" id="undefined-sticky-wrapper" style="height: 364px;">
+                        <ul class="nav_tertiary js-sticky">
+                            {{ record.support_navigation|raw }}
+                        </ul>
+                    </div>
                 {% endif %}
 
             </div>
 
         </div>
-    </div>
-    <!-- End grid -->
-</div>
+</section>
+{% endspaceless %}
+
 </main>
 <!-- End Content -->
 

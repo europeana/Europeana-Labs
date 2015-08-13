@@ -6,11 +6,12 @@
 
 {% if usetags is defined %}
     {% set uselist = usetags %}
-{% else %}
-    {% if record.taxonomy.tags is defined  %}
-        {% set uselist = record.taxonomy.tags %}
-    {% endif %}
+{% elseif record.taxonomy.appcategories is not empty  %}
+    {% set uselist = record.taxonomy.appcategories %}
+{% elseif record.taxonomy.tags is not empty  %}
+    {% set uselist = record.taxonomy.tags %}
 {% endif %}
+
 
 {% if uselist is defined or usecategories is defined %}
 <span class="item-tags">
