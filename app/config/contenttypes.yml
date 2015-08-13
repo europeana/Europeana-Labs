@@ -554,6 +554,8 @@ pages:
       type: checkbox
       label: "Hide related content section:"
       postfix: "Check to hide the related content section."
+    templateselect:
+      type: templateselect
     files:
       type: filelist
       required: false
