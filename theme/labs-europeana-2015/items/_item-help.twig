@@ -9,7 +9,7 @@
 
     <div class="help-contact">
 
-        <h4>NEED HELP?</h4>
+        <h4>{{ title|default("NEED HELP?") }}</h4>
         {% for person in records %}
 
             {% set personlink = structurelink(person) %}
