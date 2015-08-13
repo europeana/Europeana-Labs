@@ -71,16 +71,17 @@
                 #}
                 {% include 'items/_item-imagegrid.twig' with { record: record} %}
 
-
-                {#
-                    include related items
-                #}
-                {% if not record.hide_related_section %}
-                    {% include 'items/_item-related.twig' with {title: "Next steps", short: false} %}
-                {% endif %}
-
-
             </div>
+
+            {#
+                include related items
+            #}
+            {% if not record.hide_related_section %}
+                {% include 'items/_item-related.twig' with {title: "Next steps", short: false} %}
+            {% endif %}
+
+
+
         </div>
 
         <div class="sidebar">

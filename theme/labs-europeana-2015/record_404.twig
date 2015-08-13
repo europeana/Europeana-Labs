@@ -1,0 +1,65 @@
+{% include '_header.twig' %}
+{% set contacts = record.related('persons') %}
+
+<!-- Start content -->
+<main role="main" class="l-page">
+
+<div class="l-breadcrumbs page_header">
+    {% include 'items/_item-breadcrumb.twig' %}
+</div>
+
+<section class="grid_wrapper">
+    <div class="grid">
+        <div class="main-content content">
+            <div class="textcontent content-pad">
+
+                <div class="articleheader">
+
+                    <h1 class="title">{{ record.title }}</h1>
+
+                    </div>
+
+                <div class="prose">
+                    <p class="intro">{{ record.intro }}</p>
+                    {{ record.body|raw }}
+                    {% if record.filelist_downloads|length > 3 %}
+                        {{ file_browser({'mode': 'list', 'root': record.filelist_downloads}) }}
+                    {% endif %}
+                </div>
+            </div>
+
+
+            {% if not record.hide_related_section %}
+                {% include 'items/_item-related.twig' with {title: "Next steps", short: false} %}
+            {% endif %}
+
+        </div><!--
+
+     --><div class="sidebar">
+
+            <div class="inner-pad">
+                    <div class="help-contact">
+
+                        {% include 'items/_item-help.twig' with { records: contacts, title: "Questions?", use_secondary_mail: record.secondary_mail } %}
+
+                        {% if record.support_navigation != "" %}
+                        <div class="sticky-wrapper" id="undefined-sticky-wrapper" style="height: 364px;">
+                                <ul class="nav_tertiary js-sticky">
+                                    {{ record.support_navigation|raw }}
+                                </ul>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+
+          </div>
+
+    </div>
+</section>
+
+
+</main>
+<!-- End Content -->
+
+{% include '_footer.twig' %}
