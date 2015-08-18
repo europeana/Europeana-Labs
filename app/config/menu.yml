@@ -20,9 +20,9 @@ primary:
   - label: 'Incubation'
     path: /incubation
     title: 'Business incubation from Europeana'
-  - label: 'Support'
-    path: /support
-    title: 'Support for users of the API and Europeana Labs'
+  # - label: 'Support'
+  #   path: /support
+  #   title: 'Support for users of the API and Europeana Labs'
 
 footer:
   - title: Home
