@@ -304,7 +304,7 @@ class Extension extends \Bolt\BaseExtension
         else if ($record->contenttype['slug'] === 'structures') {
             return "/$selfSlug";
         }
-        else if ($record != false ) {
+        else if ($record instanceof \Bolt\Content) {
             return $record->link();
         } else {
             return;
