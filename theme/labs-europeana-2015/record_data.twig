@@ -54,6 +54,31 @@
                         {{ file_browser({'mode': 'list', 'root': record.filelist_downloads}) }}
                     {% endif %}
 
+                    <section><p>Dataset provided by <a href="{{ record.provided_by_link }}">{{ record.provided_by }}</a>.
+                    {% if record.contact_email!="" %}
+                        &nbsp;Contact <a href="mailto:{{ record.contact_email|raw }}">{{ record.contact_email }}</a> for more details.
+                    {% endif %}
+                    </p></section>
+
+
+                    <div class="section next-actions">
+                        <h4>View this item in:</h4>
+                        <a title="View in the API Console" class="btn" href="{{ record.apiconsolelink }}">API Console</a>&nbsp;
+                        <a title="View the portal" class="btn" href="{{ record.portallink }}">Portal</a>
+                    </div>
+
+                    <div class="section item-meta-secondary">
+                        {# set date #}
+                        {% include 'items/_item-date.twig' %}
+
+                        {# set tags #}
+                        {% include 'items/_item-tags.twig' %}
+
+                        {# set discus comments #}
+                        {% include 'items/_item-comments-link.twig' %}
+                    </div>
+
+
                 </div>
 
 
@@ -69,26 +94,6 @@
 
 
 
-                <section><p>Dataset provided by <a href="{{ record.provided_by_link }}">{{ record.provided_by }}</a>.
-                {% if record.contact_email!="" %}
-                    &nbsp;Contact <a href="mailto:{{ record.contact_email|raw }}">{{ record.contact_email }}</a> for more details.
-                {% endif %}
-                </p></section>
-                <div class="section next-actions">
-                    <h4>View this item in:</h4>
-                    <a title="View in the API Console" class="btn" href="{{ record.apiconsolelink }}">API Console</a>
-                    <a title="View the portal" class="btn" href="{{ record.portallink }}">Portal</a>
-                </div>
-                <div class="section item-meta-secondary">
-                    {# set date #}
-                    {% include 'items/_item-date.twig' %}
-
-                    {# set tags #}
-                    {% include 'items/_item-tags.twig' %}
-
-                    {# set discus comments #}
-                    {% include 'items/_item-comments-link.twig' %}
-                </div>
 
 
                 {#
