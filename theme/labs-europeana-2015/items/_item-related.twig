@@ -53,10 +53,10 @@
     {% endif %}
 
     {% set records = relatedContents %}
-    {% set title = 'YOU MIGHT ALSO LIKE:' %}
+    {% set title = title|default('YOU MIGHT ALSO LIKE:') %}
 {% else %}
     {% setcontent records = 'blogposts/latest/3' %}
-    {% set title = 'Things you may find interesting:' %}
+    {% set title = title|default('Things you may find interesting:') %}
 {% endif %}
 
 

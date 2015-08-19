@@ -388,6 +388,10 @@ blog:
     slug:
       type: slug
       uses: title
+    intro:
+      type: textarea
+      label: "Intro:"
+      height: 150px
     # Shown on Blog page
     body:
       type: html

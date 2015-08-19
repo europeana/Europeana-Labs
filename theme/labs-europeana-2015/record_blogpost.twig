@@ -11,17 +11,16 @@
     {% include 'items/_item-breadcrumb.twig' %}
 </div>
 
-{% if record.hero is not empty %}
 <section class="block-content-header">
     <div class="grid_wrapper">
         <div class="grid">
             <div class="contents">
-                {{ record.hero }}
+                <h1 class="title">{{ record.title }}</h1>
+                <h3 class="subhead">{{ record.intro }}</h3>
             </div>
         </div>
     </div>
 </section>
-{% endif %}
 
 {% spaceless %}
 <section class="grid_wrapper">
@@ -30,8 +29,6 @@
             <div class="textcontent">
 
                 <div class="articleheader">
-
-                    <h1 class="title">{{ blogpost.title }}</h1>
 
                     <div class="item-meta-primary">
 

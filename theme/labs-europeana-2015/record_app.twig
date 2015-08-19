@@ -8,17 +8,16 @@
     {% include 'items/_item-breadcrumb.twig' %}
 </div>
 
-{% if record.hero is not empty %}
 <section class="block-content-header">
     <div class="grid_wrapper">
         <div class="grid">
             <div class="contents">
-                {{ record.hero }}
+                <h1 class="title">{{ record.title }}</h1>
+                <h3 class="subhead">{{ record.intro }}</h3>
             </div>
         </div>
     </div>
 </section>
-{% endif %}
 
 {% spaceless %}
 <section class="grid_wrapper">
@@ -46,7 +45,7 @@
                 </div>
 
                 <div class="prose">
-                    <p class="intro">{{ record.intro }}</p>
+                    {# <p class="intro">{{ record.intro }}</p> #}
 
                     {{ record.body|raw }}
                     {% if record.filelist_downloads|length > 3 %}
@@ -71,13 +70,42 @@
                 #}
                 {% include 'items/_item-imagegrid.twig' with { record: record} %}
 
+                <div class="item-meta-secondary">
+                    {% for link in [record.link1, record.link2, record.link3] %}
+                        {% if loop.first %}
+                            <span class="item-comments">
+                                    <svg class="icon icon-home">
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-home"></use>
+                                    </svg>
+                                <p>{{ record.title }}</p>
+                            </span>
+                        {% endif %}
+
+                        {% if link is not empty %}
+                        <span class="item-comments">
+                            <svg class="icon icon-external-link">
+                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-external-link"></use>
+                            </svg>
+                            <a href="{{ link }}">{{ link|replace({'http://': '', 'https://': '', })|excerpt(36) }}</a>
+                        </span>
+                        {% endif %}
+
+                    {% endfor %}
+
             </div>
+
+            </div>
+
+            <aside>
+                {% include 'items/_item-comments.twig' %}
+            </aside>
+
 
             {#
                 include related items
             #}
             {% if not record.hide_related_section %}
-                {% include 'items/_item-related.twig' with {title: "Next steps", short: false} %}
+                {% include 'items/_item-related.twig' with {title: "Next steps:", short: false} %}
             {% endif %}
 
 
@@ -88,7 +116,7 @@
 
             <div class="inner js-getstickywidth">
 
-                {% include 'items/_item-help.twig' with { records: contacts, title: "Need help?", use_secondary_mail: record.secondary_mail } %}
+                {% include 'items/_item-help.twig' with { records: contacts, title: "Questions?", use_secondary_mail: record.secondary_mail } %}
 
                 {% if record.support_navigation != "" %}
                     <div class="sticky-wrapper" id="undefined-sticky-wrapper" style="height: 364px;">

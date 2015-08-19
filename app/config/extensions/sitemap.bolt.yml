@@ -1,6 +1,6 @@
 # sitemap settings
 
-template: assets/sitemap.twig
+template: sitemap.twig
 xml_template: assets/sitemap_xml.twig
 
 ignore:
