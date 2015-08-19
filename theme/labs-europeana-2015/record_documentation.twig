@@ -1,25 +1,49 @@
 {% include '_header.twig' %}
 {% spaceless %}
 
-	<main role="main">
-		<section class="block-content-header">
-			<div class="grid_wrapper">
-			<div class="grid">
-				<div class="contents">
-					<h1 class="title">{{ record.title }}</h1>
-					<p class="subhead">{{ record.intro }}</p>
-				</div>
-			</div>
-			</div>
-		</section>
+<main role="main" class="l-page">
 
-		<div class="lc">
-			<div class="grid grid--rev">
-				<div class="main-content prose" id="documentation">{{ record.body|raw }}</div>
-				<div class="sidebar">{% if record.support_navigation != "" %}{{ record.support_navigation|raw }}{% endif %}</div>
+<div class="l-breadcrumbs page_header">
+    {% include 'items/_item-breadcrumb.twig' %}
+</div>
+
+
+	<section class="block-content-header">
+		<div class="grid_wrapper">
+		<div class="grid">
+			<div class="contents">
+				<h1 class="title">{{ record.title }}</h1>
+				<p class="subhead">{{ record.intro }}</p>
 			</div>
 		</div>
-	</main>
+		</div>
+	</section>
+
+	<div class="lc">
+		<div class="grid grid--rev">
+
+	        <div class="sidebar">
+
+	            <div class="inner js-getstickywidth">
+
+	                {% include 'items/_item-help.twig' with { records: contacts, title: "Questions?", use_secondary_mail: record.secondary_mail } %}
+
+	                {% if record.support_navigation != "" %}
+	                    <div class="sticky-wrapper" id="undefined-sticky-wrapper" style="height: 364px;">
+	                        <ul class="nav_tertiary js-sticky">
+	                            {{ record.support_navigation|raw }}
+	                        </ul>
+	                    </div>
+	                {% endif %}
+
+	            </div>
+
+	        </div>
+
+			<div class="main-content prose" id="documentation">{{ record.body|raw }}</div>
+		</div>
+	</div>
+</main>
 
 {% endspaceless %}
 {% include '_footer.twig' %}
