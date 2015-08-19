@@ -21,16 +21,14 @@
 
 <section class="grid_wrapper">
     <div class="grid">
-        <div class="main-content content">
-            <div class="textcontent content-pad">
+        <div class="main-content ">
+            <div class="textcontent prose">
 
-                <div class="prose">
-                    {# <p class="intro">{{ record.teaser }}</p> #}
-                    {{ record.body|raw }}
-                    {% if record.filelist_downloads|length > 3 %}
-                        {{ file_browser({'mode': 'list', 'root': record.filelist_downloads}) }}
-                    {% endif %}
-                </div>
+                {# <p class="intro">{{ record.teaser }}</p> #}
+                {{ record.body|raw }}
+                {% if record.filelist_downloads|length > 3 %}
+                    {{ file_browser({'mode': 'list', 'root': record.filelist_downloads}) }}
+                {% endif %}
             </div>
 
 
@@ -42,7 +40,7 @@
 
      --><div class="sidebar">
 
-            <div class="inner-pad">
+            <div class="inner">
                     <div class="help-contact">
 
                         {% include 'items/_item-help.twig' with { records: contacts, title: "Questions?", use_secondary_mail: record.secondary_mail } %}
