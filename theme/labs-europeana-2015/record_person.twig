@@ -15,13 +15,26 @@
     {% include 'items/_item-breadcrumb.twig' %}
 </div>
 
-<div class="lc">
+
+{# <section class="block-content-header">
+    <div class="grid_wrapper">
+    <div class="grid">
+        <div class="contents">
+            <h1 class="title">{{ record.title }}</h1>
+            <p class="subhead">{{ record.intro }}</p>
+        </div>
+    </div>
+    </div>
+</section> #}
+
+<div class="lc" style="margin-top: 3.2rem;">
     <!-- Start grid -->
     <div class="grid-main">
         <div class="l-content">
 
+            <div class="textcontent">
 
-                {% if record.department is iterable %}
+                {% if 1 or record.department is iterable %}
                 <h1 class="title">Europeana Staff</h1>
                 {% else %}
                 <h1 class="title">{{ record.department }}</h1>
@@ -138,6 +151,8 @@
                     </ul>
                 </div>
                 {% endif %}
+
+            </div>
 
         </div><div class="l-sidebar">
             <div class="inner">
