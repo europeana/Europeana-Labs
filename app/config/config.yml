@@ -10,10 +10,13 @@ payoff: The Europeana Labs website
 theme: labs-europeana-2015
 
 # Stylesheets for europeana.
+# The environment should be either `prod`, `beta` or `dev`. Prod is used for
+# labs.europeana.eu. Beta for labs-beta.europeana.eu, and dev for all other environments
+# Edit the setting for config_local.yml in /data/EuropeanaLabs/shared/config/database.yml
 stylesheet:
-  prod: http://develop.styleguide.eanadev.org/css/labs/screen.css?1435962463
-  dev: http://develop.styleguide.eanadev.org/css/labs/screen.css?1435962463
-  beta: http://develop.styleguide.eanadev.org/css/labs/screen.css?1435962463
+  prod: http://styleguide.europeana.eu/css/labs/screen.css
+  dev: http://develop.styleguide.eanadev.org/css/labs/screen.css
+  beta: http://develop.styleguide.eanadev.org/css/labs/screen.css
 
 # The locale that'll be used by the application. If no locale is set the
 # fallback locale is 'en_GB'. For available options, see: http://docs.bolt.cm/locales
