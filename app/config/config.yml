@@ -9,6 +9,12 @@ payoff: The Europeana Labs website
 # they _will_ get updated in next releases
 theme: labs-europeana-2015
 
+# Stylesheets for europeana.
+stylesheet:
+  prod: http://develop.styleguide.eanadev.org/css/labs/screen.css?1435962463
+  dev: http://develop.styleguide.eanadev.org/css/labs/screen.css?1435962463
+  beta: http://develop.styleguide.eanadev.org/css/labs/screen.css?1435962463
+
 # The locale that'll be used by the application. If no locale is set the
 # fallback locale is 'en_GB'. For available options, see: http://docs.bolt.cm/locales
 locale: en_GB
