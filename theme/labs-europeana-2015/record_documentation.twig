@@ -29,11 +29,9 @@
 	                {% include 'items/_item-help.twig' with { records: contacts, title: "Questions?", use_secondary_mail: record.secondary_mail } %}
 
 	                {% if record.support_navigation != "" %}
-	                    <div class="sticky-wrapper" id="undefined-sticky-wrapper" style="height: 364px;">
-	                        <ul class="nav_tertiary js-sticky">
-	                            {{ record.support_navigation|raw }}
-	                        </ul>
-	                    </div>
+	                    <ul class="nav_tertiary js-sticky">
+	                        {{ record.support_navigation|raw }}
+	                    </ul>
 	                {% endif %}
 
 	            </div>
