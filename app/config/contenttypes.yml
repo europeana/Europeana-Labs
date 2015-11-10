@@ -1093,7 +1093,7 @@ footers:
       label: "Linklist others (required):"
       height: 300px
   relations:
-    places:
+    locations:
       label: "Location:"
       multiple: false
   viewless: true
