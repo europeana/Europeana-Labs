@@ -15,8 +15,8 @@ theme: labs-europeana-2015
 # Edit the setting for config_local.yml in /data/EuropeanaLabs/shared/config/database.yml
 stylesheet:
   prod: http://styleguide.europeana.eu/v/0.1/css/labs/screen.css
-  dev: http://styleguide.europeana.eu/v/0.1/css/labs/screen.css
-  beta: http://styleguide.europeana.eu/v/0.1/css/labs/screen.css
+  dev: http://develop.styleguide.eanadev.org/v/0.1/css/labs/screen.css
+  beta: http://develop.styleguide.eanadev.org/v/0.1/css/labs/screen.css
 
 # The locale that'll be used by the application. If no locale is set the
 # fallback locale is 'en_GB'. For available options, see: http://docs.bolt.cm/locales
