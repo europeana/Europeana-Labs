@@ -26,7 +26,7 @@
 
 	            <div class="inner js-getstickywidth">
 
-	                {% include 'items/_item-help.twig' with { records: contacts, title: "Questions?", use_secondary_mail: record.secondary_mail } %}
+	                {% include 'items/_item-help.twig' with { records: contacts|default(null), title: "Questions?", use_secondary_mail: record.secondary_mail } %}
 
 	                {% if record.support_navigation != "" %}
 	                    <ul class="nav_tertiary js-sticky">
