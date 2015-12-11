@@ -11,6 +11,7 @@ return array(
     'Bolt\\Extension\\Bolt\\RSSFeed\\Controller' => $vendorDir . '/bolt/rssfeed/src/Controller.php',
     'Bolt\\Extension\\Bolt\\RSSFeed\\Extension' => $vendorDir . '/bolt/rssfeed/Extension.php',
     'Bolt\\Extension\\Bolt\\Sitemap\\Extension' => $vendorDir . '/bolt/sitemap/Extension.php',
+    'Bolt\\Extension\\Europeana\\ApiKeyHelper\\Extension' => $baseDir . '/local/europeana/apikey-helper/Extension.php',
     'Bolt\\Extension\\Europeana\\FileHelper\\Extension' => $baseDir . '/local/europeana/file-helper/Extension.php',
     'Bolt\\Extension\\Europeana\\GoogleSearch\\Extension' => $baseDir . '/local/europeana/google-search/Extension.php',
     'Bolt\\Extension\\Europeana\\StructureTree\\Extension' => $baseDir . '/local/europeana/structure-tree/Extension.php',
