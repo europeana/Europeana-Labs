@@ -196,7 +196,7 @@ class Extension extends BaseExtension
 
             $request = $client->createRequest('POST', $url, $postoptions);
             $request->addHeader('X-Test', 'testing');
-            if(!empty($options['cookies'] && $options['cookies']['JSESSIONID']) {
+            if(!empty($options['cookies']) && $options['cookies']['JSESSIONID']) {
                 $request->addHeader('Cookie', 'JSESSIONID='.$options['cookies']['JSESSIONID']);
             }
             $response = $client->send($request);
