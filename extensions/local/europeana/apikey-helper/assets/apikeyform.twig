@@ -1,0 +1,27 @@
+<form action="{{ destination }}" class="{{ value.classes|default('contact-form') }}" method="POST">
+    <fieldset>
+        {% for key, value in fields %}
+        <div class="{{ value.classes|default('field-container') }}">
+            <label for="{{ key }}"{% if value.error is not empty %} class="error"{% endif %}>{{ value.label }}{% if value.required == true %}
+                <abbr title="Required">*</abbr>{% endif %}</label>
+            <input
+                id="{{ key }}" 
+                name="{{ key }}" 
+                type="{{ value.type }}" 
+                {% if value.postedValue is not empty %}
+                    value="{{ value.postedValue }}"
+                {% else %}
+                    placeholder="{{ value.placeholder }}"
+                {% endif %}
+                {% if value.error is not empty %} class="is-error"{% endif %}
+            />
+            {% if value.error is not empty %}
+            <p class="is-error">{{ value.error }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <fieldset class="submit-contact">
+            <input type="submit" value="{{ submit.label }}" />
+        </fieldset>
+    </fieldset>
+</form>

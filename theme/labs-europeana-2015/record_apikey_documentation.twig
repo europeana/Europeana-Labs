@@ -1,0 +1,51 @@
+{% include '_header.twig' %}
+{% spaceless %}
+
+<main role="main" class="l-page">
+
+<div class="l-breadcrumbs page_header">
+    {% include 'items/_item-breadcrumb.twig' %}
+</div>
+
+
+	<section class="block-content-header">
+		<div class="grid_wrapper">
+		<div class="grid">
+			<div class="contents">
+				<h1 class="title">{{ record.title }}</h1>
+				<h3>{{ record.intro }}</h3>
+			</div>
+		</div>
+		</div>
+	</section>
+
+	<div class="lc">
+		<div class="grid grid--rev">
+
+	        <div class="sidebar">
+
+	            <div class="inner js-getstickywidth">
+
+	                {% include 'items/_item-help.twig' with { records: contacts|default(null), title: "Questions?", use_secondary_mail: record.secondary_mail } %}
+
+	                {% if record.support_navigation != "" %}
+	                    <ul class="nav_tertiary js-sticky">
+	                        {{ record.support_navigation|raw }}
+	                    </ul>
+	                {% endif %}
+
+	            </div>
+
+	        </div>
+
+			<div class="main-content prose" id="documentation">
+				{{ apikeyform([null])|default('ẃhóøops') }}
+
+				{{ record.body|raw }}
+			</div>
+		</div>
+	</div>
+</main>
+
+{% endspaceless %}
+{% include '_footer.twig' %}

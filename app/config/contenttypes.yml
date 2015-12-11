@@ -1380,6 +1380,10 @@ documentation:
       type: image
       required: false
       label: "Teaser image:"
+    templateselect:
+      type: templateselect
+      filter: '*_documentation.twig'
+      default: 'record_documentation.twig'
     secondary_mail:
       type: checkbox
       label: "Show secondary email instead:"
