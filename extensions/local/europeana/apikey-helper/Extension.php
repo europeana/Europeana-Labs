@@ -74,7 +74,12 @@ class Extension extends BaseExtension
         if($this->posted && $this->valid_input) {
             $temp = $this->dispatchRemoteRequest();
             //dump($temp);
-            $html = $this->app['render']->render($template_thanks, array());
+            if($temp->success == true) {
+                $html = $this->app['render']->render($template_thanks, array());
+            } else {
+                $html = "<p>Something went wrong</p>";
+                dump($temp);
+            }
         } else {
             // add form error text to display
             if(!empty($this->form_errors)) {
@@ -134,6 +139,34 @@ class Extension extends BaseExtension
      * Call the remote request stuff with guzzle
      */
     protected function dispatchRemoteRequest()
+    {
+        $config = $this->config;
+
+        $ch = curl_init();
+        $request = 'http://'. $config['credentials']['fields']['j_username'] .':'. $config['credentials']['fields']['j_password'] .'@www.europeana.eu/api/admin/apikey';
+        //dump($request);
+
+        $postvars = $this->app['request']->request->all();
+        //dump($postvars);
+
+        curl_setopt($ch, CURLOPT_URL,            $request);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 );
+        curl_setopt($ch, CURLOPT_HEADER,         false );
+        curl_setopt($ch, CURLOPT_POST,           1 );
+        curl_setopt($ch, CURLOPT_POSTFIELDS,     json_encode($postvars, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) );
+        curl_setopt($ch, CURLOPT_HTTPHEADER,     array('Content-Type: application/json'));
+        //dump($ch);
+
+        $returnvalue = curl_exec($ch);
+        //dump($returnvalue);
+
+        return json_decode($returnvalue);
+    }
+
+    /**
+     * Call the remote request stuff with guzzle
+     */
+    protected function dispatchRemoteRequestOauth()
     {
         $config = $this->config;
        
