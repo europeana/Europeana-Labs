@@ -72,12 +72,16 @@ class Extension extends BaseExtension
         }
 
         if($this->posted && $this->valid_input) {
+            // TODO: implement the new api when it is available
+            //$temp = $this->dispatchRemoteRequestAuth();
+
             $temp = $this->dispatchRemoteRequest();
             //dump($temp);
             if($temp->success == true) {
                 $html = $this->app['render']->render($template_thanks, array());
             } else {
                 $html = "<p>Something went wrong</p>";
+                // TODO: remove the debugging stuff
                 dump($temp);
             }
         } else {
@@ -136,7 +140,7 @@ class Extension extends BaseExtension
     }
 
     /**
-     * Call the remote request stuff with guzzle
+     * Call the remote request with curl
      */
     protected function dispatchRemoteRequest()
     {
@@ -164,9 +168,9 @@ class Extension extends BaseExtension
     }
 
     /**
-     * Call the remote request stuff with guzzle
+     * Call the remote request in multistep with guzzle
      */
-    protected function dispatchRemoteRequestOauth()
+    protected function dispatchRemoteRequestAuth()
     {
         $config = $this->config;
        
