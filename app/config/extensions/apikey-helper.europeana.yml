@@ -26,9 +26,9 @@ form:
     submit:
         label: Request key
 credentials:
-    base_uri: http://europeana.eu/api/
-    login_url: http://europeana.eu/api/login.do
-    destination: http://europeana.eu/api/apikey
+    base_uri: http://www.europeana.eu/api/
+    login_url: http://www.europeana.eu/api/login.do
+    destination: http://www.europeana.eu/api/apikey
     fields:
         j_username: 'g28FUkrNn'
         j_password: '8opYjAgs8'
