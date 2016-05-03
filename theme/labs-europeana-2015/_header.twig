@@ -23,6 +23,9 @@
 
         <!-- google verification -->
         <meta name="google-site-verification" content="QWAXJTR-3xVfop_J2LUQNmrocsLfTxQtVEAly7f56bU" />
+        {% if app.config.get('general/environment')|default('prod') != 'prod' %}
+            <meta name="google-site-verification" content="0XaTXWYvkHwmr7_eliwcuwdN24kW5gihx7wLq3Jwdro" />
+        {% endif %}
 
         <link rel="Shortcut Icon" href="{{ paths.theme }}images/favicon.ico" />
         {% set stylesheet = app.config.get('general/stylesheet/'~ app.config.get('general/environment')|default('prod') ) %}
