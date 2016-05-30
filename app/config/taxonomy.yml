@@ -11,7 +11,7 @@ appthemes:
   singular_slug: type
   singular_name: Type
   behaves_like: categories
-  options: [Showcase, Tools, FLOSS]
+  options: [Showcase, Tools]
 
 appcategories:
   name: Theme
