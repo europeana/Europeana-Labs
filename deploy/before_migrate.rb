@@ -55,7 +55,7 @@ end
 
 # copy local configuration overrides to current site
 # run!("cp #{config.shared_path}/app/config/localconfig/*_local.yml #{config.release_path}/app/config/")
-run!("cp #{config.shared_path}/config/localconfig/extensions/*_local.yml #{config.release_path}/config/extensions/")
+run!("cp #{config.shared_path}/config/localconfig/extensions/*_local.yml #{config.release_path}/app/config/extensions/")
 
 # Make app/cache
 run!("mkdir app/cache")
