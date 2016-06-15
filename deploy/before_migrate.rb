@@ -22,18 +22,18 @@ if ey_db_config['environment'] === nil then
 end
 
 # turn this on later
-# ey_environment = nil
-# if ey_environment === nil then
-#     File.open("#{config.shared_path}/config/localconfig/environment.yml", "r") do |f|
-#         ey_environment = YAML.load(f)
-#     end
-#     info(YAML.dump(ey_environment))
-#     if ey_environment['environment'] === nil then
-#         warning("Database configuration file '#{config.shared_path}/config/localconfig/environment.yml' not found or invalid!")
-#     else
-#         ey_db_config['environment'] = ey_environment['environment']
-#     end
-# end
+ey_environment = nil
+if ey_environment === nil then
+    File.open("#{config.shared_path}/config/localconfig/environment.yml", "r") do |f|
+        ey_environment = YAML.load(f)
+    end
+    info(YAML.dump(ey_environment))
+    if ey_environment['environment'] === nil then
+        warning("Database configuration file '#{config.shared_path}/config/localconfig/environment.yml' not found or invalid!")
+    else
+        ey_db_config['environment'] = ey_environment['environment']
+    end
+end
 
 # Build Bolt config_local data structure
 my_db_config = {
