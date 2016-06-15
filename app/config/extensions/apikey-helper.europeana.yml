@@ -30,5 +30,5 @@ credentials:
     login_url: http://www.europeana.eu/api/login.do
     destination: http://www.europeana.eu/api/apikey
     fields:
-        j_username: 'g28FUkrNn'
-        j_password: '8opYjAgs8'
+        j_username: 'override in deploy scripts'
+        j_password: 'override in deploy scripts'
