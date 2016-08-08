@@ -14,7 +14,7 @@ theme: labs-europeana-2015
 # labs.europeana.eu. Beta for labs-beta.europeana.eu, and dev for all other environments
 # Edit the setting for config_local.yml in /data/EuropeanaLabs/shared/config/database.yml
 stylesheet:
-  prod: http://styleguide.europeana.eu/v/0.1/css/labs/screen.css
+  prod: https://europeana-styleguide-production.s3.amazonaws.com/v0.1/css/labs/screen.css
   dev: http://develop.styleguide.eanadev.org/v/0.1/css/labs/screen.css
   beta: http://develop.styleguide.eanadev.org/v/0.1/css/labs/screen.css
 
