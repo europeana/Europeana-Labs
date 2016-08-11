@@ -174,23 +174,24 @@ class Extension extends \Bolt\BaseExtension
         $default = $request->query->get('filter') ? 'checked' : '';
 
 
-        $this->app['twig.loader.filesystem']->addPath(__DIR__);
+        $context = [
+            'title'         => 'Search',
+            'tag'           => 'Search',
+            'cx'            => $this->cx,
+            'searchresults' => $records,
+            'resultsnum'    => $resultsNum,
+            'suggestion'    => $suggestion,
+            'query'         => $q,
+            'searchoptions' => $this->searchOptions,
+            'filteroptions' => $this->filterOptions,
+            'pager'         => $pager,
+            'sort'          => $sort,
+            'activeFilter'  => $activeFilter,
+        ];
 
-        $this->app['twig']->addGlobal('title', 'Search');
-        $this->app['twig']->addGlobal('tag', 'Search');
-        $this->app['twig']->addGlobal('cx', $this->cx);
-        $this->app['twig']->addGlobal('searchresults', $records);
-        $this->app['twig']->addGlobal('resultsnum', $resultsNum);
-        $this->app['twig']->addGlobal('suggestion', $suggestion);
-        $this->app['twig']->addGlobal('query', $q);
-        $this->app['twig']->addGlobal('searchoptions', $this->searchOptions);
-        $this->app['twig']->addGlobal('filteroptions', $this->filterOptions);
-        $this->app['twig']->addGlobal('pager', $pager);
-        $this->app['twig']->addGlobal('sort', $sort);
-        $this->app['twig']->addGlobal('activeFilter', $activeFilter);
 
 
-        $body = $this->app['render']->render($this->template);
+        $body = $this->app['render']->render($this->template, $context);
 
         return new Response($body, Response::HTTP_OK);
     }
