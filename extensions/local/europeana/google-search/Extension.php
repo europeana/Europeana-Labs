@@ -79,16 +79,17 @@ class Extension extends \Bolt\BaseExtension
     /**
      * build the search result
      *
-     * @return (Symfony\Component\HttpFoundation\Response)
+     * @param Request $request
      *
+     * @return Response
      */
-    public function googleSearch() {
-        $page = ( is_null($_GET['page']) ) ? 1 : $_GET['page'];
+    public function googleSearch(Request $request) {
+        $page = $request->query->getInt('page', 1);
         $start = ( ($page-1) * $this->resultsPerPage );
-        $sort = ( is_null($_GET['sort']) ) ? '' : $_GET['sort'];
+        $sort = $request->query->get('sort');
 
-        $q = $_GET['q'];
-        $defaultFilter = $_GET['filter'];
+        $q = $request->query->getInt('q', 1);
+        $defaultFilter = $request->query->get('filter');
         $query = urlencode($q);
 
         $filterOptions = '';
@@ -98,7 +99,7 @@ class Extension extends \Bolt\BaseExtension
         // search with the header search bar, all filter enabled
         if (!$defaultFilter) {
             foreach ($this->filterOptions as $key => $filter) {
-                if (!isset($_GET[($filter['name'])])) {
+                if ($request->query->has($filter['name'])) {
                     $this->filterOptions[$key]['checked'] = '';
                     $filterOptions .= $filter['filter'];
                 }
@@ -170,7 +171,7 @@ class Extension extends \Bolt\BaseExtension
 
 
         // params 'filter' is only set in global search
-        $default = ($_GET['filter']) ? 'checked' : '';
+        $default = $request->query->get('filter') ? 'checked' : '';
 
 
         $this->app['twig.loader.filesystem']->addPath(__DIR__);
@@ -191,6 +192,6 @@ class Extension extends \Bolt\BaseExtension
 
         $body = $this->app['render']->render($this->template);
 
-        return new Response($body, 200);
+        return new Response($body, Response::HTTP_OK);
     }
 }
