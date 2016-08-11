@@ -102,10 +102,10 @@ class Extension extends \Bolt\BaseExtension
                     $this->filterOptions[$key]['checked'] = '';
                     $filterOptions .= $filter['filter'];
                 }
-                else $activeFilter[] = $filter['name']; 
+                else $activeFilter[] = $filter['name'];
            }
         }
-        else $activeFilter[] = 'filter=on'; 
+        else $activeFilter[] = 'filter=on';
 
 
         //  add search filter to query
@@ -143,7 +143,7 @@ class Extension extends \Bolt\BaseExtension
                 $contenttype = (string) $item->xpath('PageMap/DataObject[@type="metatags"]/Attribute[@name="contenttype"]')[0]["value"];
 
                 // try to get content element by contenttype and slug
-                $content = $this->app['storage']->getContent($contenttype, array(slug => $slug, returnsingle => true) );
+                $content = $this->app['storage']->getContent($contenttype, array('slug' => $slug, 'returnsingle' => true) );
 
                 $imageLink = (string) $item->xpath('PageMap/DataObject[@type="cse_image"]/Attribute[@name="src"]')[0]["value"];
                 if (!$imageLink)
@@ -163,10 +163,10 @@ class Extension extends \Bolt\BaseExtension
 
         // set bolt pager
         $pager = array(
-                totalpages => (int) ceil( $resultsNum / $this->resultsPerPage ),
-                current => $page,
-                link => '?q=' . $q . '&' . join('&',$activeFilter) . '&sort=' . $sort .  '&page='
-                );
+            'totalpages' => (int) ceil( $resultsNum / $this->resultsPerPage ),
+            'current'    => $page,
+            'link'       => '?q=' . $q . '&' . join('&',$activeFilter) . '&sort=' . $sort .  '&page='
+        );
 
 
         // params 'filter' is only set in global search
@@ -187,7 +187,7 @@ class Extension extends \Bolt\BaseExtension
         $this->app['twig']->addGlobal('pager', $pager);
         $this->app['twig']->addGlobal('sort', $sort);
         $this->app['twig']->addGlobal('activeFilter', $activeFilter);
-        
+
 
         $body = $this->app['render']->render($this->template);
 
