@@ -151,7 +151,7 @@ var Site = window.Site || {};
         Site.initMinRead();
         Site.fileHelper();
 
-        // begin layout hack
+        // begin layout hack for inline heading based anchors 
         $('.main-content h2[id], .main-content h3[id]').each(function(i, el){
             var $el = $(el);
             var id = $el.attr('id');
