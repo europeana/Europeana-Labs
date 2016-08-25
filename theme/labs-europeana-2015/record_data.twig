@@ -60,13 +60,20 @@
                     {% endif %}
                     </p></section>
 
+                    {# links for portal and api console #}
+                    {% if record.apiconsolelink!="" or record.portallink!="" %}
+                        <div class="section next-actions">
+                            <h4>View this item in:</h4>
 
-                    {%  if record.portallink is not empty %}
-                    <div class="section next-actions">
-                        <h4>View this item in:</h4>
-                        {#<a title="View in the API Console" class="btn" href="{{ record.apiconsolelink }}">API Console</a>&nbsp;#}
-                        <a title="View the portal" class="btn" href="{{ record.portallink }}">Europeana Collections</a>
-                    </div>
+                            {% if record.apiconsolelink!="" %}
+                                <a href="{{ record.apiconsolelink }}" title="View in the API console" class="btn">API console</a>
+                            {% endif %}
+
+                            {% if record.portallink!="" %}
+                                <a href="{{ record.portallink }}" title="View in the Europeana Collections" class="btn">Europeana Collections</a>
+                            {% endif %}
+
+                        </div>
                     {% endif %}
 
                     <div class="section item-meta-secondary">
