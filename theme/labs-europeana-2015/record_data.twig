@@ -61,11 +61,13 @@
                     </p></section>
 
 
+                    {%  if record.portallink is not empty %}
                     <div class="section next-actions">
                         <h4>View this item in:</h4>
-                        <a title="View in the API Console" class="btn" href="{{ record.apiconsolelink }}">API Console</a>&nbsp;
-                        <a title="View the portal" class="btn" href="{{ record.portallink }}">Portal</a>
+                        {#<a title="View in the API Console" class="btn" href="{{ record.apiconsolelink }}">API Console</a>&nbsp;#}
+                        <a title="View the portal" class="btn" href="{{ record.portallink }}">Europeana Collections</a>
                     </div>
+                    {% endif %}
 
                     <div class="section item-meta-secondary">
                         {# set date #}
