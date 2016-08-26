@@ -228,12 +228,12 @@ class Extension extends BaseExtension
      */
     protected function dispatchRemoteRequest()
     {
-        //dump('start dispatchRemoteRequest');
+        dump('start dispatchRemoteRequest');
         $config = $this->config;
 
         $ch = curl_init();
         $request_url = 'http://'. $config['credentials']['fields']['j_username'] .':'. $config['credentials']['fields']['j_password'] .'@www.europeana.eu/api/admin/apikey';
-        //dump($request_url);
+        dump($request_url);
 
         $postvars = $this->app['request']->request->all();
 
@@ -244,6 +244,7 @@ class Extension extends BaseExtension
             }
         }
 
+        dump($sendvars);
 
         curl_setopt($ch, CURLOPT_URL,            $request_url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 );
@@ -254,8 +255,8 @@ class Extension extends BaseExtension
         //dump($ch);
 
         $returnvalue = curl_exec($ch);
-        //dump($returnvalue);
-        //dump('end dispatchRemoteRequest');
+        dump($returnvalue);
+        dump('end dispatchRemoteRequest');
         return json_decode($returnvalue);
     }
 
