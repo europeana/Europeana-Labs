@@ -228,27 +228,34 @@ class Extension extends BaseExtension
      */
     protected function dispatchRemoteRequest()
     {
-        dump('start dispatchRemoteRequest');
+        //dump('start dispatchRemoteRequest');
         $config = $this->config;
 
         $ch = curl_init();
         $request_url = 'http://'. $config['credentials']['fields']['j_username'] .':'. $config['credentials']['fields']['j_password'] .'@www.europeana.eu/api/admin/apikey';
-        dump($request_url);
+        //dump($request_url);
 
         $postvars = $this->app['request']->request->all();
-        dump($postvars);
+
+        $valid_keys = ['email', 'firstName', 'lastName', 'company'];
+        foreach ($postvars as $key => $value) {
+            if (in_array($key, $valid_keys)) {
+                $sendvars[$key] = $value;
+            }
+        }
+
 
         curl_setopt($ch, CURLOPT_URL,            $request_url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 );
         curl_setopt($ch, CURLOPT_HEADER,         false );
         curl_setopt($ch, CURLOPT_POST,           1 );
-        curl_setopt($ch, CURLOPT_POSTFIELDS,     json_encode($postvars, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) );
+        curl_setopt($ch, CURLOPT_POSTFIELDS,     json_encode($sendvars, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) );
         curl_setopt($ch, CURLOPT_HTTPHEADER,     array('Content-Type: application/json'));
         //dump($ch);
 
         $returnvalue = curl_exec($ch);
-        dump($returnvalue);
-        dump('end dispatchRemoteRequest');
+        //dump($returnvalue);
+        //dump('end dispatchRemoteRequest');
         return json_decode($returnvalue);
     }
 
