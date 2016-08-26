@@ -99,8 +99,8 @@ class Extension extends BaseExtension
             } else {
                 $html = "<p>Something went wrong.</p>";
                 // TODO: remove the debugging stuff
-                //dump('dispatchRemoteRequest did something wrong');
-                //dump($temp);
+                dump('dispatchRemoteRequest did something wrong');
+                dump($temp);
             }
         } else {
             // add form error text to display
@@ -145,7 +145,7 @@ class Extension extends BaseExtension
             // dump('recaptcha result');
             // dump($recaptcharesult->success);
             if($recaptcharesult->success != true || $recaptcharesult->success != 'true') {
-                //dump('recaptcha failed');
+                dump('recaptcha failed');
                 $this->valid_input = false;
                 $has_errors = true;
             }
@@ -199,7 +199,7 @@ class Extension extends BaseExtension
             $checkvars['remoteip'] = $remote_ip;
         }
         // dump($checkvars);
-      
+
         // format fields for curl request
         $fields_count = 0;
         foreach($checkvars as $key=>$value) {
@@ -228,17 +228,17 @@ class Extension extends BaseExtension
      */
     protected function dispatchRemoteRequest()
     {
-        //dump('start dispatchRemoteRequest');
+        dump('start dispatchRemoteRequest');
         $config = $this->config;
 
         $ch = curl_init();
-        $request = 'http://'. $config['credentials']['fields']['j_username'] .':'. $config['credentials']['fields']['j_password'] .'@www.europeana.eu/api/admin/apikey';
-        //dump($request);
+        $request_url = 'http://'. $config['credentials']['fields']['j_username'] .':'. $config['credentials']['fields']['j_password'] .'@www.europeana.eu/api/admin/apikey';
+        dump($request_url);
 
         $postvars = $this->app['request']->request->all();
-        //dump($postvars);
+        dump($postvars);
 
-        curl_setopt($ch, CURLOPT_URL,            $request);
+        curl_setopt($ch, CURLOPT_URL,            $request_url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 );
         curl_setopt($ch, CURLOPT_HEADER,         false );
         curl_setopt($ch, CURLOPT_POST,           1 );
@@ -247,8 +247,8 @@ class Extension extends BaseExtension
         //dump($ch);
 
         $returnvalue = curl_exec($ch);
-        //dump($returnvalue);
-        //dump('end dispatchRemoteRequest');
+        dump($returnvalue);
+        dump('end dispatchRemoteRequest');
         return json_decode($returnvalue);
     }
 
