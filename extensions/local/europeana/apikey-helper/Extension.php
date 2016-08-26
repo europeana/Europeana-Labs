@@ -61,21 +61,24 @@ class Extension extends BaseExtension
         $template_form = $this->config['templates']['apikeyform'];
         $template_thanks = $this->config['templates']['thankspage'];
 
-        dump($config);
-
         if($config['recaptcha']['enabled'] == true) {
-            // Add javascript file for recaptcha
-            $this->addJavascript(
-                'https://www.google.com/recaptcha/api.js',
-                ['late' => false, 'priority' => 1000]
-            );
+            // dump($config);
+            $this->addSnippet('endofhead', '<script src="https://www.google.com/recaptcha/api.js"></script>');
         }
 
         $this->app['twig.loader.filesystem']->addPath(__DIR__);
 
         $posted = $valid = false;
 
-        dump($this->app['request']);
+        // $remote_ip = $this->app['request']->server->get('REMOTE_ADDR');
+        // $forwarded_ip = $this->app['request']->server->get('HTTP_X_FORWARDED_FOR');
+
+        // if(!empty($forwarded_ip) && $remote_ip != $forwarded_ip) {
+        //     $checkvars['remoteip'] = $forwarded_ip;
+        // } else {
+        //     $checkvars['remoteip'] = $remote_ip;
+        // }
+        // dump($checkvars);
 
         if ($this->app['request']->isMethod('POST')) {
             $this->posted = true;
@@ -94,9 +97,10 @@ class Extension extends BaseExtension
                     'config' => $config
                 ));
             } else {
-                $html = "<p>Something went wrong</p>";
+                $html = "<p>Something went wrong.</p>";
                 // TODO: remove the debugging stuff
-                dump($temp);
+                //dump('dispatchRemoteRequest did something wrong');
+                //dump($temp);
             }
         } else {
             // add form error text to display
@@ -138,7 +142,13 @@ class Extension extends BaseExtension
         if($config['recaptcha']['enabled'] == true) {
             // request remote recaptcha
             $recaptcharesult = $this->dispatchRecaptchaRequest($postvars);
-            dump($recaptcharesult);
+            // dump('recaptcha result');
+            // dump($recaptcharesult->success);
+            if($recaptcharesult->success != true || $recaptcharesult->success != 'true') {
+                //dump('recaptcha failed');
+                $this->valid_input = false;
+                $has_errors = true;
+            }
         }
 
         foreach($config['form']['fields'] as $key => $field) {
@@ -167,31 +177,50 @@ class Extension extends BaseExtension
      */
     protected function dispatchRecaptchaRequest($postvars)
     {
-        dump($postvars);
+        //dump('start dispatchRecaptchaRequest');
+        // dump($postvars);
 
-        var $checkvars = [];
+        $checkvars = [];
         $config = $this->config;
 
         $ch = curl_init();
-        $request = $config['recaptcha']['remoteurl'];
-        dump($request);
+        $request_url = $config['recaptcha']['remoteurl'];
+        //dump($request_url);
 
         $checkvars['secret'] = $config['recaptcha']['secret'];
         $checkvars['response'] = $postvars['g-recaptcha-response'];
-        $checkvars['remoteip'] = $postvars['remoteip'];
 
-        curl_setopt($ch, CURLOPT_URL,            $request);
+        $remote_ip = $this->app['request']->server->get('REMOTE_ADDR');
+        $forwarded_ip = $this->app['request']->server->get('HTTP_X_FORWARDED_FOR');
+
+        if(!empty($forwarded_ip) && $remote_ip != $forwarded_ip) {
+            $checkvars['remoteip'] = $forwarded_ip;
+        } else {
+            $checkvars['remoteip'] = $remote_ip;
+        }
+        // dump($checkvars);
+      
+        // format fields for curl request
+        $fields_count = 0;
+        foreach($checkvars as $key=>$value) {
+            $fields_arr[] = $key.'='.$value;
+            $fields_count++;
+        }
+        $fields_string = join('&', $fields_arr);
+
+        curl_setopt($ch, CURLOPT_URL,            $request_url );
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 );
         curl_setopt($ch, CURLOPT_HEADER,         false );
-        curl_setopt($ch, CURLOPT_POST,           1 );
-        curl_setopt($ch, CURLOPT_POSTFIELDS,     json_encode($postvars, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) );
-        curl_setopt($ch, CURLOPT_HTTPHEADER,     array('Content-Type: application/json'));
-        dump($ch);
+        curl_setopt($ch, CURLOPT_POST,           $fields_count );
+        curl_setopt($ch, CURLOPT_POSTFIELDS,     $fields_string );
+        // dump($ch);
 
         $returnvalue = curl_exec($ch);
-        dump($returnvalue);
-
-        return json_decode($returnvalue);
+        //dump($returnvalue);
+        $returnvaluej = json_decode($returnvalue);
+        //dump($returnvaluej);
+        //dump('end dispatchRecaptchaRequest');
+        return $returnvaluej;
     }
 
     /**
@@ -199,6 +228,7 @@ class Extension extends BaseExtension
      */
     protected function dispatchRemoteRequest()
     {
+        //dump('start dispatchRemoteRequest');
         $config = $this->config;
 
         $ch = curl_init();
@@ -218,7 +248,7 @@ class Extension extends BaseExtension
 
         $returnvalue = curl_exec($ch);
         //dump($returnvalue);
-
+        //dump('end dispatchRemoteRequest');
         return json_decode($returnvalue);
     }
 
