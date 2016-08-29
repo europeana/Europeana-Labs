@@ -96,11 +96,13 @@ class Extension extends BaseExtension
                 $html = $this->app['render']->render($template_thanks, array(
                     'config' => $config
                 ));
+                $this->app['logger.system']->info('Created API key.', array('event' => 'ApiKeyHelper'));
             } else {
                 $html = "<p>There was an error requesting an API key. Please try again later.</p>";
                 // TODO: remove the debugging stuff
                 // dump('dispatchRemoteRequest did something wrong');
                 // dump($temp);
+                $this->app['logger.system']->error('Failed to create an API key', array('event' => 'ApiKeyHelper'));
             }
         } else {
             // add form error text to display
