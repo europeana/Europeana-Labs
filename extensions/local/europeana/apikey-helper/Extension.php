@@ -149,6 +149,7 @@ class Extension extends BaseExtension
             if($recaptcharesult->success != true || $recaptcharesult->success != 'true') {
                 // dump('recaptcha failed');
                 $this->valid_input = false;
+                $this->form_errors['recaptcha'] = 'Please complete the reCAPTCHA test.';
                 $has_errors = true;
             }
         }
