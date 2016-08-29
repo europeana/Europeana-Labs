@@ -32,3 +32,8 @@ credentials:
     fields:
         j_username: 'override in deploy scripts'
         j_password: 'override in deploy scripts'
+recaptcha:
+    enabled: false
+    remoteurl: 'https://www.google.com/recaptcha/api/siteverify'
+    sitekey: 'override in deploy scripts'
+    secret: 'override in deploy scripts'
